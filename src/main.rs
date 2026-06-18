@@ -397,7 +397,7 @@ const PAGE_CSS: &str = r#"
 @font-face{font-family:"Anton";src:url("/font/anton.ttf") format("truetype");font-display:swap}
 :root{--bg:#0b0c0e;--surface:#15171c;--surface2:#1c1f26;--border:#272b33;--fg:#eceef2;--muted:#8b919e;--accent:#ff7a45;--accent-ink:#1a0d06;--radius:14px}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scrollbar-gutter:stable}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-wrap:break-word}
 a{color:inherit}
 img{max-width:100%}
@@ -446,10 +446,12 @@ img{max-width:100%}
 .hero-actions .btn{flex:0 0 auto}
 .agent-link{background:none;border:0;color:var(--muted);font:inherit;font-size:.8rem;cursor:pointer;padding:.35rem 0;text-decoration:underline;text-underline-offset:2px;align-self:flex-start}
 .agent-link:hover{color:var(--accent)}
-.agent-links{display:flex;flex-wrap:wrap;gap:.25rem 1rem;margin-bottom:.9rem}
+.topnav{display:flex;flex-wrap:wrap;gap:.25rem 1rem;align-items:center}
+.topnav a{color:var(--muted);text-decoration:none;font-size:.9rem;transition:color .15s}
+.topnav a:hover{color:var(--fg)}
 .back{display:inline-block;color:var(--muted);text-decoration:none;font-size:.9rem;margin:0 0 .5rem}
 .back:hover{color:var(--fg)}
-footer{margin-top:3rem;border-top:1px solid var(--border);padding:1.5rem 1rem 0;color:var(--muted);font-size:.85rem;max-width:72rem;margin-left:auto;margin-right:auto}
+footer{margin-top:3rem;border-top:1px solid var(--border);padding:1.5rem 1rem;color:var(--muted);font-size:.85rem;max-width:72rem;margin-left:auto;margin-right:auto}
 footer a{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
 footer a:hover{color:var(--fg)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -524,6 +526,12 @@ fn topbar() -> Markup {
         header class="topbar" {
             a class="brand" href="/" { "memegen" span class="dot" { ".rs" } }
             span class="spacer" {}
+            nav class="topnav" {
+                a href="/llms.txt" { "llms.txt" }
+                a href="/openapi.json" { "OpenAPI" }
+                a href="/docs" { "API docs" }
+                a href="/templates" { "Templates JSON" }
+            }
             a class="gh" href="https://github.com/tenequm/memegen-rs"
                 title="GitHub repository" target="_blank" rel="noreferrer" {
                 (PreEscaped(GH_ICON))
@@ -580,12 +588,6 @@ fn og_image_for(t: &Template) -> String {
 fn page_footer() -> Markup {
     html! {
         footer {
-            div class="agent-links" {
-                a href="/llms.txt" { "llms.txt" }
-                a href="/openapi.json" { "OpenAPI" }
-                a href="/docs" { "API docs" }
-                a href="/templates" { "Templates JSON" }
-            }
             "Built with Rust, axum & maud - "
             a href="https://github.com/tenequm/memegen-rs" { "source on GitHub" }
             ". A minimal reimplementation of "
