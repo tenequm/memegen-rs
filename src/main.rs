@@ -436,8 +436,8 @@ img{max-width:100%}
 .badge.gif{color:var(--accent-ink);background:var(--accent);border-color:var(--accent);font-weight:700}
 .card[hidden]{display:none}
 .empty{color:var(--muted);padding:2rem 0}
-.builder{display:grid;grid-template-columns:1fr;gap:1.25rem;margin-top:1rem}
-.preview-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem}
+.builder{display:grid;grid-template-columns:minmax(0,1fr);gap:1.25rem;margin-top:1rem}
+.preview-wrap{min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem}
 #preview{width:100%;border-radius:8px;display:block;background:var(--surface2);min-height:120px}
 .panel h1{font-family:"Anton",Impact,sans-serif;font-weight:400;font-size:1.6rem;margin:.1rem 0 .25rem;text-transform:uppercase;letter-spacing:.01em}
 .panel .src{color:var(--muted);font-size:.85rem;margin:0 0 1rem}
@@ -469,7 +469,7 @@ footer a:hover{color:var(--fg)}
   .topbar{padding:.7rem 1.25rem}
   .brand{font-size:1.4rem}
   .hero{padding:2.5rem 0 .5rem}
-  .builder{grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.25rem}
+  .builder{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2rem;margin-top:1.25rem}
   .preview-wrap{position:sticky;top:5rem;align-self:start;padding:1rem}
   .panel h1{font-size:2rem}
 }
