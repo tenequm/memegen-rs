@@ -11,10 +11,10 @@ text:
     color: white
     font: thick
     anchor_x: 0.005
-    anchor_y: 0.005
+    anchor_y: 0.0
     angle: 0.0
     scale_x: 0.99
-    scale_y: 0.013
+    scale_y: 0.09
     align: center
     start: 0.0
     stop: 1.0
@@ -22,10 +22,10 @@ text:
     color: white
     font: thick
     anchor_x: 0.005
-    anchor_y: 0.08
+    anchor_y: 0.09
     angle: 0.0
     scale_x: 0.99
-    scale_y: 0.015
+    scale_y: 0.09
     align: center
     start: 0.0
     stop: 1.0

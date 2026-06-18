@@ -12,21 +12,21 @@ text:
     color: black
     font: thick
     anchor_x: 0.05
-    anchor_y: 0.07
+    anchor_y: 0.05
     angle: 0.0
-    scale_x: 0.435
-    scale_y: 0.31
+    scale_x: 0.4
+    scale_y: 0.18
     align: center
     start: 0.0
     stop: 1.0
   - style: upper
     color: black
     font: thick
-    anchor_x: 0.41
-    anchor_y: 0.05
+    anchor_x: 0.05
+    anchor_y: 0.27
     angle: 0.0
-    scale_x: 0.41
-    scale_y: 0.2
+    scale_x: 0.4
+    scale_y: 0.18
     align: center
     start: 0.0
     stop: 1.0

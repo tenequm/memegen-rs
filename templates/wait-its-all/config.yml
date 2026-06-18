@@ -17,8 +17,6 @@ text:
     scale_x: 0.24
     scale_y: 0.067
     align: right
-    start: 0.0
-    stop: 1.0
   - style: upper
     color: white
     font: thick
@@ -28,8 +26,6 @@ text:
     scale_x: 0.295
     scale_y: 0.075
     align: center
-    start: 0.0
-    stop: 1.0
 example:
   - Always has been
   - "Wait, it's all Ohio?"

@@ -11,10 +11,10 @@ text:
     color: white
     font: thick
     anchor_x: 0.015
-    anchor_y: 0.015
+    anchor_y: 0.32
     angle: 0.0
     scale_x: 0.965
-    scale_y: 0.1
+    scale_y: 0.14
     align: center
     start: 0.0
     stop: 1.0

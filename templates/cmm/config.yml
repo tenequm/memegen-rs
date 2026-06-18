@@ -11,7 +11,7 @@ text:
     anchor_y: 0.33
     angle: 23.0
     scale_x: 0.46
-    scale_y: 0.25
+    scale_y: 0.16
     align: center
     start: 0.0
     stop: 1.0

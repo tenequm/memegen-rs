@@ -11,44 +11,44 @@ text:
   - style: upper
     color: white
     font: thick
-    anchor_x: 0.106
-    anchor_y: 0.118
-    angle: 0.0
-    scale_x: 0.162
-    scale_y: 0.594
-    align: center
-    start: 0.0
-    stop: 1.0
-  - style: upper
-    color: white
-    font: thick
-    anchor_x: 0.188
-    anchor_y: 0.078
-    angle: 0.0
-    scale_x: 0.24
-    scale_y: 0.726
-    align: center
-    start: 0.0
-    stop: 1.0
-  - style: upper
-    color: white
-    font: thick
-    anchor_x: 0.356
+    anchor_x: 0.01
     anchor_y: 0.07
     angle: 0.0
-    scale_x: 0.218
-    scale_y: 0.744
+    scale_x: 0.235
+    scale_y: 0.8
     align: center
     start: 0.0
     stop: 1.0
   - style: upper
     color: white
     font: thick
-    anchor_x: 0.534
-    anchor_y: 0.022
+    anchor_x: 0.255
+    anchor_y: 0.07
     angle: 0.0
-    scale_x: 0.348
-    scale_y: 0.858
+    scale_x: 0.235
+    scale_y: 0.8
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.5
+    anchor_y: 0.07
+    angle: 0.0
+    scale_x: 0.235
+    scale_y: 0.8
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.745
+    anchor_y: 0.07
+    angle: 0.0
+    scale_x: 0.245
+    scale_y: 0.8
     align: center
     start: 0.0
     stop: 1.0

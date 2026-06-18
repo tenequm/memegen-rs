@@ -6,11 +6,11 @@ text:
   - style: upper
     color: white
     font: thick
-    anchor_x: 0.18
-    anchor_y: 0.13
+    anchor_x: 0.05
+    anchor_y: 0.05
     angle: 44.0
-    scale_x: 0.35
-    scale_y: 0.3
+    scale_x: 0.5
+    scale_y: 0.45
     align: center
     start: 0.0
     stop: 1.0

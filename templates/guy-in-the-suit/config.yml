@@ -21,10 +21,10 @@ text:
   - style: upper
     color: white
     font: thick
-    anchor_x: 0.31
+    anchor_x: 0.35
     anchor_y: 0.014
     angle: 0.0
-    scale_x: 0.422
+    scale_x: 0.3
     scale_y: 0.74
     align: center
     start: 0.0
@@ -32,10 +32,10 @@ text:
   - style: upper
     color: white
     font: thick
-    anchor_x: 0.53
+    anchor_x: 0.67
     anchor_y: 0.16
     angle: 0.0
-    scale_x: 0.41
+    scale_x: 0.32
     scale_y: 0.84
     align: center
     start: 0.0

@@ -15,12 +15,12 @@ text:
     start: 0.0
     stop: 1.0
   - style: default
-    color: khaki
+    color: black
     font: thin
-    anchor_x: 0.0
-    anchor_y: 0.8
+    anchor_x: 0.05
+    anchor_y: 0.4
     angle: 0.0
-    scale_x: 0.6
+    scale_x: 0.9
     scale_y: 0.2
     align: center
     start: 0.0
