@@ -1,8 +1,9 @@
 mod render;
 mod template;
 
+use std::collections::HashMap;
 use std::path::PathBuf;
-use std::sync::{Arc, OnceLock};
+use std::sync::{Arc, Mutex, OnceLock};
 
 use axum::Json;
 use axum::Router;
@@ -273,10 +274,22 @@ async fn render_custom(
 
 // ---------- Static-ish handlers (unthrottled) ----------
 
-/// Serve a template's blank background straight from disk - no rendering. This
-/// is what makes a gallery of hundreds of thumbnails viable under the 5/s render
-/// cap: thumbnails never touch the renderer.
+/// Gallery thumbnails are square JPEG cover-crops at 2x the ~170px card. We
+/// downscale the (often 1440px / ~350KB) corpus background once, then keep it:
+/// the source files never change at runtime, so a per-id in-process cache means
+/// each thumb is decoded+resized once per cold start (the edge caches the rest).
+/// This is `/thumbs/`, not `/images/`, so it skips the render rate limiter.
+const THUMB_PX: u32 = 340;
+
+fn thumb_cache() -> &'static Mutex<HashMap<String, Vec<u8>>> {
+    static CACHE: OnceLock<Mutex<HashMap<String, Vec<u8>>>> = OnceLock::new();
+    CACHE.get_or_init(|| Mutex::new(HashMap::new()))
+}
+
 async fn thumb(State(reg): State<AppState>, Path(id): Path<String>) -> Result<Response, AppError> {
+    if let Some(bytes) = thumb_cache().lock().unwrap().get(&id).cloned() {
+        return Ok(cached_bytes(bytes, "image/jpeg"));
+    }
     let template = reg
         .get(&id)
         .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
@@ -284,10 +297,12 @@ async fn thumb(State(reg): State<AppState>, Path(id): Path<String>) -> Result<Re
         .default_background
         .as_ref()
         .ok_or_else(|| AppError::NotFound(format!("no background for {id}")))?;
-    let bytes = tokio::fs::read(path)
+    let src = tokio::fs::read(path)
         .await
         .map_err(|e| AppError::Internal(e.to_string()))?;
-    Ok(cached_bytes(bytes, mime_for(path)))
+    let (bytes, mime) = render::thumbnail(&src, THUMB_PX).map_err(AppError::from)?;
+    thumb_cache().lock().unwrap().insert(id, bytes.clone());
+    Ok(cached_bytes(bytes, mime))
 }
 
 /// The same Anton face the memes are captioned in, served as a webfont so the UI
@@ -604,11 +619,19 @@ fn gallery_markup(reg: &Registry) -> Markup {
                     }
                     p #empty class="empty" hidden { "No templates match that search." }
                     div class="grid" {
-                        @for t in reg.all() {
+                        @for (i, t) in reg.all().enumerate() {
                             @let is_gif = t.is_gif;
+                            // Above-the-fold cards (first ~2 rows on a wide screen)
+                            // load and decode eagerly so they paint with the layout
+                            // instead of popping in from a placeholder; the long tail
+                            // stays lazy/async to keep initial load cheap.
+                            @let eager = i < 12;
                             a class="card" href={ "/edit/" (t.id) } data-search=(search_blob(t)) {
-                                img class="thumb" src={ "/thumbs/" (t.id) } loading="lazy"
-                                    decoding="async" alt=(display_name(t));
+                                img class="thumb" src={ "/thumbs/" (t.id) }
+                                    width="340" height="340"
+                                    loading=(if eager { "eager" } else { "lazy" })
+                                    decoding=(if eager { "sync" } else { "async" })
+                                    alt=(display_name(t));
                                 div class="meta" {
                                     span class="tname" { (display_name(t)) }
                                     div class="tags" {
@@ -693,16 +716,6 @@ async fn builder(State(reg): State<AppState>, Path(id): Path<String>) -> Result<
 
 fn split_ext(s: &str) -> (&str, &str) {
     s.rsplit_once('.').unwrap_or((s, "png"))
-}
-
-fn mime_for(p: &std::path::Path) -> &'static str {
-    match p.extension().and_then(|e| e.to_str()) {
-        Some("png") => "image/png",
-        Some("jpg" | "jpeg") => "image/jpeg",
-        Some("webp") => "image/webp",
-        Some("gif") => "image/gif",
-        _ => "application/octet-stream",
-    }
 }
 
 fn cached_bytes(bytes: Vec<u8>, mime: &'static str) -> Response {

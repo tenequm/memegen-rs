@@ -408,6 +408,51 @@ fn pad_to(img: &RgbaImage, w: u32, h: u32) -> RgbaImage {
     canvas
 }
 
+/// Decode a background and produce a small square cover-cropped thumbnail.
+///
+/// The gallery cards display these at ~170 CSS px; we render at 2x for crisp
+/// HiDPI. Two costs matter and they're separate:
+///   - decode: the browser re-decodes every `<img>` on each navigation, and the
+///     raw corpus backgrounds run to 1440px, so a grid of full-res sources
+///     flashes its placeholders before the bitmaps land. Downscaling to ~340px
+///     (~13x fewer pixels) is what kills that flash, regardless of codec.
+///   - bytes: we encode JPEG, not WebP. `image`'s WebP encoder (image-webp) is
+///     lossless-only, which on a photo is ~90-140KB - no real win over the
+///     source. The cover-crop fills the square fully so there's no alpha to
+///     keep, and lossy JPEG lands the same thumb in ~10-20KB.
+pub(crate) fn thumbnail(bytes: &[u8], size: u32) -> Result<(Vec<u8>, &'static str), RenderError> {
+    use fast_image_resize::images::Image as FirImage;
+    use fast_image_resize::{PixelType, ResizeAlg, ResizeOptions, Resizer};
+
+    // Decode by content, not extension (same corpus quirk as `render`).
+    let img = image::load_from_memory(bytes)
+        .map_err(|e| RenderError::Decode(e.to_string()))?
+        .to_rgba8();
+    let (w, h) = img.dimensions();
+    let to_err = |e: fast_image_resize::ResizeError| RenderError::Decode(e.to_string());
+
+    // `object-fit: cover` for a square target: crop the source to its centered
+    // square (fir does the crop as part of the resize), then scale that to
+    // `size`. One SIMD Lanczos3 pass instead of resize-then-crop.
+    let side = w.min(h) as f64;
+    let src = FirImage::from_vec_u8(w, h, img.into_raw(), PixelType::U8x4)
+        .map_err(|e| RenderError::Decode(e.to_string()))?;
+    let mut dst = FirImage::new(size, size, PixelType::U8x4);
+    Resizer::new()
+        .resize(
+            &src,
+            &mut dst,
+            &ResizeOptions::new()
+                .resize_alg(ResizeAlg::Convolution(fast_image_resize::FilterType::Lanczos3))
+                .crop((w as f64 - side) / 2.0, (h as f64 - side) / 2.0, side, side),
+        )
+        .map_err(to_err)?;
+
+    let cropped = RgbaImage::from_raw(size, size, dst.into_vec())
+        .ok_or_else(|| RenderError::Encode("thumbnail buffer size mismatch".into()))?;
+    encode(cropped, "jpg")
+}
+
 fn encode(img: RgbaImage, ext: &str) -> Result<(Vec<u8>, &'static str), RenderError> {
     let dynimg = DynamicImage::ImageRgba8(img);
     let mut buf = Cursor::new(Vec::new());

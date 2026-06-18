@@ -26,6 +26,10 @@ utoipa-scalar = { version = "0.3.0", features = ["axum"] }
 maud = { version = "0.27.0", features = ["axum"] }
 image = "0.25.10"
 imageproc = { version = "0.27.0", default-features = false, features = ["text"] }
+# SIMD-accelerated resize for gallery thumbnails - ~10x faster than the
+# `image` crate's `imageops::resize`, which matters when downscaling hundreds
+# of full-res corpus backgrounds on a cold start.
+fast_image_resize = "6"
 ab_glyph = "0.2.32"
 reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
 anyhow = "1.0"

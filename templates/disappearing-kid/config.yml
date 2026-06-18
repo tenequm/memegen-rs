@@ -5,31 +5,18 @@ keywords:
   - kid
   - fading
   - peace out
-  - nileseyy niles
   - im out
 text:
   - style: upper
-    color: white
+    color: black
     font: thick
-    anchor_x: 0.003
-    anchor_y: 0.003
+    anchor_x: 0.03
+    anchor_y: 0.02
     angle: 0.0
-    scale_x: 0.99
-    scale_y: 0.147
-    align: center
-    start: 0.0
-    stop: 1.0
-  - style: upper
-    color: white
-    font: thick
-    anchor_x: 0.003
-    anchor_y: 0.846
-    angle: 0.0
-    scale_x: 0.99
-    scale_y: 0.147
+    scale_x: 0.94
+    scale_y: 0.10
     align: center
     start: 0.0
     stop: 1.0
 example:
   - My dad when I turn the car light on
-  - Peace out

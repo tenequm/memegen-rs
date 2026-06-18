@@ -9,22 +9,22 @@ text:
   - style: upper
     color: white
     font: thick
-    anchor_x: 0.01
+    anchor_x: 0.02
     anchor_y: 0.005
     angle: 0.0
-    scale_x: 0.975
-    scale_y: 0.145
+    scale_x: 0.96
+    scale_y: 0.11
     align: center
     start: 0.0
     stop: 1.0
   - style: upper
     color: white
     font: thick
-    anchor_x: 0.3
-    anchor_y: 0.15
+    anchor_x: 0.02
+    anchor_y: 0.88
     angle: 0.0
-    scale_x: 0.32
-    scale_y: 0.84
+    scale_x: 0.96
+    scale_y: 0.10
     align: center
     start: 0.0
     stop: 1.0
