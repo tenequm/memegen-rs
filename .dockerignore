@@ -1,0 +1,7 @@
+target
+cache
+.git
+.github
+node_modules
+*.md
+.DS_Store

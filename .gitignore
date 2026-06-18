@@ -1,2 +1,4 @@
 /target
 /cache
+/node_modules
+/.wrangler

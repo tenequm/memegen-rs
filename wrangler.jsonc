@@ -1,0 +1,42 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "memegen-rs",
+  "account_id": "3db7dd8ff22ae68593205855d8bc0b25",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-06-17",
+  "observability": {
+    "enabled": true
+  },
+  "routes": [
+    { "pattern": "memegen.rs", "custom_domain": true }
+  ],
+  "containers": [
+    {
+      // For the first deploy, wrangler builds this Containerfile locally and
+      // pushes it to Cloudflare's registry. Once CI pushes pre-built images,
+      // swap this for "registry.cloudflare.com/<ACCOUNT_ID>/memegen-rs:<sha>".
+      "image": "./Containerfile",
+      "class_name": "MemegenContainer",
+      "instance_type": "basic",
+      // The Worker pins all traffic to one instance via getContainer(), so the
+      // in-container 5 req/s limiter is a true global cap. This ceiling is only
+      // rollover headroom (old instances linger until sleepAfter); it does not
+      // add serving concurrency.
+      "max_instances": 5
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "MEMEGEN",
+        "class_name": "MemegenContainer"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["MemegenContainer"]
+    }
+  ]
+}
