@@ -7,6 +7,9 @@
   "observability": {
     "enabled": true
   },
+  "vars": {
+    "EXTRA_HTML_SCRIPTS": "<script defer src=\"/mesh/script.js\" data-site-id=\"84199879b537\"></script>"
+  },
   "routes": [
     { "pattern": "memegen.rs", "custom_domain": true }
   ],

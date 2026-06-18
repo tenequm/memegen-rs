@@ -57,12 +57,21 @@ export default {
 
     const res = await getContainer(env.MEMEGEN).fetch(request);
 
-    // Cache only immutable assets - the Rust origin marks rendered images,
-    // thumbnails, and the font with a long `immutable` Cache-Control. HTML and
-    // JSON carry none, so they stay fresh on every deploy.
+    // Edge-cache only the content-derived assets (rendered images, thumbnails,
+    // the font) - their URL fully determines their bytes. HTML and JSON are
+    // skipped so they stay fresh on every deploy.
     const type = res.headers.get("content-type") ?? "";
     if (res.ok && (type.startsWith("image/") || type.startsWith("font/"))) {
       ctx.waitUntil(cache.put(key, res.clone()));
+    }
+    if (env.EXTRA_HTML_SCRIPTS && type.startsWith("text/html")) {
+      return new HTMLRewriter()
+        .on("head", {
+          element(el) {
+            el.append(env.EXTRA_HTML_SCRIPTS, { html: true });
+          },
+        })
+        .transform(res);
     }
     return res;
   },

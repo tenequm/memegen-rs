@@ -22,10 +22,6 @@ use template::{Registry, Template, decode};
 
 type AppState = Arc<Registry>;
 
-/// Rendered memes are fully described by their URL, so the same URL is the same
-/// image forever - safe to cache hard at the browser and the Cloudflare edge.
-const IMMUTABLE: &str = "public, max-age=31536000, s-maxage=31536000, immutable";
-
 /// Canonical origin for absolute URLs in social-share metadata (og:url,
 /// og:image) - link crawlers reject relative URLs.
 const SITE: &str = "https://memegen.rs";
@@ -364,14 +360,7 @@ const MANIFEST: &str = r##"{
 }"##;
 
 fn static_asset(bytes: &'static [u8], mime: &'static str) -> Response {
-    (
-        [
-            (header::CONTENT_TYPE, mime),
-            (header::CACHE_CONTROL, IMMUTABLE),
-        ],
-        Bytes::from_static(bytes),
-    )
-        .into_response()
+    ([(header::CONTENT_TYPE, mime)], Bytes::from_static(bytes)).into_response()
 }
 
 /// `/SKILL.md`, `/llms.txt`, and any-case variants (`/skill.md`, `/LLMS.TXT`,
@@ -453,6 +442,11 @@ img{max-width:100%}
 .actions{display:flex;gap:.6rem;flex-wrap:wrap}
 .btn{flex:1 1 auto;cursor:pointer;font:inherit;font-weight:600;text-align:center;text-decoration:none;border-radius:10px;min-height:2.75rem;display:inline-flex;align-items:center;justify-content:center;padding:.6rem 1.1rem;border:1px solid var(--border);background:var(--surface);color:var(--fg);transition:border-color .15s,background .15s,filter .15s}
 .btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.hero-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.1rem}
+.hero-actions .btn{flex:0 0 auto}
+.agent-link{background:none;border:0;color:var(--muted);font:inherit;font-size:.8rem;cursor:pointer;padding:.35rem 0;text-decoration:underline;text-underline-offset:2px;align-self:flex-start}
+.agent-link:hover{color:var(--accent)}
+.agent-links{display:flex;flex-wrap:wrap;gap:.25rem 1rem;margin-bottom:.9rem}
 .back{display:inline-block;color:var(--muted);text-decoration:none;font-size:.9rem;margin:0 0 .5rem}
 .back:hover{color:var(--fg)}
 footer{margin-top:3rem;border-top:1px solid var(--border);padding:1.5rem 1rem 0;color:var(--muted);font-size:.85rem;max-width:72rem;margin-left:auto;margin-right:auto}
@@ -487,8 +481,11 @@ footer a:hover{color:var(--fg)}
 
 const GH_ICON: &str = r#"<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>"#;
 
+const AGENT_PROMPT: &str = "Read https://memegen.rs/llms.txt and use memegen.rs to generate memes through plain URLs from now on.\n\nReady-to-use example:\nhttps://memegen.rs/images/drake/dont_caption_by_hand/just_build_a_url.png\n\nPattern: https://memegen.rs/images/{template}/{top}/{bottom}.{ext}\n- {template}: template id - browse the full list at https://memegen.rs/templates\n- {top}/{bottom}: one caption line per URL segment; spaces become _ , a literal _ becomes __ , an empty line is a single _\n- {ext}: png (default) or gif for animated templates\n- options (optional query string): ?width= ?height= ?style= ?layout=top ?color=";
+
 const GALLERY_JS: &str = r#"
 (function(){var q=document.getElementById('search');var cards=[].slice.call(document.querySelectorAll('.card'));var none=document.getElementById('empty');if(!q)return;q.addEventListener('input',function(){var v=q.value.trim().toLowerCase();var shown=0;for(var i=0;i<cards.length;i++){var hit=v===''||cards[i].dataset.search.indexOf(v)!==-1;cards[i].hidden=!hit;if(hit)shown++;}if(none)none.hidden=shown!==0;});})();
+(function(){var b=document.getElementById('copy-agent');if(!b)return;var lbl=b.textContent;b.addEventListener('click',function(){var p=document.getElementById('agent-prompt').textContent;navigator.clipboard.writeText(p).then(function(){b.textContent='Copied!';setTimeout(function(){b.textContent=lbl;},1300);},function(){b.textContent='Copy failed';setTimeout(function(){b.textContent=lbl;},1300);});});})();
 "#;
 
 const BUILDER_JS: &str = r#"
@@ -501,7 +498,9 @@ function flash(b,m){b.textContent=m;setTimeout(function(){b.textContent=b.datase
 var link=document.getElementById('copy-link');link.dataset.label=link.textContent;
 link.addEventListener('click',function(){navigator.clipboard.writeText(location.origin+path()).then(function(){flash(link,'Copied!');},function(){flash(link,'Copy failed');});});
 var ci=document.getElementById('copy-img');ci.dataset.label=ci.textContent;
-ci.addEventListener('click',function(){fetch(path()).then(function(r){if(!r.ok){flash(ci,r.status===429?'Rate limited':'Error');return null;}return r.blob();}).then(function(b){if(!b)return;return navigator.clipboard.write([new ClipboardItem(Object.fromEntries([[b.type,b]]))]).then(function(){flash(ci,'Copied!');});}).catch(function(){flash(ci,'Copy failed');});});})();
+ci.addEventListener('click',function(){fetch(path()).then(function(r){if(!r.ok){flash(ci,r.status===429?'Rate limited':'Error');return null;}return r.blob();}).then(function(b){if(!b)return;return navigator.clipboard.write([new ClipboardItem(Object.fromEntries([[b.type,b]]))]).then(function(){flash(ci,'Copied!');});}).catch(function(){flash(ci,'Copy failed');});});
+var ca=document.getElementById('copy-agent');if(ca){ca.dataset.label=ca.textContent;ca.addEventListener('click',function(){var nm=(document.querySelector('.panel h1')||{}).textContent||'this template';var p='Read https://memegen.rs/llms.txt and use memegen.rs to generate memes through plain URLs.\n\nExample ('+nm+'): '+location.origin+path()+'\n\nPattern: '+location.origin+'/images/{template}/{top}/{bottom}.png - one caption per URL segment, spaces become _, use .gif for animated templates, optional query ?width= ?height= ?style= ?layout=top ?color=';navigator.clipboard.writeText(p).then(function(){flash(ca,'Copied!');},function(){flash(ca,'Copy failed');});});}
+})();
 "#;
 
 fn display_name(t: &Template) -> &str {
@@ -546,6 +545,7 @@ fn page_head(title: &str, desc: &str, path: &str, og_image: &str) -> Markup {
             title { (title) }
             meta name="description" content=(desc);
             link rel="canonical" href=(canonical);
+            link rel="alternate" type="text/plain" href="/llms.txt" title="LLM usage guide";
 
             meta property="og:type" content="website";
             meta property="og:site_name" content="memegen.rs";
@@ -580,6 +580,12 @@ fn og_image_for(t: &Template) -> String {
 fn page_footer() -> Markup {
     html! {
         footer {
+            div class="agent-links" {
+                a href="/llms.txt" { "llms.txt" }
+                a href="/openapi.json" { "OpenAPI" }
+                a href="/docs" { "API docs" }
+                a href="/templates" { "Templates JSON" }
+            }
             "Built with Rust, axum & maud - "
             a href="https://github.com/tenequm/memegen-rs" { "source on GitHub" }
             ". A minimal reimplementation of "
@@ -617,7 +623,11 @@ fn gallery_markup(reg: &Registry) -> Markup {
                     section class="hero" {
                         h1 { "Every meme is " span class="accent" { "just a URL" } "." }
                         p { "A tiny, stateless meme generator in pure Rust. Pick a template, type your caption, copy the link or the image." }
+                        div class="hero-actions" {
+                            button #copy-agent class="btn" type="button" { "Copy prompt for your agent" }
+                        }
                     }
+                    pre #agent-prompt hidden { (AGENT_PROMPT) }
                     div class="toolbar" {
                         input #search type="search" placeholder="Search templates by name or keyword..."
                             autocomplete="off" aria-label="Search templates";
@@ -707,6 +717,7 @@ async fn builder(State(reg): State<AppState>, Path(id): Path<String>) -> Result<
                                 button #copy-img class="btn" type="button" { "Copy image" }
                                 a class="btn" href="/docs" { "More options" }
                             }
+                            button #copy-agent class="agent-link" type="button" { "Copy prompt for your agent" }
                         }
                     }
                 }
@@ -725,14 +736,7 @@ fn split_ext(s: &str) -> (&str, &str) {
 }
 
 fn cached_bytes(bytes: Vec<u8>, mime: &'static str) -> Response {
-    (
-        [
-            (header::CONTENT_TYPE, mime),
-            (header::CACHE_CONTROL, IMMUTABLE),
-        ],
-        bytes,
-    )
-        .into_response()
+    ([(header::CONTENT_TYPE, mime)], bytes).into_response()
 }
 
 async fn fetch(url: &str) -> Result<Vec<u8>, AppError> {
