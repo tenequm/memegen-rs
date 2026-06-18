@@ -1,0 +1,51 @@
+# git-cliff configuration - pond-style release notes: emoji-grouped sections,
+# scope-bolded entries, PR links, breaking markers, and a per-version compare
+# link. Used standalone (on tag push) to generate the GitHub Release body; the
+# workflow appends the GHCR image section after this renders.
+[changelog]
+header = "# Changelog\n\n"
+body = """
+{% if version %}\
+{% if previous and previous.version %}\
+{% set href = "https://github.com/tenequm/memegen-rs/compare/" ~ previous.version ~ "..." ~ version %}\
+{% else %}\
+{% set href = "https://github.com/tenequm/memegen-rs/releases/tag/" ~ version %}\
+{% endif %}\
+## [{{ version }}]({{ href }}) - {{ timestamp | date(format="%Y-%m-%d") }}
+{% else %}\
+## [unreleased]
+{% endif %}\
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | upper_first }}
+{% for commit in commits %}{% if commit.scope %}- **{{ commit.scope }}:** {% else %}- {% endif %}{% if commit.breaking %}[**breaking**] {% endif %}{{ commit.message }}
+{% endfor %}{% endfor %}{% if version and previous and previous.version %}
+**Full Changelog**: https://github.com/tenequm/memegen-rs/compare/{{ previous.version }}...{{ version }}
+{% endif %}"""
+trim = true
+
+[git]
+conventional_commits = true
+filter_unconventional = false
+require_conventional = false
+protect_breaking_commits = true
+tag_pattern = "v[0-9]*"
+filter_commits = false
+topo_order = false
+sort_commits = "oldest"
+commit_preprocessors = [
+  { pattern = '\(#([0-9]+)\)', replace = "([#${1}](https://github.com/tenequm/memegen-rs/pull/${1}))" },
+]
+commit_parsers = [
+  { message = '^chore: release', skip = true },
+  { message = '^chore\(release\)', skip = true },
+  { message = '^chore\(deps\)', skip = true },
+  { message = '^[a-z]+(\(.+\))?!:', group = "<!-- 0 -->🛠 Breaking Changes" },
+  { body = '^BREAKING CHANGE', group = "<!-- 0 -->🛠 Breaking Changes" },
+  { message = '^feat', group = "<!-- 1 -->🎉 New Features" },
+  { message = '^fix', group = "<!-- 2 -->🐛 Bug Fixes" },
+  { message = '^perf', group = "<!-- 3 -->🚀 Performance" },
+  { message = '^refactor', group = "<!-- 4 -->🚜 Refactor" },
+  { message = '^docs', group = "<!-- 5 -->📚 Documentation" },
+  { message = '^chore|^ci|^build|^test', group = "<!-- 6 -->🧹 Chores" },
+  { message = '^.*', group = "<!-- 7 -->🔧 Other" },
+]

@@ -1,0 +1,101 @@
+name: Build and deploy memegen-rs
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }} # tenequm/memegen-rs
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # push to GHCR
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+
+      # The template corpus is not committed to the repo. Assemble it into
+      # ./templates here (your VLM markup pipeline) before the image build.
+      # - run: ./scripts/assemble-templates.sh
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,format=long
+            type=semver,pattern={{version}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      # Build linux/amd64 once and push to GHCR. (push + load together is
+      # rejected by the buildx driver, so we pull the image back for the CF
+      # step below instead of loading it here.)
+      - name: Build and push to GHCR
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Containerfile
+          platforms: linux/amd64 # Cloudflare Containers requirement
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Provenance attestation
+        uses: actions/attest@v4
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      # Cloudflare Containers cannot pull from GHCR. Pull the image we just
+      # built (by digest) and copy it into Cloudflare's managed registry (which
+      # forbids the 'latest' tag, so we use a commit-derived tag).
+      - name: Copy image to Cloudflare registry
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          SRC="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.push.outputs.digest }}"
+          TAG="g${{ github.sha }}"
+          docker pull "$SRC"
+          docker tag "$SRC" "memegen-rs:${TAG}"
+          npx wrangler containers push "memegen-rs:${TAG}"
+
+      # Point wrangler at the pre-built CF registry image instead of rebuilding.
+      - name: Pin image reference for deploy
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          IMG="registry.cloudflare.com/${CLOUDFLARE_ACCOUNT_ID}/memegen-rs:g${{ github.sha }}"
+          sed -i "s|\"image\": \"./Containerfile\"|\"image\": \"${IMG}\"|" wrangler.jsonc
+
+      - name: Deploy Worker + Container
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy
