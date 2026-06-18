@@ -9,10 +9,8 @@ export class MemegenContainer extends Container {
   sleepAfter = "10m"; // scale to zero when idle; pay only for active time
 }
 
-interface Env {
-  MEMEGEN: DurableObjectNamespace<MemegenContainer>;
-  RENDER_LIMITER: RateLimit;
-}
+// `Env` (with MEMEGEN + RENDER_LIMITER) is generated from wrangler.jsonc
+// bindings into worker-configuration.d.ts by `wrangler types`.
 
 // Render endpoints are the only CPU-heavy paths (drawing, GIF encoding, the
 // outbound fetch in /custom). The gallery, builder, docs, JSON, fonts, and

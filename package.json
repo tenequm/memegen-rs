@@ -5,13 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "generate-types": "wrangler types"
   },
   "dependencies": {
     "@cloudflare/containers": "^0.3.7"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260617.1",
     "wrangler": "^4.101.0"
   }
 }
