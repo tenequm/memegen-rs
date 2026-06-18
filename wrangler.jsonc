@@ -18,11 +18,16 @@
       "image": "./Containerfile",
       "class_name": "MemegenContainer",
       "instance_type": "basic",
-      // The Worker pins all traffic to one instance via getContainer(), so the
-      // in-container 5 req/s limiter is a true global cap. This ceiling is only
-      // rollover headroom (old instances linger until sleepAfter); it does not
-      // add serving concurrency.
-      "max_instances": 5
+      // The Worker routes all traffic to one instance via getContainer() (the
+      // built-in cf-singleton-container id), so the in-container 5 req/s limiter
+      // is a true global cap. Pin the ceiling to 1 so the platform can never
+      // hold more than one instance (avoids stray instances from earlier
+      // experiments lingering against the cap during a rollout).
+      "max_instances": 1,
+      // Replace an active instance immediately on deploy instead of waiting out
+      // a grace period (paired with --containers-rollout=immediate in CI and
+      // SIGTERM handling in the server, deploys roll the new image right away).
+      "rollout_active_grace_period": 0
     }
   ],
   "durable_objects": {
