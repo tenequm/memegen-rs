@@ -21,11 +21,11 @@ text:
   - style: upper
     color: black
     font: thick
-    anchor_x: 0.34
-    anchor_y: 0.755
+    anchor_x: 0.335
+    anchor_y: 0.745
     angle: 0.0
-    scale_x: 0.075
-    scale_y: 0.09
+    scale_x: 0.6
+    scale_y: 0.07
     align: left
     start: 0.0
     stop: 1.0

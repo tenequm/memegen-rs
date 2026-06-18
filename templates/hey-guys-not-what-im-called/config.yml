@@ -7,40 +7,18 @@ keywords:
   - drawing
   - misnomer
 text:
+  # "hey guys" and "NOT WHAT I'M CALLED" are baked into the speech bubbles;
+  # the only caption is the middle dark box (the thing being mislabeled).
   - style: upper
     color: white
     font: thick
-    anchor_x: 0.283
-    anchor_y: 0.07
+    anchor_x: 0.085
+    anchor_y: 0.19
     angle: 0.0
-    scale_x: 0.129
-    scale_y: 0.115
-    align: center
-    start: 0.0
-    stop: 1.0
-  - style: upper
-    color: white
-    font: thick
-    anchor_x: 0.081
-    anchor_y: 0.261
-    angle: 0.0
-    scale_x: 0.31
+    scale_x: 0.41
     scale_y: 0.23
     align: center
     start: 0.0
     stop: 1.0
-  - style: upper
-    color: white
-    font: thick
-    anchor_x: 0.291
-    anchor_y: 0.581
-    angle: 0.0
-    scale_x: 0.204
-    scale_y: 0.233
-    align: center
-    start: 0.0
-    stop: 1.0
 example:
-  - hey guys
   - the guy from fortnite
-  - NOT WHAT I'M CALLED
