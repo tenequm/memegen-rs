@@ -45,7 +45,7 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           context: .
-          file: ./Containerfile
+          file: ./ops/docker/Containerfile
           platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -63,7 +63,7 @@ jobs:
           TAG: ${{ github.ref_name }}
           PKG_URL: https://github.com/${{ github.repository }}/pkgs/container/${{ github.event.repository.name }}
         run: |
-          git-cliff --latest --strip header --config cliff.toml -o NOTES.md
+          git-cliff --latest --strip header --config .github/cliff.toml -o NOTES.md
           {
             echo ""
             echo "### 📦 Container image"

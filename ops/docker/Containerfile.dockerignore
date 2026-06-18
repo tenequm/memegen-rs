@@ -2,6 +2,7 @@ target
 cache
 .git
 .github
+ops
 node_modules
 *.md
 .DS_Store

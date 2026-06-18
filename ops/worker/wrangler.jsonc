@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "memegen-rs",
   "account_id": "3db7dd8ff22ae68593205855d8bc0b25",
-  "main": "src/worker.ts",
+  "main": "worker.ts",
   "compatibility_date": "2026-06-17",
   "observability": {
     "enabled": true
@@ -30,7 +30,7 @@
       // For the first deploy, wrangler builds this Containerfile locally and
       // pushes it to Cloudflare's registry. Once CI pushes pre-built images,
       // swap this for "registry.cloudflare.com/<ACCOUNT_ID>/memegen-rs:<sha>".
-      "image": "./Containerfile",
+      "image": "../docker/Containerfile",
       "class_name": "MemegenContainer",
       "instance_type": "basic",
       // The Worker routes all traffic to one instance via getContainer() (the
