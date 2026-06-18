@@ -1,0 +1,35 @@
+name: Disappearing Kid
+source: file://disappearing-kid.mp4
+keywords:
+  - disappearing
+  - kid
+  - fading
+  - peace out
+  - nileseyy niles
+  - im out
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.003
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.147
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.003
+    anchor_y: 0.846
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.147
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My dad when I turn the car light on
+  - Peace out

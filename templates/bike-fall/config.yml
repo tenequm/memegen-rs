@@ -1,0 +1,47 @@
+name: Bike Fall
+source: https://imgflip.com/memetemplate/79132341
+keywords:
+  - baton roue
+  - bicycle
+  - fall
+  - stick
+  - blame
+  - self-sabotage
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.282
+    anchor_y: 0.048
+    angle: 0.0
+    scale_x: 0.203
+    scale_y: 0.277
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.468
+    anchor_y: 0.425
+    angle: 0.0
+    scale_x: 0.182
+    scale_y: 0.21
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.445
+    anchor_y: 0.805
+    angle: 0.0
+    scale_x: 0.32
+    scale_y: 0.095
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me making a bad decision
+  - The bad decision
+  - Why would society do this?

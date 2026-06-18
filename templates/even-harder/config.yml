@@ -1,0 +1,34 @@
+name: Even Harder
+source: https://imgflip.com/meme/342245744/even-harder
+keywords:
+  - the office
+  - pam
+  - michael scott
+  - stop
+  - im gonna do it even harder
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.403
+    anchor_y: 0.415
+    angle: 0.0
+    scale_x: 0.307
+    scale_y: 0.031
+    align: left
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.275
+    anchor_y: 0.928
+    angle: 0.0
+    scale_x: 0.258
+    scale_y: 0.031
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - DATING HIM
+  - DATE HIM

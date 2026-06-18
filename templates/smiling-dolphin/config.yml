@@ -1,0 +1,23 @@
+name: Smiling Dolphin
+source: https://imgflip.com/meme/553695155/smiling-dolphin
+keywords:
+  - dolphin
+  - smiling
+  - blob
+  - grey
+  - cute
+  - simple
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.025
+    anchor_y: 0.025
+    angle: 0.0
+    scale_x: 0.95
+    scale_y: 0.37
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me when I get a little treat

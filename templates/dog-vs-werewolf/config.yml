@@ -1,0 +1,36 @@
+name: Dog vs Werewolf
+source: https://imgflip.com/meme/179315205/dog-vs-werewolf
+keywords:
+  - dog
+  - werewolf
+  - golden retriever
+  - scary
+  - cute
+  - comparison
+  - beast
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.55
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.3
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.12
+    anchor_y: 0.5
+    angle: 0.0
+    scale_x: 0.23
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My actual problems
+  - Me worrying about them

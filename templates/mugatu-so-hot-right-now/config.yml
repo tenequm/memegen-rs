@@ -1,0 +1,33 @@
+name: Mugatu So Hot Right Now
+source: https://imgflip.com/meme/Mugatu-So-Hot-Right-Now
+keywords:
+  - mugatu
+  - so hot right now
+  - zoolander
+  - will ferrell
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.115
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.88
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.11
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - AI image generators
+  - They're so hot right now

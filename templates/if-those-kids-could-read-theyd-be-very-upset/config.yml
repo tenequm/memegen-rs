@@ -1,0 +1,23 @@
+name: If those kids could read they'd be very upset
+source: https://imgflip.com/meme/243100573/If-those-kids-could-read-theyd-be-very-upset
+keywords:
+  - king of the hill
+  - bobby hill
+  - principal
+  - classroom
+  - sign
+  - if those kids could read
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.338
+    anchor_y: 0.048
+    angle: 0.0
+    scale_x: 0.282
+    scale_y: 0.324
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Your opinion is not a fact

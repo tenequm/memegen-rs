@@ -1,0 +1,35 @@
+name: Happy / Shock
+source: https://imgflip.com/meme/248097807/Happy--Shock
+keywords:
+  - happy
+  - shock
+  - disappointed
+  - excited
+  - two panels
+  - reaction
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.48
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.51
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.48
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When you find a great meme template
+  - But you have to write a caption for it

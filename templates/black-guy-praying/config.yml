@@ -1,0 +1,46 @@
+name: They Hated Jesus Because He Told Them the Truth
+source: https://imgflip.com/meme/549792503/Black-Guy-Praying
+keywords:
+  - they hated jesus
+  - most people rejected his message
+  - shut up
+  - "galatians 4:16"
+  - bible comic
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.06
+    anchor_y: 0.03
+    angle: 0.0
+    scale_x: 0.888
+    scale_y: 0.095
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.558
+    anchor_y: 0.228
+    angle: 0.0
+    scale_x: 0.342
+    scale_y: 0.122
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.054
+    anchor_y: 0.825
+    angle: 0.0
+    scale_x: 0.88
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Most people rejected His message.
+  - "Shut up!"
+  - They hated Jesus because He told them the truth.

@@ -1,0 +1,33 @@
+name: Why Can't I Hold All These Limes
+source: https://imgflip.com/meme/Why-Cant-I-Hold-All-These-Limes
+keywords:
+  - why can't i hold all these limes
+  - limes guy
+  - holding limes
+  - dropping limes
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.012
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.083
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.014
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - WHY CAN'T I
+  - HOLD ALL THESE LIMES?

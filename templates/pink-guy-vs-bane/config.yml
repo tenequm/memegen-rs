@@ -1,0 +1,35 @@
+name: Pink Guy vs Bane
+source: https://imgflip.com/meme/212319280/Pink-Guy-vs-Bane
+keywords:
+  - pink guy
+  - bane
+  - filthy frank
+  - batman
+  - confrontation
+  - boss fight
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.278
+    anchor_y: 0.268
+    angle: 0.0
+    scale_x: 0.202
+    scale_y: 0.17
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.64
+    anchor_y: 0.505
+    angle: 0.0
+    scale_x: 0.21
+    scale_y: 0.133
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My final exams
+  - Me with zero preparation

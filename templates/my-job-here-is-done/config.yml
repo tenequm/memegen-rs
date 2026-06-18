@@ -1,0 +1,33 @@
+name: My job here is done
+source: https://imgflip.com/meme/141482677/My-job-here-is-done
+keywords:
+  - tuxedo mask
+  - sailor moon
+  - but you didn't do anything
+  - anime
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.13
+    angle: 0.0
+    scale_x: 0.35
+    scale_y: 0.22
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.54
+    anchor_y: 0.43
+    angle: 0.0
+    scale_x: 0.36
+    scale_y: 0.33
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me after writing one line of code
+  - The rest of the team

@@ -1,0 +1,22 @@
+name: Sure grandma let's get you to bed
+source: https://imgflip.com/meme/268054898/Sure-grandma-lets-get-you-to-bed
+keywords:
+  - sure grandma
+  - grandma
+  - old person
+  - delusional
+  - nursing home
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.15
+    angle: 0.0
+    scale_x: 0.35
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - I remember when the internet didn't have ads

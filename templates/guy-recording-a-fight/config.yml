@@ -1,0 +1,46 @@
+name: Guy recording a fight
+source: https://imgflip.com/meme/176409418/Guy-recording-a-fight
+keywords:
+  - guy recording a fight
+  - fight
+  - recording
+  - bystander
+  - worldstar
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.58
+    anchor_y: 0.265
+    angle: 0.0
+    scale_x: 0.4
+    scale_y: 0.305
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.07
+    angle: 0.0
+    scale_x: 0.51
+    scale_y: 0.86
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.41
+    anchor_y: 0.63
+    angle: 0.0
+    scale_x: 0.58
+    scale_y: 0.3
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me watching the drama unfold
+  - My responsibilities
+  - My mental health

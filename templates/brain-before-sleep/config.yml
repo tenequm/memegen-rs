@@ -1,0 +1,47 @@
+name: Brain Before Sleep
+source: https://imgflip.com/meme/189601074/Brain-Before-Sleep
+keywords:
+  - brain
+  - sleep
+  - are you going to sleep
+  - awake
+  - bed
+  - thinking
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.078
+    anchor_y: 0.03
+    angle: 0.0
+    scale_x: 0.42
+    scale_y: 0.184
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.506
+    anchor_y: 0.026
+    angle: 0.0
+    scale_x: 0.248
+    scale_y: 0.228
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.026
+    anchor_y: 0.506
+    angle: 0.0
+    scale_x: 0.472
+    scale_y: 0.174
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Are you going to sleep?
+  - "Yes, now shut up."
+  - Remember that embarrassing thing you did 10 years ago?

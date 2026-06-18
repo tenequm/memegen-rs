@@ -1,0 +1,34 @@
+name: Damn Got Hands
+source: https://imgflip.com/meme/293131641/damn-got-hands
+keywords:
+  - ok ima fight
+  - damn got hands
+  - boxing
+  - fight
+  - depression
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.29
+    anchor_y: 0.08
+    angle: 0.0
+    scale_x: 0.61
+    scale_y: 0.17
+    align: left
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.68
+    angle: 0.0
+    scale_x: 0.39
+    scale_y: 0.1
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - my inner demons
+  - my inner demons

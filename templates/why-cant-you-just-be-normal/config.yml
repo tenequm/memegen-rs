@@ -1,0 +1,34 @@
+name: Why Can't You Just Be Normal
+source: https://imgflip.com/meme/303873877/Why-Cant-You-Just-Be-Normal
+keywords:
+  - babadook
+  - screaming
+  - mother
+  - son
+  - car
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.4
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.4
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.3
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.28
+    scale_y: 0.26
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Web Developers
+  - Safari

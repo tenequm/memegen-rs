@@ -38,7 +38,7 @@ cd memegen-rs
 cargo build --release
 ```
 
-The binary is then at `target/release/memegen-rs`. You also need a `templates/` directory - see [Templates](#templates).
+The binary is then at `target/release/memegen-rs`. The template corpus ships in `templates/` (see [Templates](#templates)), so it runs out of the box.
 
 ## Usage
 
@@ -80,7 +80,7 @@ templates/<id>/
 
 `config.yml` uses the same schema as upstream memegen, so any memegen-compatible corpus works. Text-box coordinates are fractions of the image (0.0-1.0). Alternate background variants (extra image files beside `default.*`) become selectable via `?style=<name>`.
 
-The corpus is read once at startup into an immutable in-memory registry. It is not shipped with this repository - the images belong to their respective rights holders. Point `MEMEGEN_TEMPLATES_DIR` at any folder of templates you assemble yourself.
+This repository ships a corpus of ~780 templates under `templates/`, read once at startup into an immutable in-memory registry. Add or replace templates by dropping folders in, or point `MEMEGEN_TEMPLATES_DIR` at a different directory. See [License](#license) for the licensing posture on the bundled images.
 
 ## Architecture
 
@@ -141,6 +141,12 @@ Issues and pull requests are welcome - open an [issue](https://github.com/tenequ
 
 ## License
 
-[MIT](LICENSE) (c) 2026 Misha Kolesnik
+Code, build scripts, and template `config.yml` markup are [MIT](LICENSE) (c) 2026 Misha Kolesnik. The embedded Anton font is [SIL OFL 1.1](assets/OFL-Anton.txt).
 
-Template background images are not covered by this license and belong to their respective owners. The embedded Anton font is licensed under [SIL OFL 1.1](assets/OFL-Anton.txt).
+### Template images
+
+The MIT license does **not** extend to the template background images and clips shipped under `templates/`. These are well-known internet meme formats whose underlying photos, film stills, and artwork are owned by their respective copyright holders. They are included in good faith for the same nominative/transformative use that meme-generation tools rely on (the same legal posture as [memegen.link](https://memegen.link) and the upstream memegen image), and **no claim of ownership is made over them**.
+
+If you are a rights holder and want a template removed, email **misha@kolesnik.io** with the template name (its folder under `templates/`) and proof of rights. Removal requests are honored promptly - typically within a few days.
+
+For zero redistribution exposure, remove `templates/` and rely on the `?background=<url>` custom-background endpoint instead.

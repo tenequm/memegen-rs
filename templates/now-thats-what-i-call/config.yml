@@ -1,0 +1,21 @@
+name: Now That's What I Call
+source: https://imgflip.com/meme/133459494/Now-Thats-What-I-Call
+keywords:
+  - now thats what i call
+  - music
+  - album
+  - compilation
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.16
+    anchor_y: 0.63
+    angle: 0.0
+    scale_x: 0.685
+    scale_y: 0.31
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - A MAJOR DISAPPOINTMENT

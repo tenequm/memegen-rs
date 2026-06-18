@@ -1,0 +1,33 @@
+name: Blank Nut Button
+source: https://imgflip.com/memetemplate/119139145
+keywords:
+  - blue button
+  - slamming button
+  - nut button
+  - hand slamming
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.23
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.07
+    anchor_y: 0.48
+    angle: 0.0
+    scale_x: 0.38
+    scale_y: 0.375
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When you see a good meme
+  - UPVOTE

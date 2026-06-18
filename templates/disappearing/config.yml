@@ -1,0 +1,35 @@
+name: Disappearing
+source: https://imgflip.com/meme/89139301/disappearing
+keywords:
+  - peace out
+  - nileseyy niles
+  - disappear
+  - fading
+  - goodbye
+  - vanish
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.1
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.43
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My dad going to get milk
+  - Me

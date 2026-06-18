@@ -1,0 +1,34 @@
+name: White man been here
+source: https://imgflip.com/meme/365270545/White-man-been-here
+keywords:
+  - white man been here
+  - native american
+  - tracking
+  - snow
+  - how can you tell
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.023
+    anchor_y: 0.056
+    angle: 0.0
+    scale_x: 0.291
+    scale_y: 0.153
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.548
+    anchor_y: 0.711
+    angle: 0.0
+    scale_x: 0.343
+    scale_y: 0.135
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - A white man has been here.
+  - He left a Starbucks cup.

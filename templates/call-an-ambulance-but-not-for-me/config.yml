@@ -1,0 +1,71 @@
+name: Call an ambulance but not for me
+source: https://imgflip.com/meme/220294579/Call-an-ambulance-but-not-for-me
+keywords:
+  - call an ambulance
+  - but not for me
+  - old man
+  - gun
+  - robbery
+  - reverse card
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.368
+    scale_y: 0.484
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.512
+    anchor_y: 0.251
+    angle: 0.0
+    scale_x: 0.482
+    scale_y: 0.243
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.24
+    anchor_y: 0.436
+    angle: 0.0
+    scale_x: 0.518
+    scale_y: 0.052
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.508
+    anchor_y: 0.498
+    angle: 0.0
+    scale_x: 0.474
+    scale_y: 0.498
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.296
+    anchor_y: 0.936
+    angle: 0.0
+    scale_x: 0.404
+    scale_y: 0.052
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Robber
+  - Old man
+  - "Call an ambulance!"
+  - Old man with gun
+  - "But not for me!"

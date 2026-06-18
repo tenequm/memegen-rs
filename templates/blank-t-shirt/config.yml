@@ -1,0 +1,22 @@
+name: Blank T-Shirt
+source: https://imgflip.com/meme/46798201/Blank-T-Shirt
+keywords:
+  - blank t-shirt
+  - black shirt
+  - tshirt
+  - clothing
+  - apparel
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.25
+    anchor_y: 0.18
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.67
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - YOUR LOGO HERE

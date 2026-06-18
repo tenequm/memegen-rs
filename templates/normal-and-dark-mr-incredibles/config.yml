@@ -1,0 +1,35 @@
+name: Normal and Dark Mr. Incredible
+source: https://imgflip.com/meme/336492590/Normal-and-dark-mrincredibles
+keywords:
+  - mr incredible becoming uncanny
+  - normal and dark mr incredibles
+  - canny
+  - uncanny
+  - comparison
+  - two panels
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.475
+    scale_y: 0.145
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.475
+    scale_y: 0.145
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - People who know
+  - People who don't know

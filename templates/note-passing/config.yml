@@ -1,0 +1,46 @@
+name: Note passing
+source: https://imgflip.com/meme/61087503/Note-passing
+keywords:
+  - note passing
+  - classroom
+  - angry
+  - comic
+  - webcomic
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.06
+    anchor_y: 0.16
+    angle: 0.0
+    scale_x: 0.31
+    scale_y: 0.24
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.24
+    scale_y: 0.25
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.47
+    anchor_y: 0.59
+    angle: 0.0
+    scale_x: 0.28
+    scale_y: 0.22
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My brain
+  - Me trying to sleep
+  - Remember that embarrassing thing you did 5 years ago?

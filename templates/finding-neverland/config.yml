@@ -1,0 +1,47 @@
+name: Finding Neverland
+source: https://imgflip.com/memetemplate/6235864
+keywords:
+  - finding neverland
+  - johnny depp
+  - freddie highmore
+  - crying
+  - bench
+  - hug
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.015
+    anchor_y: 0.015
+    angle: 0.0
+    scale_x: 0.965
+    scale_y: 0.305
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.015
+    anchor_y: 0.35
+    angle: 0.0
+    scale_x: 0.965
+    scale_y: 0.31
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.015
+    anchor_y: 0.69
+    angle: 0.0
+    scale_x: 0.965
+    scale_y: 0.29
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Why are you crying?
+  - Because I have to write a JSON response.
+  - "There, there, it's okay."

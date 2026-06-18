@@ -1,0 +1,46 @@
+name: Stop He's Already Dead
+source: https://imgflip.com/meme/298218630/Stop-Hes-Already-Dead
+keywords:
+  - simpsons
+  - stop he's already dead
+  - beating
+  - krusty burglar
+  - crying kid
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.215
+    anchor_y: 0.095
+    angle: 0.0
+    scale_x: 0.475
+    scale_y: 0.401
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.39
+    anchor_y: 0.568
+    angle: 0.0
+    scale_x: 0.325
+    scale_y: 0.41
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.258
+    anchor_y: 0.855
+    angle: 0.0
+    scale_x: 0.302
+    scale_y: 0.128
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me
+  - Life
+  - My hopes and dreams

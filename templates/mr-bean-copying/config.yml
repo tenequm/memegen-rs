@@ -1,0 +1,107 @@
+name: Mr bean copying
+source: https://imgflip.com/meme/156789093/Mr-bean-copying
+keywords:
+  - mr bean
+  - copying
+  - exam
+  - cheating
+  - four panels
+  - comparison
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.228
+    angle: 0.0
+    scale_x: 0.141
+    scale_y: 0.12
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.324
+    anchor_y: 0.201
+    angle: 0.0
+    scale_x: 0.11
+    scale_y: 0.113
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.521
+    anchor_y: 0.246
+    angle: 0.0
+    scale_x: 0.13
+    scale_y: 0.106
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.824
+    anchor_y: 0.195
+    angle: 0.0
+    scale_x: 0.092
+    scale_y: 0.07
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.002
+    anchor_y: 0.713
+    angle: 0.0
+    scale_x: 0.141
+    scale_y: 0.123
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.308
+    anchor_y: 0.691
+    angle: 0.0
+    scale_x: 0.11
+    scale_y: 0.113
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.511
+    anchor_y: 0.725
+    angle: 0.0
+    scale_x: 0.13
+    scale_y: 0.106
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.825
+    anchor_y: 0.711
+    angle: 0.0
+    scale_x: 0.092
+    scale_y: 0.07
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Original idea
+  - My adaptation
+  - Complex formula
+  - Simplified version
+  - Original idea
+  - My adaptation
+  - Complex formula
+  - Simplified version

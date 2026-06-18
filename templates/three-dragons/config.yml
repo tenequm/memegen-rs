@@ -1,0 +1,46 @@
+name: Three dragons
+source: https://imgflip.com/meme/187760713/Three-dragons
+keywords:
+  - king ghidorah
+  - three heads
+  - two serious one derpy
+  - monster
+  - dragon
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.24
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.38
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.22
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.69
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.24
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - First movie in a trilogy
+  - Second movie in a trilogy
+  - Third movie in a trilogy

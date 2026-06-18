@@ -1,0 +1,34 @@
+name: Please sir may I have some more
+source: https://imgflip.com/meme/39351202/Please-sir-may-I-have-some-more
+keywords:
+  - oliver twist
+  - boy with bowl
+  - begging
+  - more
+  - please sir
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.979
+    scale_y: 0.147
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.84
+    angle: 0.0
+    scale_x: 0.979
+    scale_y: 0.15
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "Please sir, may I have some more"
+  - pixels

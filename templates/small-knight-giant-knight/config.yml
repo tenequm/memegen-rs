@@ -1,0 +1,35 @@
+name: Small knight giant knight
+source: https://imgflip.com/meme/264303393/Small-knight-giant-knight
+keywords:
+  - yhorm the giant
+  - ashen one
+  - dark souls
+  - boss fight
+  - giant vs small
+  - overwhelming obstacle
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.48
+    anchor_y: 0.19
+    angle: 0.0
+    scale_x: 0.33
+    scale_y: 0.14
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.15
+    anchor_y: 0.7
+    angle: 0.0
+    scale_x: 0.23
+    scale_y: 0.11
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - A massive project deadline
+  - Me with my little sword

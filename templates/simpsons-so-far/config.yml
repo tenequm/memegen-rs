@@ -1,0 +1,34 @@
+name: Simpsons so far
+source: https://imgflip.com/meme/131745903/Simpsons-so-far
+keywords:
+  - the simpsons
+  - bart simpson
+  - homer simpson
+  - worst day of your life
+  - so far
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.425
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.073
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.47
+    anchor_y: 0.908
+    angle: 0.0
+    scale_x: 0.518
+    scale_y: 0.09
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - This is the worst day of my life.
+  - The worst day of your life so far.

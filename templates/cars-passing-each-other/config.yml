@@ -1,0 +1,48 @@
+name: Cars Passing Each Other
+source: https://imgflip.com/meme/260194796/Cars-Passing-Each-Other
+keywords:
+  - cars
+  - lightning mcqueen
+  - the king
+  - chick hicks
+  - race
+  - shortcut
+  - grass
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.3
+    scale_y: 0.12
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.42
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.25
+    scale_y: 0.12
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.65
+    anchor_y: 0.8
+    angle: 0.0
+    scale_x: 0.19
+    scale_y: 0.12
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Doing things the right way
+  - Cheating to get ahead
+  - Me taking a completely different path

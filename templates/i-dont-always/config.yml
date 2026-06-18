@@ -1,0 +1,32 @@
+name: The Most Interesting Man in the World
+source: https://imgflip.com/meme/10760000/i-dont-always
+keywords:
+  - i don't always
+  - most interesting man
+  - dos equis
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.002
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.013
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.085
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.013
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - I DON'T ALWAYS TEST MY CODE
+  - "BUT WHEN I DO, I DO IT IN PRODUCTION"

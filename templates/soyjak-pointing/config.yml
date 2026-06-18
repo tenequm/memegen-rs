@@ -1,0 +1,22 @@
+name: Soyjak Pointing
+source: https://imgflip.com/meme/322540291/Soyjak-Pointing
+keywords:
+  - soyjak
+  - pointing
+  - wojak
+  - two men pointing
+  - excited
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.32
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.36
+    scale_y: 0.35
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - The new thing

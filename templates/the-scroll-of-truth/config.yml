@@ -1,0 +1,35 @@
+name: The Scroll Of Truth
+source: https://imgflip.com/memetemplate/123999232
+keywords:
+  - scroll of truth
+  - comic
+  - robotatertot
+  - truth
+  - scroll
+  - nyehhh
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.175
+    anchor_y: 0.565
+    angle: 0.0
+    scale_x: 0.205
+    scale_y: 0.32
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.508
+    anchor_y: 0.515
+    angle: 0.0
+    scale_x: 0.197
+    scale_y: 0.135
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - You don't need to buy every game on sale
+  - "NYEHHH!"

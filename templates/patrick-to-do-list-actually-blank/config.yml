@@ -1,0 +1,22 @@
+name: Patrick To Do List Actually Blank
+source: https://imgflip.com/meme/247756783/patrick-to-do-list-actually-blank
+keywords:
+  - patrick star
+  - spongebob
+  - to do list
+  - nothing
+  - blank paper
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.27
+    anchor_y: 0.24
+    angle: 0.0
+    scale_x: 0.488
+    scale_y: 0.7
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Nothing

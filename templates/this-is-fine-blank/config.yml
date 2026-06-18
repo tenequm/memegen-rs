@@ -1,0 +1,22 @@
+name: This is Fine (Blank)
+source: https://imgflip.com/meme/91401121/This-is-Fine-Blank
+keywords:
+  - this is fine
+  - dog
+  - fire
+  - speech bubble
+  - comic
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.615
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.34
+    scale_y: 0.255
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - This is fine.

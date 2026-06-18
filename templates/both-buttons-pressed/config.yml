@@ -1,0 +1,35 @@
+name: Both Buttons Pressed
+source: https://imgflip.com/meme/286646496/Both-Buttons-Pressed
+keywords:
+  - daily struggle
+  - two buttons
+  - pressing both
+  - choice
+  - decision
+  - thumbs up
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.07
+    angle: 0.0
+    scale_x: 0.435
+    scale_y: 0.31
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.41
+    anchor_y: 0.05
+    angle: 0.0
+    scale_x: 0.41
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Option A
+  - Option B

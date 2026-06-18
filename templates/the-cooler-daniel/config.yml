@@ -1,0 +1,34 @@
+name: The Cooler Daniel
+source: https://imgflip.com/meme/113387478/The-Cooler-Daniel
+keywords:
+  - daniel
+  - the cooler daniel
+  - yearbook
+  - sunglasses
+  - comparison
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.088
+    anchor_y: 0.23
+    angle: 0.0
+    scale_x: 0.386
+    scale_y: 0.592
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.34
+    scale_y: 0.575
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Your product
+  - The product they told you not to worry about

@@ -1,0 +1,58 @@
+name: Train Hits Bus
+source: https://imgflip.com/meme/255579145/train-crashes-bus
+keywords:
+  - train crashes bus
+  - school bus
+  - train
+  - two panels
+  - collision
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.06
+    anchor_y: 0.218
+    angle: 0.0
+    scale_x: 0.15
+    scale_y: 0.102
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.48
+    anchor_y: 0.22
+    angle: 0.0
+    scale_x: 0.42
+    scale_y: 0.1
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.16
+    anchor_y: 0.62
+    angle: 0.0
+    scale_x: 0.29
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.76
+    anchor_y: 0.72
+    angle: 0.0
+    scale_x: 0.23
+    scale_y: 0.11
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My plans
+  - Me enjoying life
+  - Reality
+  - My plans

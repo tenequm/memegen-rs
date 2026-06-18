@@ -1,0 +1,34 @@
+name: Let's See Paul Allen's Card
+source: https://imgflip.com/meme/306721434/lets-see-paul-allens-card
+keywords:
+  - american psycho
+  - patrick bateman
+  - christian bale
+  - glasses
+  - smile
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.002
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.148
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.83
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Look at that subtle off-white coloring.
+  - Let's see Paul Allen's card.

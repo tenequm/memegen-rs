@@ -1,0 +1,33 @@
+name: What a week huh
+source: https://imgflip.com/meme/333869421/What-a-week-huh
+keywords:
+  - tintin
+  - captain haddock
+  - what a week
+  - it's only wednesday
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.078
+    anchor_y: 0.076
+    angle: 0.0
+    scale_x: 0.847
+    scale_y: 0.202
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.078
+    anchor_y: 0.285
+    angle: 0.0
+    scale_x: 0.594
+    scale_y: 0.125
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "What a week, huh?"
+  - "Captain, it's Wednesday."

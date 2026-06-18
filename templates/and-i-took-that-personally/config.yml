@@ -1,0 +1,21 @@
+name: And I Took That Personally
+source: https://imgflip.com/meme/270884147/and-I-took-that-personally
+keywords:
+  - michael jordan
+  - the last dance
+  - and i took that personally
+  - took that personally
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.23
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When someone says they don't like my favorite movie

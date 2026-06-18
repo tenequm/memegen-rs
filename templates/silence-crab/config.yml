@@ -1,0 +1,22 @@
+name: Silence Crab
+source: https://imgflip.com/meme/187987746/Silence-Crab
+keywords:
+  - silence
+  - crab
+  - laser eyes
+  - explosion
+  - silence brand
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.2
+    anchor_y: 0.78
+    angle: 0.0
+    scale_x: 0.6
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - brand

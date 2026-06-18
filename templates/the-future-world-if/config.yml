@@ -1,0 +1,22 @@
+name: The future world if
+source: https://imgflip.com/meme/179137533/The-future-world-if
+keywords:
+  - the world if
+  - society if
+  - future
+  - utopia
+  - futuristic city
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.002
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.148
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - The world if everyone used the correct meme template

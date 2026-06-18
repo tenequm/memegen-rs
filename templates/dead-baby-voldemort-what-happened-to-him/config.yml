@@ -1,0 +1,46 @@
+name: Dead Baby Voldemort / What Happened To Him
+source: https://imgflip.com/meme/221506353/Dead-Baby-Voldemort--What-Happened-To-Him
+keywords:
+  - harry potter
+  - voldemort
+  - dumbledore
+  - what happened to him
+  - three panels
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.15
+    anchor_y: 0.04
+    angle: 0.0
+    scale_x: 0.65
+    scale_y: 0.28
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.58
+    angle: 0.0
+    scale_x: 0.8
+    scale_y: 0.075
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.91
+    angle: 0.0
+    scale_x: 0.8
+    scale_y: 0.075
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My sleep schedule
+  - "\"What happened to him?\""
+  - "\"He tried to fix a bug in production on a Friday afternoon.\""

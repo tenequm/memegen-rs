@@ -1,0 +1,33 @@
+name: "You know, I'm something of a scientist myself"
+source: https://imgflip.com/meme/178433874/You-know-Im-something-of-a--myself
+keywords:
+  - willem dafoe
+  - spider-man
+  - norman osborn
+  - something of a myself
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.978
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.63
+    anchor_y: 0.885
+    angle: 0.0
+    scale_x: 0.175
+    scale_y: 0.07
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When I successfully change a lightbulb
+  - scientist

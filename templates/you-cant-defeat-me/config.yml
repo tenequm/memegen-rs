@@ -1,0 +1,47 @@
+name: You can't defeat me
+source: https://imgflip.com/meme/146594491/You-cant-defeat-me
+keywords:
+  - thor ragnarok
+  - hela
+  - thor
+  - surtur
+  - you can't defeat me
+  - i know but he can
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.34
+    anchor_y: 0.148
+    angle: 0.0
+    scale_x: 0.22
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.385
+    angle: 0.0
+    scale_x: 0.468
+    scale_y: 0.28
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.15
+    anchor_y: 0.668
+    angle: 0.0
+    scale_x: 0.63
+    scale_y: 0.33
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My older brother
+  - Me
+  - My mom with a slipper

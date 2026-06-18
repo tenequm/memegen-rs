@@ -1,0 +1,34 @@
+name: Jack Sparrow Being Chased
+source: https://imgflip.com/meme/Jack-Sparrow-Being-Chased
+keywords:
+  - jack sparrow
+  - pirates of the caribbean
+  - running away
+  - chase
+  - crowd
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.318
+    anchor_y: 0.29
+    angle: 0.0
+    scale_x: 0.337
+    scale_y: 0.55
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.51
+    angle: 0.0
+    scale_x: 0.43
+    scale_y: 0.21
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me
+  - My responsibilities

@@ -1,0 +1,47 @@
+name: Children scared of rabbit
+source: https://imgflip.com/meme/257665044/Children-scared-of-rabbit
+keywords:
+  - children scared of rabbit
+  - kids scared of bunny
+  - scared kids
+  - rabbit
+  - bunny
+  - fear
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.22
+    anchor_y: 0.115
+    angle: 0.0
+    scale_x: 0.268
+    scale_y: 0.6
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.198
+    anchor_y: 0.262
+    angle: 0.0
+    scale_x: 0.34
+    scale_y: 0.47
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.418
+    anchor_y: 0.744
+    angle: 0.0
+    scale_x: 0.242
+    scale_y: 0.236
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My older sister
+  - Me
+  - A minor inconvenience

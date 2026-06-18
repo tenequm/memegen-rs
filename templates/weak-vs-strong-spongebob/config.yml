@@ -1,0 +1,35 @@
+name: Weak vs Strong Spongebob
+source: https://imgflip.com/meme/174791714/Weak-vs-Strong-Spongebob
+keywords:
+  - spongebob
+  - weak
+  - strong
+  - buff
+  - comparison
+  - two panels
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.48
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.51
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.48
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me doing 5 pushups
+  - Me carrying all the groceries in one trip

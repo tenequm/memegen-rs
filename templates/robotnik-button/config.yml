@@ -1,0 +1,34 @@
+name: Robotnik Button
+source: file://robotnik-button.mp4
+keywords:
+  - sonic movie
+  - dr robotnik
+  - jim carrey
+  - button
+  - push
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.0
+    angle: 0.0
+    scale_x: 1.0
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.87
+    angle: 0.0
+    scale_x: 1.0
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - my finger is on the button
+  - push the button

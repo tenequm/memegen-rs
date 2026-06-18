@@ -1,0 +1,46 @@
+name: Will Smith slapping Chris Rock
+source: https://imgflip.com/meme/380030185/Will-Smith-punching-Chris-Rock
+keywords:
+  - will smith
+  - chris rock
+  - slap
+  - oscars
+  - punch
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.25
+    anchor_y: 0.18
+    angle: 0.0
+    scale_x: 0.15
+    scale_y: 0.17
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.61
+    anchor_y: 0.13
+    angle: 0.0
+    scale_x: 0.14
+    scale_y: 0.25
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.195
+    anchor_y: 0.43
+    angle: 0.0
+    scale_x: 0.335
+    scale_y: 0.24
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me enjoying my life
+  - Monday morning
+  - Alarm clock

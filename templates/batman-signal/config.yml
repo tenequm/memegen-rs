@@ -1,0 +1,34 @@
+name: Batman Signal
+source: https://imgflip.com/meme/22138211/batman-signal
+keywords:
+  - batman
+  - bat-signal
+  - sky
+  - silhouette
+  - gotham
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.072
+    anchor_y: 0.044
+    angle: 0.0
+    scale_x: 0.336
+    scale_y: 0.45
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.728
+    anchor_y: 0.328
+    angle: 0.0
+    scale_x: 0.098
+    scale_y: 0.278
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - A minor inconvenience
+  - Me

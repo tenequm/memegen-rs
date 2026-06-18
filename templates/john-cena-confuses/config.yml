@@ -1,0 +1,33 @@
+name: Soup Nazi
+source: https://imgflip.com/meme/232462064/John-Cena-confuses
+keywords:
+  - soup nazi
+  - seinfeld
+  - no soup for you
+  - yev kassem
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.21
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.78
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "NO SOUP FOR YOU!"
+  - "NEXT!"

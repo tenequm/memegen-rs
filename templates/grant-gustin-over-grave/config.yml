@@ -1,0 +1,35 @@
+name: Grant Gustin over grave
+source: https://imgflip.com/memetemplate/221578498
+keywords:
+  - grant gustin
+  - grave
+  - tombstone
+  - barry allen
+  - arrowverse
+  - oliver queen
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.138
+    anchor_y: 0.308
+    angle: 0.0
+    scale_x: 0.242
+    scale_y: 0.25
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.55
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.3
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My hopes and dreams
+  - Me

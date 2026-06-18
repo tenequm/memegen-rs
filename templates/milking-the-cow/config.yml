@@ -1,0 +1,34 @@
+name: Milking the Cow
+source: https://imgflip.com/meme/159223754/milking-the-cow
+keywords:
+  - milking the cow
+  - obama milking cow
+  - exhausted cow
+  - milking a franchise
+  - overused
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.2
+    anchor_y: 0.156
+    angle: 0.0
+    scale_x: 0.3
+    scale_y: 0.524
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.68
+    anchor_y: 0.478
+    angle: 0.0
+    scale_x: 0.235
+    scale_y: 0.312
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - GTA V
+  - Rockstar Games

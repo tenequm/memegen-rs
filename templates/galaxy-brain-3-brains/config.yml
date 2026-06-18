@@ -1,0 +1,46 @@
+name: Galaxy Brain (3 brains)
+source: https://imgflip.com/meme/159807519/Galaxy-Brain-3-brains
+keywords:
+  - galaxy brain
+  - expanding brain
+  - three panels
+  - intelligence
+  - increasingly smart
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.0
+    angle: 0.0
+    scale_x: 0.533
+    scale_y: 0.325
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.331
+    angle: 0.0
+    scale_x: 0.533
+    scale_y: 0.329
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.666
+    angle: 0.0
+    scale_x: 0.533
+    scale_y: 0.334
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Using a calculator for 2+2
+  - Doing 2+2 in your head
+  - Writing a Python script to calculate 2+2

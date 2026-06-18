@@ -1,0 +1,35 @@
+name: Captain Picard Facepalm
+source: https://imgflip.com/meme/Captain-Picard-Facepalm
+keywords:
+  - star trek
+  - picard
+  - facepalm
+  - disappointment
+  - bust
+  - figurine
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.82
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - WHEN SOMEONE SAYS
+  - STAR WARS IS BETTER THAN STAR TREK

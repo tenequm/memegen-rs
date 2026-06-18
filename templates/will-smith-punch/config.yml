@@ -1,0 +1,35 @@
+name: Will Smith Slapping Chris Rock
+source: file://will-smith-punch.mp4
+keywords:
+  - will smith
+  - chris rock
+  - slap
+  - punch
+  - oscars
+  - academy awards
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.208
+    anchor_y: 0.12
+    angle: 0.0
+    scale_x: 0.272
+    scale_y: 0.71
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.48
+    anchor_y: 0.05
+    angle: 0.0
+    scale_x: 0.315
+    scale_y: 0.805
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - me minding my own business
+  - my responsibilities

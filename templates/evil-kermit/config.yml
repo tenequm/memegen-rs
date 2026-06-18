@@ -1,0 +1,34 @@
+name: Evil Kermit
+source: https://imgflip.com/memetemplate/84341851
+keywords:
+  - evil kermit
+  - inner me
+  - me to me
+  - hooded kermit
+  - sith kermit
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.47
+    scale_y: 0.34
+    align: left
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.47
+    scale_y: 0.34
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - "Me: I should save my money."
+  - "Me to me: Buy it."

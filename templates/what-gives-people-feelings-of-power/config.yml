@@ -1,0 +1,22 @@
+name: What Gives People Feelings of Power
+source: https://imgflip.com/meme/177984372/What-Gives-People-Feelings-of-Power
+keywords:
+  - what gives people feelings of power
+  - money
+  - status
+  - bar chart
+  - graph
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.75
+    angle: 0.0
+    scale_x: 0.26
+    scale_y: 0.2
+    align: right
+    start: 0.0
+    stop: 1.0
+example:
+  - Finding a diamond in Minecraft

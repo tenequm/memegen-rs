@@ -1,0 +1,34 @@
+name: Ol' Reliable
+source: https://imgflip.com/meme/139937960/Ol-Reliable
+keywords:
+  - spongebob
+  - ol reliable
+  - box
+  - glowing
+  - jellyfish net
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.015
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.135
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.13
+    anchor_y: 0.72
+    angle: 0.0
+    scale_x: 0.61
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When I need to get out of a social event
+  - My stomach hurts

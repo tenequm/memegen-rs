@@ -1,0 +1,33 @@
+name: These Are Not the Droids You're Looking For
+source: https://imgflip.com/meme/196106739/Make-your-own-meme
+keywords:
+  - obi-wan kenobi
+  - star wars
+  - jedi mind trick
+  - droids
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.147
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.83
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.155
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - These are not the droids
+  - you're looking for

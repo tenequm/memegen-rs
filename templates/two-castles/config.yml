@@ -1,0 +1,47 @@
+name: Two Castles
+source: https://imgflip.com/meme/329250424/two-castles
+keywords:
+  - two castles
+  - fork in the road
+  - choice
+  - bright castle
+  - dark castle
+  - y-road
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.15
+    anchor_y: 0.08
+    angle: 0.0
+    scale_x: 0.18
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.68
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.21
+    scale_y: 0.165
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.45
+    anchor_y: 0.75
+    angle: 0.0
+    scale_x: 0.1
+    scale_y: 0.245
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Healthy habits
+  - Staying up late scrolling
+  - Me

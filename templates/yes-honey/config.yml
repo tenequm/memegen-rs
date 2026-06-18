@@ -1,0 +1,34 @@
+name: Yes Honey
+source: https://imgflip.com/meme/245901889/Yes-Honey
+keywords:
+  - wojak
+  - honey it's 4pm
+  - dick flattening
+  - depressed
+  - relationship
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.64
+    angle: 0.0
+    scale_x: 0.45
+    scale_y: 0.31
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.54
+    anchor_y: 0.64
+    angle: 0.0
+    scale_x: 0.44
+    scale_y: 0.31
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "Honey, it's 4 PM, time for your daily meeting!"
+  - "Yes, honey..."

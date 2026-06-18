@@ -1,0 +1,143 @@
+name: Mr Incredible Becoming Uncanny
+source: https://imgflip.com/meme/197846899/Mr-incredible-mad
+keywords:
+  - mr incredible
+  - uncanny
+  - becoming uncanny
+  - distorted
+  - creepy
+  - comparison
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.0
+    angle: 0.0
+    scale_x: 1.0
+    scale_y: 0.115
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.115
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.09
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.205
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.085
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.29
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.09
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.38
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.09
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.47
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.08
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.08
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.63
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.095
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.725
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.095
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.82
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.09
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.91
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.09
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - People who know vs people who don't know
+  - Phase 1
+  - Phase 2
+  - Phase 3
+  - Phase 4
+  - Phase 5
+  - Phase 6
+  - Phase 7
+  - Phase 8
+  - Phase 9
+  - Phase 10

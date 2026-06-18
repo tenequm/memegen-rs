@@ -1,0 +1,22 @@
+name: Silent Movie Card
+source: https://imgflip.com/meme/23646296/Silent-Movie-Card
+keywords:
+  - silent movie
+  - title card
+  - vintage
+  - retro
+  - black and white
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.15
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.7
+    scale_y: 0.48
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "And so, he decided to eat the entire pizza."

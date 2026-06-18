@@ -1,0 +1,46 @@
+name: Woman Shouting Knives
+source: https://imgflip.com/meme/245389734/Woman-Shouting-Knives
+keywords:
+  - woman shouting knives
+  - hurtful words
+  - relationship
+  - argument
+  - stabbing
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.14
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.228
+    scale_y: 0.5
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.44
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.19
+    scale_y: 0.11
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.47
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.49
+    scale_y: 0.96
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My mom
+  - "\"You're just like your father\""
+  - Me trying to eat my breakfast

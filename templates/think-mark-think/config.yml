@@ -1,0 +1,46 @@
+name: "Think Mark, Think"
+source: https://imgflip.com/meme/316307016/Think-Mark-Think
+keywords:
+  - think mark think
+  - omni-man
+  - invincible
+  - omniman
+  - mark grayson
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.002
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.148
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.22
+    angle: 0.0
+    scale_x: 0.35
+    scale_y: 0.23
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.7
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.25
+    scale_y: 0.3
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "Think, Mark! You can't just use any font!"
+  - Me explaining the lore
+  - My friend who just wanted to play the game

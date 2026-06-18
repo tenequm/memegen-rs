@@ -1,0 +1,23 @@
+name: Sad Thumbs Up Cat
+source: https://imgflip.com/meme/231792809/sad-thumbs-up-cat
+keywords:
+  - sad
+  - thumbs up
+  - cat
+  - crying
+  - ok
+  - fine
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.05
+    angle: 0.0
+    scale_x: 0.33
+    scale_y: 0.9
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me pretending everything is fine

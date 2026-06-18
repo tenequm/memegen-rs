@@ -1,0 +1,23 @@
+name: Peter Griffin skin color chart
+source: https://imgflip.com/meme/237132471/Peter-Griffin-skin-color-chart-race-terrorist-blank
+keywords:
+  - peter griffin
+  - skin color chart
+  - family guy
+  - okay
+  - not okay
+  - terrorist
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.015
+    angle: 0.0
+    scale_x: 0.975
+    scale_y: 0.12
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When the police pull over a driver

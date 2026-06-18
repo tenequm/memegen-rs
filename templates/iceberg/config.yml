@@ -1,0 +1,35 @@
+name: Iceberg
+source: https://imgflip.com/meme/68277995/iceberg
+keywords:
+  - iceberg
+  - tip of the iceberg
+  - surface
+  - deep
+  - underwater
+  - secrets
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.18
+    angle: 0.0
+    scale_x: 0.8
+    scale_y: 0.095
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.6
+    angle: 0.0
+    scale_x: 0.8
+    scale_y: 0.25
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Surface level facts
+  - Deep dark secrets

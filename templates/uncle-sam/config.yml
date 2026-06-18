@@ -1,0 +1,34 @@
+name: Uncle Sam
+source: https://imgflip.com/meme/Uncle-Sam
+keywords:
+  - uncle sam
+  - i want you
+  - pointing
+  - patriotic
+  - recruitment
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.8
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - I WANT YOU
+  - TO MIND YOUR OWN BUSINESS

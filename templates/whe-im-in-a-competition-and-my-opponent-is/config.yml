@@ -1,0 +1,33 @@
+name: When I'm in a competition and my opponent is
+source: https://imgflip.com/memetemplate/360597639
+keywords:
+  - squidward
+  - competition
+  - opponent
+  - spongebob
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.105
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.15
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.545
+    angle: 0.0
+    scale_x: 0.978
+    scale_y: 0.445
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - lying
+  - a politician

@@ -1,0 +1,34 @@
+name: Willem Dafoe Looking Up
+source: https://imgflip.com/meme/367782046/William-Dafoe-looking-up
+keywords:
+  - willem dafoe
+  - looking up
+  - scared
+  - at eternity's gate
+  - vincent van gogh
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.979
+    scale_y: 0.147
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.83
+    angle: 0.0
+    scale_x: 0.979
+    scale_y: 0.15
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me looking up at the giant spider on my ceiling
+  - It has wings

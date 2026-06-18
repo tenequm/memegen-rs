@@ -1,0 +1,47 @@
+name: Man giving sword to larger man
+source: https://imgflip.com/meme/158721148/Man-giving-sword-to-larger-man
+keywords:
+  - master's blessing
+  - knight offering sword
+  - giant
+  - sword
+  - kneeling
+  - fantasy art
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.15
+    anchor_y: 0.048
+    angle: 0.0
+    scale_x: 0.4
+    scale_y: 0.4
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.3
+    anchor_y: 0.4
+    angle: 0.0
+    scale_x: 0.47
+    scale_y: 0.11
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.42
+    anchor_y: 0.5
+    angle: 0.0
+    scale_x: 0.43
+    scale_y: 0.41
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My boss
+  - A tiny bit of extra effort
+  - Me

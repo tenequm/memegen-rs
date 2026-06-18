@@ -1,0 +1,72 @@
+name: Who wants to be a millionaire?
+source: https://imgflip.com/meme/165567092/Who-wants-to-be-a-millionaire
+keywords:
+  - steve harvey
+  - kenan thompson
+  - snl
+  - who wants to be a millionaire
+  - trivia
+  - question
+  - options
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.125
+    anchor_y: 0.642
+    angle: 0.0
+    scale_x: 0.75
+    scale_y: 0.123
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.115
+    anchor_y: 0.775
+    angle: 0.0
+    scale_x: 0.375
+    scale_y: 0.085
+    align: left
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.515
+    anchor_y: 0.775
+    angle: 0.0
+    scale_x: 0.375
+    scale_y: 0.085
+    align: left
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.115
+    anchor_y: 0.87
+    angle: 0.0
+    scale_x: 0.375
+    scale_y: 0.085
+    align: left
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.515
+    anchor_y: 0.87
+    angle: 0.0
+    scale_x: 0.375
+    scale_y: 0.085
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - What is the hardest decision in life?
+  - "A: What to eat for dinner"
+  - "B: When to go to sleep"
+  - "C: Replying to an email"
+  - "D: Getting out of bed"

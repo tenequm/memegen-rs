@@ -1,0 +1,37 @@
+name: Tiger yelling at pondering monkey
+source: https://imgflip.com/meme/582050050/tiger-yell-at-pondering-monkey
+keywords:
+  - tiger
+  - lioness
+  - yell
+  - screaming
+  - pondering
+  - monkey
+  - chimpanzee
+  - unfazed
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.2
+    angle: 0.0
+    scale_x: 0.3
+    scale_y: 0.25
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.6
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.28
+    scale_y: 0.3
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My mom yelling at me to clean my room
+  - Me thinking about lore of a video game

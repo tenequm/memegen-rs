@@ -1,0 +1,34 @@
+name: Drake Josh Megan
+source: https://imgflip.com/meme/206731966/Drake-Josh-Megan
+keywords:
+  - josh peck
+  - megan
+  - squinting
+  - suspicious
+  - drake and josh
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.979
+    scale_y: 0.147
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.83
+    angle: 0.0
+    scale_x: 0.979
+    scale_y: 0.155
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - WHEN SOMETHING GOES WRONG
+  - MEGAN...

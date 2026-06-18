@@ -1,0 +1,34 @@
+name: Maybe I Am A
+source: https://imgflip.com/meme/335384304/Bee-Movie-Lawyer-Tantrum
+keywords:
+  - vision
+  - maybe i am a
+  - marvel
+  - wandavision
+  - avengers
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.23
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.53
+    anchor_y: 0.9
+    angle: 0.0
+    scale_x: 0.185
+    scale_y: 0.085
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When you start enjoying pineapple on pizza
+  - monster

@@ -1,0 +1,34 @@
+name: Rage Table Flip
+source: file://rage-table-flip.mp4
+keywords:
+  - muscle man
+  - regular show
+  - table flip
+  - rage
+  - angry
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.19
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.78
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - WHEN THE CODE DOESN'T WORK
+  - AND YOU DON'T KNOW WHY

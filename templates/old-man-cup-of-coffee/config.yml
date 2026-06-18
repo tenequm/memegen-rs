@@ -1,0 +1,35 @@
+name: Old man cup of coffee
+source: https://imgflip.com/meme/99465667/Old-man-cup-of-coffee
+keywords:
+  - hide the pain harold
+  - harold
+  - laptop
+  - coffee
+  - old man
+  - two panels
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.52
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me looking at my code working perfectly
+  - Me realizing it's running on the production database

@@ -1,0 +1,34 @@
+name: Squidward Drawing
+source: https://imgflip.com/meme/Squidward
+keywords:
+  - squidward
+  - patrick
+  - drawing
+  - spongebob
+  - paper
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.22
+    anchor_y: 0.03
+    angle: 0.0
+    scale_x: 0.57
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.24
+    anchor_y: 0.66
+    angle: 0.0
+    scale_x: 0.56
+    scale_y: 0.26
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My ugly drawing
+  - Me at 3 AM eating shredded cheese

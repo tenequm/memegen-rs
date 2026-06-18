@@ -1,0 +1,21 @@
+name: Spongebob Ight Imma Head Out
+source: https://imgflip.com/meme/Spongebob-Ight-Imma-Head-Out
+keywords:
+  - spongebob
+  - ight imma head out
+  - leaving
+  - imma head out
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.0
+    angle: 0.0
+    scale_x: 1.0
+    scale_y: 0.248
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When the party starts getting political

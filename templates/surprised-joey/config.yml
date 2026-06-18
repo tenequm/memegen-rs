@@ -1,0 +1,34 @@
+name: Surprised Joey
+source: https://imgflip.com/meme/231948831/Surprised-Joey
+keywords:
+  - friends
+  - joey tribbiani
+  - surprised
+  - realization
+  - two panels
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.475
+    scale_y: 0.475
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.515
+    angle: 0.0
+    scale_x: 0.475
+    scale_y: 0.475
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Eating a delicious cookie
+  - It was for the dog

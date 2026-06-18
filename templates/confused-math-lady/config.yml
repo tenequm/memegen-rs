@@ -1,0 +1,34 @@
+name: NPC Wojak vs Cute Character
+source: https://imgflip.com/meme/286126573/Confused-Math-Lady
+keywords:
+  - npc
+  - wojak
+  - angry npc
+  - cute character
+  - four panels
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.39
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.104
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.218
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Statement of fact
+  - Simple counter-question

@@ -1,0 +1,33 @@
+name: Brace Yourselves X is Coming
+source: https://imgflip.com/meme/Brace-Yourselves-X-is-Coming
+keywords:
+  - brace yourselves
+  - ned stark
+  - game of thrones
+  - winter is coming
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.15
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.83
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.15
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - BRACE YOURSELVES
+  - WINTER IS COMING

@@ -1,0 +1,34 @@
+name: Doof If I had a Nickel
+source: https://imgflip.com/meme/235033561/Doof-If-I-had-a-Nickel
+keywords:
+  - doofenshmirtz
+  - if i had a nickel
+  - two nickels
+  - weird that it happened twice
+  - phineas and ferb
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.755
+    angle: 0.0
+    scale_x: 0.43
+    scale_y: 0.08
+    align: left
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.2
+    anchor_y: 0.2
+    angle: 0.0
+    scale_x: 0.29
+    scale_y: 0.46
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - a character gets redesigned
+  - Me

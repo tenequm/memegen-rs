@@ -1,0 +1,35 @@
+name: High vs Low Cortisol
+source: https://imgflip.com/meme/641967685/high-vs-low-cortisol
+keywords:
+  - cortisol
+  - stress
+  - meter
+  - gauge
+  - shaking
+  - calm
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When I hear my phone ring
+  - When I am asleep

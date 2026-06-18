@@ -1,0 +1,34 @@
+name: Absolute Cinema
+source: https://imgflip.com/memetemplate/505705955
+keywords:
+  - martin scorsese
+  - absolute cinema
+  - hands up
+  - director
+  - peak fiction
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.979
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.88
+    angle: 0.0
+    scale_x: 0.979
+    scale_y: 0.11
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When the villain actually has a point
+  - Absolute Cinema

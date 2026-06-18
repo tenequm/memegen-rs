@@ -1,0 +1,34 @@
+name: Second Breakfast
+source: https://imgflip.com/meme/12235935/Second-Breakfast
+keywords:
+  - lord of the rings
+  - pippin
+  - merry
+  - hobbits
+  - what about second breakfast
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.145
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.85
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.14
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "WE'VE HAD ONE, YES."
+  - BUT WHAT ABOUT SECOND BREAKFAST?

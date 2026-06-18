@@ -1,0 +1,34 @@
+name: I Sleep Real Shit
+source: https://imgflip.com/meme/118929239/i-sleep-real-shit
+keywords:
+  - shaq
+  - sleeping
+  - glowing eyes
+  - real shit
+  - i sleep
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.0
+    angle: 0.0
+    scale_x: 0.49
+    scale_y: 0.54
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.54
+    angle: 0.0
+    scale_x: 0.49
+    scale_y: 0.46
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Something boring
+  - Something exciting

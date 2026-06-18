@@ -1,0 +1,34 @@
+name: Anime Girl Hiding from Terminator
+source: https://imgflip.com/memetemplate/224514655
+keywords:
+  - anime girl hiding from terminator
+  - scared anime girl
+  - terminator
+  - hiding
+  - fear
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.09
+    angle: 0.0
+    scale_x: 0.23
+    scale_y: 0.26
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.46
+    anchor_y: 0.15
+    angle: 0.0
+    scale_x: 0.43
+    scale_y: 0.33
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My responsibilities
+  - Me playing video games

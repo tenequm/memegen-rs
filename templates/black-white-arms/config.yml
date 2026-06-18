@@ -1,0 +1,45 @@
+name: Black White Arms
+source: https://imgflip.com/meme/149409046/Black-White-Arms
+keywords:
+  - epic handshake
+  - predator handshake
+  - agreement
+  - clasping hands
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.35
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.13
+    scale_y: 0.15
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.2
+    anchor_y: 0.65
+    angle: 0.0
+    scale_x: 0.2
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.58
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.18
+    scale_y: 0.23
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Hating sunlight
+  - Gamers
+  - Weebs

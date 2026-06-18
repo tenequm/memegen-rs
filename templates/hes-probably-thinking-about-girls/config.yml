@@ -1,0 +1,33 @@
+name: He's probably thinking about girls
+source: https://imgflip.com/meme/112850636/Hes-probably-thinking-about-girls
+keywords:
+  - he's probably thinking about other women
+  - couple in bed
+  - thinking in bed
+  - man and woman
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.03
+    anchor_y: 0.04
+    angle: 0.0
+    scale_x: 0.42
+    scale_y: 0.24
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.55
+    anchor_y: 0.04
+    angle: 0.0
+    scale_x: 0.42
+    scale_y: 0.24
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - He's probably thinking about other women.
+  - "If a tomato is a fruit, is ketchup a smoothie?"

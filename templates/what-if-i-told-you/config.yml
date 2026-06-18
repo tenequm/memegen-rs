@@ -1,0 +1,33 @@
+name: What if I told you
+source: https://imgflip.com/meme/4081988/What-if-i-told-you
+keywords:
+  - morpheus
+  - matrix
+  - what if i told you
+  - laurence fishburne
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.05
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.75
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - WHAT IF I TOLD YOU
+  - YOU READ THIS IN MY VOICE

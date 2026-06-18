@@ -1,0 +1,71 @@
+name: Death Knocking at the Door
+source: https://imgflip.com/meme/174847904/death-knocking-at-the-door
+keywords:
+  - grim reaper
+  - death
+  - knocking
+  - doors
+  - blood
+  - next victim
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.16
+    angle: 0.0
+    scale_x: 0.075
+    scale_y: 0.405
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.17
+    anchor_y: 0.125
+    angle: 0.0
+    scale_x: 0.095
+    scale_y: 0.515
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.4
+    anchor_y: 0.085
+    angle: 0.0
+    scale_x: 0.14
+    scale_y: 0.665
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.6
+    anchor_y: 0.48
+    angle: 0.0
+    scale_x: 0.16
+    scale_y: 0.4
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.775
+    anchor_y: 0.05
+    angle: 0.0
+    scale_x: 0.19
+    scale_y: 0.93
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - MySpace
+  - Tumblr
+  - Twitter
+  - TikTok
+  - Reddit

@@ -1,0 +1,35 @@
+name: Big dog small dog
+source: https://imgflip.com/meme/246949658/Big-dog-small-dog
+keywords:
+  - swole doge vs cheems
+  - doge
+  - cheems
+  - buff doge
+  - weak doge
+  - comparison
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.05
+    angle: 0.0
+    scale_x: 0.45
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.55
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.4
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My ancestors at age 20
+  - Me at age 20

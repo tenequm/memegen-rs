@@ -1,0 +1,35 @@
+name: This Is Brilliant But I Like This
+source: https://imgflip.com/meme/136553931/This-Is-Brilliant-But-I-Like-This
+keywords:
+  - this is brilliant but i like this
+  - jeremy clarkson
+  - top gear
+  - cars
+  - white car
+  - red car
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.11
+    anchor_y: 0.2
+    angle: 0.0
+    scale_x: 0.31
+    scale_y: 0.21
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.5
+    anchor_y: 0.18
+    angle: 0.0
+    scale_x: 0.31
+    scale_y: 0.27
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "An amazing, well-written book"
+  - A trashy fanfiction

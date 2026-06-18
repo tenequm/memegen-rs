@@ -1,0 +1,21 @@
+name: Sparta Leonidas Sloganmaker
+source: https://imgflip.com/meme/Sparta-Leonidas
+keywords:
+  - sloganmaker
+  - sparta
+  - website
+  - screenshot
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.405
+    anchor_y: 0.238
+    angle: 0.0
+    scale_x: 0.175
+    scale_y: 0.05
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Sparta is a legend.

@@ -1,0 +1,22 @@
+name: X situation is crazy
+source: https://imgflip.com/meme/547497453/X-situation-is-crazy
+keywords:
+  - penguinz0
+  - moistcritykal
+  - youtube
+  - situation is crazy
+  - charlie
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.385
+    anchor_y: 0.79
+    angle: 0.0
+    scale_x: 0.53
+    scale_y: 0.072
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - This Situation is Crazy

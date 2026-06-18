@@ -1,0 +1,46 @@
+name: Press button hard choice
+source: https://imgflip.com/meme/140167664/Press-button-hard-choice
+keywords:
+  - two buttons
+  - daily struggle
+  - hard choice
+  - red button
+  - sweating
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.07
+    anchor_y: 0.08
+    angle: 0.0
+    scale_x: 0.34
+    scale_y: 0.11
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.43
+    anchor_y: 0.055
+    angle: 0.0
+    scale_x: 0.32
+    scale_y: 0.095
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.75
+    angle: 0.0
+    scale_x: 0.8
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Option A
+  - Option B
+  - Me

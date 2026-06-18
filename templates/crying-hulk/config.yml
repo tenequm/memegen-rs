@@ -1,0 +1,35 @@
+name: Crying Hulk
+source: https://imgflip.com/meme/232422466/Crying-Hulk
+keywords:
+  - hulk
+  - crying
+  - sad
+  - marvel
+  - tears
+  - two panels
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.03
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.22
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.53
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.22
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When you realize the weekend is already over
+  - And you have to wake up early tomorrow

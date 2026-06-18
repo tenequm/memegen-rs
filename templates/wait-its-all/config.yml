@@ -1,0 +1,35 @@
+name: "Wait, it's all always has been"
+source: https://imgflip.com/meme/252363448/Wait-its-all
+keywords:
+  - astronaut
+  - space
+  - earth
+  - gun
+  - always has been
+  - wait its all
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.74
+    anchor_y: 0.034
+    angle: 0.0
+    scale_x: 0.24
+    scale_y: 0.067
+    align: right
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.35
+    anchor_y: 0.35
+    angle: 0.0
+    scale_x: 0.295
+    scale_y: 0.075
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Always has been
+  - "Wait, it's all Ohio?"

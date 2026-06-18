@@ -1,0 +1,21 @@
+name: "Ew, I stepped in shit"
+source: https://imgflip.com/meme/72598094/Ew-i-stepped-in-shit
+keywords:
+  - ew i stepped in shit
+  - shoe
+  - disgust
+  - comic
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.25
+    anchor_y: 0.62
+    angle: 0.0
+    scale_x: 0.41
+    scale_y: 0.28
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - bad opinions

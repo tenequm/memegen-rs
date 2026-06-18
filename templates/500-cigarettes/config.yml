@@ -1,0 +1,23 @@
+name: "Nah, I'd Win"
+source: https://imgflip.com/meme/539373579/500-Cigarettes
+keywords:
+  - gojo satoru
+  - jujutsu kaisen
+  - nah i'd win
+  - anime
+  - manga
+  - speech bubble
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.7
+    anchor_y: 0.09
+    angle: 0.0
+    scale_x: 0.28
+    scale_y: 0.605
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "Nah, I'd win"

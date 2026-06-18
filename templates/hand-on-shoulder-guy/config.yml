@@ -1,0 +1,35 @@
+name: Two Guys on a Bus
+source: https://imgflip.com/meme/504619938/Hand-on-shoulder-guy
+keywords:
+  - two guys on a bus
+  - sad
+  - happy
+  - bus
+  - sunset
+  - rock wall
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.136
+    anchor_y: 0.538
+    angle: 0.0
+    scale_x: 0.122
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.628
+    anchor_y: 0.476
+    angle: 0.0
+    scale_x: 0.145
+    scale_y: 0.286
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me looking at my bank account
+  - Me looking at memes

@@ -1,0 +1,22 @@
+name: "It ain't much, but it's honest work"
+source: https://imgflip.com/meme/165198998/It-aint-much-but-its-honest-work
+keywords:
+  - farmer
+  - honest work
+  - it ain't much
+  - agriculture
+  - hard work
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.978
+    scale_y: 0.255
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When you upvote a post that only has 1 upvote

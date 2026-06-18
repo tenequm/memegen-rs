@@ -1,0 +1,46 @@
+name: Hey Guys - NOT WHAT I'M CALLED
+source: https://imgflip.com/meme/594100699/Hey-Guys---NOT-WHAT-IM-CALLED
+keywords:
+  - hey guys
+  - not what i'm called
+  - comic
+  - drawing
+  - misnomer
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.283
+    anchor_y: 0.07
+    angle: 0.0
+    scale_x: 0.129
+    scale_y: 0.115
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.081
+    anchor_y: 0.261
+    angle: 0.0
+    scale_x: 0.31
+    scale_y: 0.23
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.291
+    anchor_y: 0.581
+    angle: 0.0
+    scale_x: 0.204
+    scale_y: 0.233
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - hey guys
+  - the guy from fortnite
+  - NOT WHAT I'M CALLED

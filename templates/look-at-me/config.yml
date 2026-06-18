@@ -1,0 +1,33 @@
+name: Look At Me
+source: https://imgflip.com/memetemplate/29617627
+keywords:
+  - look at me
+  - i'm the captain now
+  - captain phillips
+  - somali pirate
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.245
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.75
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.23
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - LOOK AT ME
+  - I'M THE CAPTAIN NOW

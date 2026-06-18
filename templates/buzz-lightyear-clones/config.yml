@@ -1,0 +1,23 @@
+name: Buzz Lightyear Clones
+source: https://imgflip.com/meme/326590566/Buzz-lightyear-clones
+keywords:
+  - buzz lightyear
+  - clones
+  - toy story
+  - shelf
+  - everyone is the same
+  - unoriginal
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.28
+    anchor_y: 0.18
+    angle: 0.0
+    scale_x: 0.45
+    scale_y: 0.23
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - I have a unique personality

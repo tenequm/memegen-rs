@@ -1,0 +1,33 @@
+name: Yo Dawg Heard You
+source: https://imgflip.com/meme/Yo-Dawg-Heard-You
+keywords:
+  - yo dawg
+  - xzibit
+  - heard you like
+  - so we put a
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.247
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.75
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.23
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - YO DAWG I HERD YOU LIKE MEMES
+  - SO WE PUT A MEME IN YOUR MEME SO YOU CAN MEME WHILE YOU MEME

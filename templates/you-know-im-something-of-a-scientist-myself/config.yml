@@ -1,0 +1,33 @@
+name: "You know, I'm something of a scientist myself"
+source: https://imgflip.com/meme/133946291/You-know-Im-something-of-a-scientist-myself
+keywords:
+  - willem dafoe
+  - norman osborn
+  - spider-man
+  - scientist
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.145
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.85
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.135
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When I plug in the USB correctly on the first try
+  - "You know, I'm something of a scientist myself"

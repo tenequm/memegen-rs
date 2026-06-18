@@ -1,0 +1,84 @@
+name: Victoria David Beckham Be Honest
+source: https://imgflip.com/meme/497281194/Victoria-David-Beckham-Be-Honest
+keywords:
+  - victoria beckham
+  - david beckham
+  - be honest
+  - rolls royce
+  - working class
+  - documentary
+  - peeking
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.24
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.085
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.24
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.085
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.57
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.085
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.57
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.085
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.905
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.085
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.905
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.085
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - We're very working class.
+  - Be honest.
+  - "I am being honest!"
+  - What car did your dad drive you to school in?
+  - "Okay, in the 80s he had a Rolls Royce."
+  - Thank you.

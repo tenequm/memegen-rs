@@ -1,0 +1,57 @@
+name: "Oh dear, oh dear gorgeous"
+source: https://imgflip.com/meme/211147137/Oh-dear-dear-gorgeus
+keywords:
+  - gordon ramsay
+  - oh dear oh dear gorgeous
+  - you fucking donkey
+  - double standard
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.15
+    angle: 0.0
+    scale_x: 0.2
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.03
+    anchor_y: 0.65
+    angle: 0.0
+    scale_x: 0.2
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.7
+    anchor_y: 0.15
+    angle: 0.0
+    scale_x: 0.25
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.6
+    angle: 0.0
+    scale_x: 0.23
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My mom
+  - Me when I stub my toe
+  - My mom
+  - My brother when he stubs his toe

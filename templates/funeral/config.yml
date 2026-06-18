@@ -1,0 +1,47 @@
+name: Fernanfloo in a Suit
+source: https://imgflip.com/meme/221962589/Funeral
+keywords:
+  - fernanfloo
+  - suit
+  - casual vs formal
+  - my funeral
+  - gaming
+  - release
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.15
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.18
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.1
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.18
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.1
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When I have to go to...
+  - My own wedding
+  - The release of a new game

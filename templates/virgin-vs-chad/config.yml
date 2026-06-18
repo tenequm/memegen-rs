@@ -1,0 +1,45 @@
+name: Virgin vs Brad vs Chad
+source: https://imgflip.com/meme/237925155/Virgin-vs-Chad
+keywords:
+  - virgin vs chad
+  - brad
+  - comparison
+  - three panels
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.148
+    angle: 0.0
+    scale_x: 0.23
+    scale_y: 0.062
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.31
+    anchor_y: 0.118
+    angle: 0.0
+    scale_x: 0.225
+    scale_y: 0.062
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.68
+    anchor_y: 0.05
+    angle: 0.0
+    scale_x: 0.26
+    scale_y: 0.06
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - The virgin normal template
+  - The brad blank template
+  - The chad original illustration

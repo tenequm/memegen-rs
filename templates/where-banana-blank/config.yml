@@ -1,0 +1,34 @@
+name: Where Banana
+source: https://imgflip.com/meme/306678672/Where-Banana-blank
+keywords:
+  - where banana
+  - orangutans
+  - monkeys
+  - where thumbnail
+  - news room
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.975
+    scale_y: 0.165
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.64
+    anchor_y: 0.245
+    angle: 0.0
+    scale_x: 0.26
+    scale_y: 0.07
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "When the video has a clickbait thumbnail that isn't actually part of the video:"
+  - where thumbnail

@@ -1,0 +1,58 @@
+name: Grim Reaper Knocking Door
+source: https://imgflip.com/meme/104893621/Grim-Reaper-Knocking-Door
+keywords:
+  - grim reaper
+  - death
+  - knocking on door
+  - blood
+  - next target
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.015
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.068
+    scale_y: 0.29
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.178
+    anchor_y: 0.235
+    angle: 0.0
+    scale_x: 0.082
+    scale_y: 0.355
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.412
+    anchor_y: 0.208
+    angle: 0.0
+    scale_x: 0.118
+    scale_y: 0.467
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.795
+    anchor_y: 0.178
+    angle: 0.0
+    scale_x: 0.153
+    scale_y: 0.687
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Music industry
+  - Movie theaters
+  - Cable TV
+  - Streaming services

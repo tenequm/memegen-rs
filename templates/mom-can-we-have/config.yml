@@ -1,0 +1,45 @@
+name: Mom Can We Have
+source: https://imgflip.com/meme/179437650/Mom-can-we-have
+keywords:
+  - mom can we have
+  - at home
+  - we have food at home
+  - comparison
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.46
+    anchor_y: 0.078
+    angle: 0.0
+    scale_x: 0.42
+    scale_y: 0.072
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.4
+    anchor_y: 0.33
+    angle: 0.0
+    scale_x: 0.44
+    scale_y: 0.11
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.62
+    angle: 0.0
+    scale_x: 0.8
+    scale_y: 0.33
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - McDonald's
+  - McDonald's
+  - "[disappointing off-brand version]"

@@ -1,0 +1,46 @@
+name: Why would they do this
+source: https://imgflip.com/meme/136147907/Why-would-they-do-this
+keywords:
+  - who killed hannibal
+  - eric andre
+  - shooting
+  - why would
+  - two panels
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.125
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.28
+    scale_y: 0.24
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.15
+    angle: 0.0
+    scale_x: 0.285
+    scale_y: 0.34
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.91
+    angle: 0.0
+    scale_x: 0.8
+    scale_y: 0.07
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My sleep schedule
+  - Me staying up until 4 AM
+  - Why would society do this?

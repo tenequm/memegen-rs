@@ -1,0 +1,34 @@
+name: Atlas holding Earth
+source: https://imgflip.com/meme/161188607/Atlas-holding-Earth
+keywords:
+  - atlas
+  - holding earth
+  - carrying
+  - wikimedia commons
+  - public domain
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.335
+    anchor_y: 0.0
+    angle: 0.0
+    scale_x: 0.49
+    scale_y: 0.36
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.498
+    anchor_y: 0.365
+    angle: 0.0
+    scale_x: 0.277
+    scale_y: 0.27
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - The entire internet's knowledge
+  - Wikipedia editors

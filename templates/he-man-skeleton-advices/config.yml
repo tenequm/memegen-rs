@@ -1,0 +1,33 @@
+name: Skeletor Facts
+source: https://imgflip.com/meme/338290607/he-man-skeleton-advices
+keywords:
+  - skeletor
+  - he-man
+  - skeletor facts
+  - skeletor will return next week with more disturbing facts
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.65
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.33
+    scale_y: 0.23
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.5
+    angle: 0.0
+    scale_x: 0.47
+    scale_y: 0.48
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Skeletor will return next week with more disturbing facts
+  - "Until we meet again!"

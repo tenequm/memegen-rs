@@ -1,0 +1,35 @@
+name: Overwatch Mercy Meme
+source: https://imgflip.com/meme/223642538/Overwatch-Mercy-Meme
+keywords:
+  - overwatch
+  - mercy
+  - guardian angel
+  - savior
+  - helping hand
+  - gaming
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.22
+    anchor_y: 0.04
+    angle: 0.0
+    scale_x: 0.49
+    scale_y: 0.43
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.29
+    anchor_y: 0.52
+    angle: 0.0
+    scale_x: 0.35
+    scale_y: 0.45
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me struggling with my math homework
+  - Photomath app

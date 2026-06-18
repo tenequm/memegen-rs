@@ -1,0 +1,33 @@
+name: Show me on this doll
+source: https://imgflip.com/meme/23940723/Show-me-on-this-doll
+keywords:
+  - south park
+  - show me on this doll
+  - mr mackey
+  - doll
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.978
+    scale_y: 0.137
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.85
+    angle: 0.0
+    scale_x: 0.978
+    scale_y: 0.14
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Show me on this doll
+  - where the bad code hurt you

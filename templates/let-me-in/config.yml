@@ -1,0 +1,46 @@
+name: Let Me In
+source: https://imgflip.com/meme/170261505/let-me-in
+keywords:
+  - eric andre
+  - let me in
+  - fence
+  - gate
+  - screaming
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.35
+    scale_y: 0.35
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.45
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.3
+    scale_y: 0.35
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.5
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.45
+    scale_y: 0.4
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - A healthy sleep schedule
+  - Me
+  - Me

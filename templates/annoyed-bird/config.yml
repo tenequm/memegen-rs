@@ -1,0 +1,72 @@
+name: Annoyed Bird
+source: https://imgflip.com/meme/142098540/annoyed-bird
+keywords:
+  - annoyed bird
+  - crow
+  - pigeon
+  - screaming
+  - loud
+  - comic
+  - false knees
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.025
+    anchor_y: 0.018
+    angle: 0.0
+    scale_x: 0.301
+    scale_y: 0.103
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.527
+    anchor_y: 0.064
+    angle: 0.0
+    scale_x: 0.175
+    scale_y: 0.08
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.691
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.291
+    scale_y: 0.284
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.141
+    anchor_y: 0.493
+    angle: 0.0
+    scale_x: 0.357
+    scale_y: 0.244
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.573
+    anchor_y: 0.491
+    angle: 0.0
+    scale_x: 0.409
+    scale_y: 0.374
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - I like this song
+  - I like...
+  - DESPACITO
+  - DESPACITO QUIERO RESPIRAR TU CUELLO DESPACITO
+  - DE-SPA-CITO

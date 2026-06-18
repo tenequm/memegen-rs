@@ -1,0 +1,47 @@
+name: Peter Parker and Harry Osborn conversation
+source: https://imgflip.com/meme/315706591/Black-man-crying
+keywords:
+  - tobey maguire
+  - james franco
+  - spider-man
+  - peter parker
+  - harry osborn
+  - three panels
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.478
+    anchor_y: 0.017
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.17
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.365
+    angle: 0.0
+    scale_x: 0.483
+    scale_y: 0.156
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.513
+    anchor_y: 0.68
+    angle: 0.0
+    scale_x: 0.465
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - I'm gonna tell him
+  - Tell me what?
+  - That you're adopted

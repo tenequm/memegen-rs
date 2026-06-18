@@ -1,0 +1,45 @@
+name: They call me 007
+source: https://imgflip.com/meme/325211689/They-call-me-007
+keywords:
+  - james bond
+  - sean connery
+  - 007
+  - they call me 007
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.148
+    angle: 0.0
+    scale_x: 0.85
+    scale_y: 0.064
+    align: left
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.212
+    angle: 0.0
+    scale_x: 0.85
+    scale_y: 0.063
+    align: left
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.275
+    angle: 0.0
+    scale_x: 0.85
+    scale_y: 0.07
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - 0 motivation
+  - 0 skills
+  - 7 hours of sleep

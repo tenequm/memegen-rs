@@ -1,0 +1,58 @@
+name: You made this? I made this
+source: https://imgflip.com/meme/117370206/You-made-thisI-made-this
+keywords:
+  - comic
+  - repost
+  - plagiarism
+  - stealing
+  - creation
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.094
+    anchor_y: 0.18
+    angle: 0.0
+    scale_x: 0.262
+    scale_y: 0.215
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.344
+    anchor_y: 0.225
+    angle: 0.0
+    scale_x: 0.174
+    scale_y: 0.095
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.524
+    anchor_y: 0.177
+    angle: 0.0
+    scale_x: 0.27
+    scale_y: 0.203
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.486
+    anchor_y: 0.752
+    angle: 0.0
+    scale_x: 0.308
+    scale_y: 0.229
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Original Creator
+  - OC
+  - Reposter
+  - Reposter

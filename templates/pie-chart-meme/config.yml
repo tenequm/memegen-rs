@@ -1,0 +1,45 @@
+name: Pie Chart Meme
+source: https://imgflip.com/meme/221993469/Pie-Chart-Meme
+keywords:
+  - pie chart
+  - graph
+  - percentage
+  - comparison
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.67
+    anchor_y: 0.19
+    angle: 0.0
+    scale_x: 0.28
+    scale_y: 0.07
+    align: left
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.67
+    anchor_y: 0.35
+    angle: 0.0
+    scale_x: 0.28
+    scale_y: 0.07
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - My productivity during the day
+  - Actual work
+  - Looking at memes

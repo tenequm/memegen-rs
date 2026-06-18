@@ -1,0 +1,48 @@
+name: Two Paths
+source: https://imgflip.com/memetemplate/309668311
+keywords:
+  - two paths
+  - choice
+  - fork in the road
+  - castle
+  - dark castle
+  - sunny castle
+  - decision
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.04
+    angle: 0.0
+    scale_x: 0.4
+    scale_y: 0.21
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.55
+    anchor_y: 0.04
+    angle: 0.0
+    scale_x: 0.4
+    scale_y: 0.21
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.44
+    anchor_y: 0.74
+    angle: 0.0
+    scale_x: 0.12
+    scale_y: 0.24
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Learning a new skill
+  - Scrolling social media
+  - Me on the weekend

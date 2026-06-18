@@ -1,0 +1,34 @@
+name: My beloved
+source: https://imgflip.com/meme/324310141/My-beloved
+keywords:
+  - heart
+  - locket
+  - love
+  - beloved
+  - valentine
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.242
+    angle: 0.0
+    scale_x: 0.485
+    scale_y: 0.588
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.49
+    anchor_y: 0.07
+    angle: 0.0
+    scale_x: 0.495
+    scale_y: 0.6
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My favorite video game
+  - My beloved

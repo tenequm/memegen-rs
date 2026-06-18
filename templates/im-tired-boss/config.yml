@@ -1,0 +1,23 @@
+name: I'm Tired Boss
+source: https://imgflip.com/meme/354000104/Im-tired-boss
+keywords:
+  - the green mile
+  - john coffey
+  - tired
+  - boss
+  - exhausted
+  - sad
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.23
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When you have to wake up at 6 AM for work

@@ -1,0 +1,47 @@
+name: Big thumb guy
+source: https://imgflip.com/meme/373007204/Big-thumb-guy
+keywords:
+  - stick figure
+  - thumbs up
+  - supportive
+  - whispering
+  - giant thumb
+  - ok guy
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.035
+    anchor_y: 0.11
+    angle: 0.0
+    scale_x: 0.135
+    scale_y: 0.19
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.53
+    anchor_y: 0.115
+    angle: 0.0
+    scale_x: 0.365
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.365
+    anchor_y: 0.375
+    angle: 0.0
+    scale_x: 0.445
+    scale_y: 0.275
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me
+  - People arguing about politics
+  - Me who just likes the memes

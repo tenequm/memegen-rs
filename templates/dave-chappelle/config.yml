@@ -1,0 +1,34 @@
+name: Dave Chappelle Tyrone Biggums
+source: https://imgflip.com/meme/33897585/dave-chappelle
+keywords:
+  - dave chappelle
+  - tyrone biggums
+  - scratching neck
+  - y'all got any more of
+  - addict
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.002
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.148
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.85
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.14
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Y'ALL GOT ANY MORE OF THEM
+  - GRAPHICS CARDS?

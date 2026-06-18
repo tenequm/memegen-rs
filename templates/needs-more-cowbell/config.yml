@@ -1,0 +1,33 @@
+name: Needs More Cowbell
+source: https://imgflip.com/meme/24165732/Needs-More-Cowbell
+keywords:
+  - christopher walken
+  - saturday night live
+  - snl
+  - cowbell
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.195
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.8
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.19
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - I GOT A FEVER
+  - AND THE ONLY PRESCRIPTION IS MORE COWBELL

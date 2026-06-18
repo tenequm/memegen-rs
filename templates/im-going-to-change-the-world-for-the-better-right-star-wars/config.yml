@@ -1,0 +1,59 @@
+name: "For the better, right? Star Wars"
+source: https://imgflip.com/meme/323122739/Im-going-to-change-the-world-For-the-better-right-Star-Wars
+keywords:
+  - anakin
+  - padme
+  - star wars
+  - for the better right
+  - right
+  - four panels
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.38
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.105
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.38
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.105
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.88
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.105
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.88
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.105
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - I'm going to change the world.
+  - "For the better, right?"
+  - ...
+  - "For the better, right?"

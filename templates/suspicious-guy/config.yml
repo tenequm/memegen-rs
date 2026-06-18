@@ -1,0 +1,35 @@
+name: Sweating Jordan Peele
+source: https://imgflip.com/meme/616658737/Suspicious-guy
+keywords:
+  - suspicious guy
+  - jordan peele
+  - sweating
+  - nervous
+  - anxious
+  - key and peele
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.03
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.19
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.78
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When she asks who you were texting at 2 AM
+  - And you realize you don't have an excuse

@@ -1,0 +1,34 @@
+name: Mocking Spongebob
+source: https://imgflip.com/meme/102918669/spongebob-stupid
+keywords:
+  - spongebob
+  - stupid
+  - mocking
+  - chicken
+  - sarcastic
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.002
+    angle: 0.0
+    scale_x: 0.978
+    scale_y: 0.148
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.85
+    angle: 0.0
+    scale_x: 0.978
+    scale_y: 0.14
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - yOu CaN't JuSt MaKe A mEmE oUt Of ThIs
+  - YoU cAn'T jUsT mAkE a MeMe OuT oF tHiS

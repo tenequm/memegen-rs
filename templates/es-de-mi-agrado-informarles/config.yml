@@ -1,0 +1,33 @@
+name: Es de mi agrado informarles
+source: https://imgflip.com/meme/307910011/es-de-mi-agrado-informarles
+keywords:
+  - gentleman frog
+  - es de mi agrado informarles
+  - it is with great pleasure
+  - frog suit
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.82
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Es de mi agrado informarles
+  - que hoy es viernes

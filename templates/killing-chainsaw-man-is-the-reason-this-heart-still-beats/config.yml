@@ -1,0 +1,22 @@
+name: Killing Chainsaw Man is the reason this heart still beats
+source: https://imgflip.com/meme/627772281/killing-chainsaw-man-is-the-reason-this-heart-still-beats
+keywords:
+  - katana man
+  - chainsaw man
+  - manga
+  - speech bubble
+  - is the reason this heart still beats
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.6
+    anchor_y: 0.0
+    angle: 0.0
+    scale_x: 0.4
+    scale_y: 0.39
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Eating pizza

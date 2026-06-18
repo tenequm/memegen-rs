@@ -1,0 +1,21 @@
+name: Megamind No Bitches
+source: https://imgflip.com/meme/376123478/megamind-no-b
+keywords:
+  - megamind
+  - no bitches
+  - no
+  - bitches
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.07
+    anchor_y: 0.06
+    angle: 0.0
+    scale_x: 0.86
+    scale_y: 0.155
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - NO BITCHES?

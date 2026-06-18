@@ -1,0 +1,34 @@
+name: Get In Loser
+source: https://imgflip.com/meme/28926942/Get-In-Loser
+keywords:
+  - mean girls
+  - regina george
+  - get in loser
+  - car
+  - we are going shopping
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.013
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.08
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.015
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - GET IN LOSER
+  - WE'RE GOING SHOPPING

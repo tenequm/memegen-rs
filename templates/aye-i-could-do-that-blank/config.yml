@@ -1,0 +1,46 @@
+name: "Aye, I Could Do That Blank"
+source: https://imgflip.com/meme/234478242/Aye-I-Could-Do-That-Blank
+keywords:
+  - gimli
+  - legolas
+  - lord of the rings
+  - side by side with a friend
+  - aye i could do that
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.24
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.085
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.58
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.08
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.91
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.085
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Never thought I'd die fighting side by side with an elf.
+  - What about side by side with a friend?
+  - "Aye, I could do that."

@@ -1,0 +1,35 @@
+name: Piper Perri Surrounded
+source: https://imgflip.com/meme/306216142/Chef-Skinner-Reading-a-Letter
+keywords:
+  - piper perri
+  - couch
+  - five guys
+  - surrounded
+  - coomer
+  - black guys white girl
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.2
+    anchor_y: 0.08
+    angle: 0.0
+    scale_x: 0.79
+    scale_y: 0.64
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.421
+    anchor_y: 0.458
+    angle: 0.0
+    scale_x: 0.254
+    scale_y: 0.49
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My responsibilities
+  - Me trying to enjoy my weekend

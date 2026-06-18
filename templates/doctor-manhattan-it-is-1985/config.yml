@@ -1,0 +1,46 @@
+name: Doctor Manhattan it is 1985
+source: https://imgflip.com/meme/392020536/Doctor-Manhattan-it-is-1985
+keywords:
+  - doctor manhattan
+  - watchmen
+  - it is 1985
+  - comic
+  - narration
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.035
+    anchor_y: 0.031
+    angle: 0.0
+    scale_x: 0.436
+    scale_y: 0.114
+    align: left
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.533
+    anchor_y: 0.037
+    angle: 0.0
+    scale_x: 0.436
+    scale_y: 0.114
+    align: left
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.058
+    anchor_y: 0.607
+    angle: 0.0
+    scale_x: 0.381
+    scale_y: 0.095
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - It is 1985. I am on Mars.
+  - It is 2024. I am still looking at memes.
+  - "There is no future, there is no past. Only this."

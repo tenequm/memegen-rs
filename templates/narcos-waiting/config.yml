@@ -1,0 +1,22 @@
+name: Narcos Waiting
+source: https://imgflip.com/meme/135745012/Narcos-waiting
+keywords:
+  - pablo escobar
+  - waiting
+  - narcos
+  - sad
+  - alone
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.012
+    anchor_y: 0.012
+    angle: 0.0
+    scale_x: 0.971
+    scale_y: 0.078
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Waiting for my package to arrive

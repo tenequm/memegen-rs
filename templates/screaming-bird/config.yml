@@ -1,0 +1,35 @@
+name: Screaming bird
+source: https://imgflip.com/meme/139123308/Screaming-bird
+keywords:
+  - inhaling seagull
+  - screaming seagull
+  - gull
+  - bird
+  - red glow
+  - laser eyes
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.52
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me preparing to sing along
+  - "COUNTRY ROADS, TAKE ME HOME"

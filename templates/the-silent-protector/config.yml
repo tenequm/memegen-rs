@@ -1,0 +1,47 @@
+name: The Silent Protector
+source: https://imgflip.com/meme/143535109/the-silent-protector
+keywords:
+  - soldier
+  - sleeping
+  - protecting
+  - shielding
+  - penguin
+  - silent protector
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.24
+    scale_y: 0.43
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.29
+    anchor_y: 0.38
+    angle: 0.0
+    scale_x: 0.21
+    scale_y: 0.27
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.515
+    anchor_y: 0.735
+    angle: 0.0
+    scale_x: 0.44
+    scale_y: 0.155
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Life's problems
+  - My parents
+  - Me sleeping peacefully

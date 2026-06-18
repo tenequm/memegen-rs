@@ -1,0 +1,34 @@
+name: Flaming Horse
+source: https://imgflip.com/meme/168840525/Horse-Drawing
+keywords:
+  - fire
+  - horse
+  - epic
+  - drawing a horse
+  - flames
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.012
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.975
+    scale_y: 0.117
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.012
+    anchor_y: 0.87
+    angle: 0.0
+    scale_x: 0.975
+    scale_y: 0.12
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - WHEN YOU WRITE THE PERFECT CODE
+  - BUT IT'S FOR THE WRONG PROJECT

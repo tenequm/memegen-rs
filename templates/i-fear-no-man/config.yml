@@ -1,0 +1,23 @@
+name: I fear no man
+source: https://imgflip.com/meme/119575805/I-fear-no-man
+keywords:
+  - heavy
+  - tf2
+  - team fortress 2
+  - i fear no man
+  - but that thing
+  - it scares me
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.328
+    anchor_y: 0.67
+    angle: 0.0
+    scale_x: 0.343
+    scale_y: 0.326
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - math homework

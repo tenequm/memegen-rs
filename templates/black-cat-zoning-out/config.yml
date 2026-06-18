@@ -1,0 +1,35 @@
+name: I've only had Arlo for a day and a half
+source: https://imgflip.com/meme/471380686/black-cat-zoning-out
+keywords:
+  - rosa diaz
+  - brooklyn nine-nine
+  - puppy
+  - arlo
+  - i've only had
+  - if anything happened to him
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.248
+    anchor_y: 0.428
+    angle: 0.0
+    scale_x: 0.51
+    scale_y: 0.047
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.174
+    anchor_y: 0.928
+    angle: 0.0
+    scale_x: 0.658
+    scale_y: 0.067
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - I've only had Arlo for a day and a half.
+  - "But if anything happened to him, I would kill everyone in this room and then myself."

@@ -1,0 +1,33 @@
+name: I am once again asking
+source: https://imgflip.com/meme/223004373/I-am-once-again-asking
+keywords:
+  - bernie sanders
+  - i am once again asking
+  - financial support
+  - asking for your
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.11
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.16
+    anchor_y: 0.795
+    angle: 0.0
+    scale_x: 0.67
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Your dog when you open a slice of cheese
+  - I am once again asking for your financial support.

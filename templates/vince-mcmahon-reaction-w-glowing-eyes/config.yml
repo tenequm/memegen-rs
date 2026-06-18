@@ -1,0 +1,58 @@
+name: Vince McMahon Reaction w/Glowing Eyes
+source: https://imgflip.com/meme/126882756/Vince-McMahon-Reaction-wGlowing-Eyes
+keywords:
+  - vince mcmahon
+  - glowing eyes
+  - reaction
+  - escalating
+  - excited
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.0
+    angle: 0.0
+    scale_x: 0.492
+    scale_y: 0.244
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.244
+    angle: 0.0
+    scale_x: 0.492
+    scale_y: 0.24
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.484
+    angle: 0.0
+    scale_x: 0.492
+    scale_y: 0.257
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.741
+    angle: 0.0
+    scale_x: 0.492
+    scale_y: 0.259
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - First level of excitement
+  - Second level of excitement
+  - Third level of excitement
+  - Maximum excitement with glowing eyes

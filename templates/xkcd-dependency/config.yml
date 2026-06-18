@@ -1,0 +1,71 @@
+name: XKCD Dependency
+source: https://imgflip.com/meme/328965799/XKCD-Dependency
+keywords:
+  - xkcd
+  - dependency
+  - software
+  - infrastructure
+  - open source
+  - nebraska
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.03
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.11
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.09
+    anchor_y: 0.46
+    angle: 0.0
+    scale_x: 0.24
+    scale_y: 0.238
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.335
+    anchor_y: 0.548
+    angle: 0.0
+    scale_x: 0.26
+    scale_y: 0.15
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.11
+    anchor_y: 0.695
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.115
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.55
+    anchor_y: 0.77
+    angle: 0.0
+    scale_x: 0.4
+    scale_y: 0.13
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - All modern digital infrastructure
+  - Enterprise software
+  - Government systems
+  - The entire internet
+  - A tiny library maintained by some guy in Nebraska since 2003

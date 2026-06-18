@@ -1,0 +1,47 @@
+name: Oprah You Get A Car Everybody Gets A Car
+source: https://imgflip.com/meme/Oprah-You-Get-A-Car-Everybody-Gets-A-Car
+keywords:
+  - oprah
+  - you get a car
+  - everybody gets a car
+  - tv show
+  - audience
+  - giveaway
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.03
+    anchor_y: 0.04
+    angle: 0.0
+    scale_x: 0.42
+    scale_y: 0.24
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.2
+    anchor_y: 0.43
+    angle: 0.0
+    scale_x: 0.6
+    scale_y: 0.12
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.2
+    anchor_y: 0.75
+    angle: 0.0
+    scale_x: 0.6
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "YOU GET A CAR!"
+  - "YOU GET A CAR!"
+  - "EVERYBODY GETS A CAR!"

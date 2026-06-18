@@ -1,0 +1,59 @@
+name: Clown Applying Makeup
+source: https://imgflip.com/memetemplate/195515965
+keywords:
+  - clown
+  - makeup
+  - putting on makeup
+  - clown makeup
+  - four panels
+  - progression
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.54
+    scale_y: 0.238
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.26
+    angle: 0.0
+    scale_x: 0.54
+    scale_y: 0.238
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.51
+    angle: 0.0
+    scale_x: 0.54
+    scale_y: 0.238
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.76
+    angle: 0.0
+    scale_x: 0.54
+    scale_y: 0.238
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - I'll just check my phone for a second
+  - I can reply to this email later
+  - "It's fine, I have plenty of time before the deadline"
+  - "Oh no, it's 3 AM"

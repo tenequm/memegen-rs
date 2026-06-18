@@ -1,0 +1,34 @@
+name: Domino Effect
+source: https://imgflip.com/memetemplate/162372564
+keywords:
+  - domino effect
+  - small domino
+  - large domino
+  - cause and effect
+  - chain reaction
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.22
+    scale_y: 0.62
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.5
+    anchor_y: 0.8
+    angle: 0.0
+    scale_x: 0.06
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - World War III
+  - A minor disagreement online

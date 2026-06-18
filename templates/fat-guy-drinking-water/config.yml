@@ -1,0 +1,59 @@
+name: Fat guy drinking water
+source: https://imgflip.com/meme/282648262/fat-guy-drinking-water
+keywords:
+  - water pipe
+  - leak
+  - rich man
+  - poor man
+  - inequality
+  - trickle down economics
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.43
+    anchor_y: 0.172
+    angle: 0.0
+    scale_x: 0.43
+    scale_y: 0.346
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.09
+    anchor_y: 0.28
+    angle: 0.0
+    scale_x: 0.06
+    scale_y: 0.27
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.5
+    angle: 0.0
+    scale_x: 0.28
+    scale_y: 0.47
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.45
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.41
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - massive government bailouts
+  - $1200 stimulus check
+  - working class
+  - billionaires

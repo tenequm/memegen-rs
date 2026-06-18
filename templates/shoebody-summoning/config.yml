@@ -1,0 +1,22 @@
+name: Change My Mind
+source: https://imgflip.com/meme/585415785/shoebody-summoning
+keywords:
+  - steven crowder
+  - change my mind
+  - table
+  - sign
+  - opinion
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.42
+    anchor_y: 0.446
+    angle: 0.0
+    scale_x: 0.36
+    scale_y: 0.344
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Pineapple belongs on pizza

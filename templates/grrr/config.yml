@@ -1,0 +1,35 @@
+name: Grrr Angry Red Emoji
+source: https://imgflip.com/meme/577475738/grrr
+keywords:
+  - grrr
+  - angry
+  - red emoji
+  - mad
+  - fist
+  - reaction
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.8
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - WHEN THEY TAKE THE LAST SLICE OF PIZZA
+  - WITHOUT ASKING

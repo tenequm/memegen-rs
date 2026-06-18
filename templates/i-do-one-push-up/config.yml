@@ -1,0 +1,59 @@
+name: I do ONE Push-Up
+source: https://imgflip.com/meme/254366901/I-do-ONE-Push-Up
+keywords:
+  - shen comix
+  - comic
+  - every time i
+  - push up
+  - buff guy
+  - jesus christ
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.241
+    anchor_y: 0.028
+    angle: 0.0
+    scale_x: 0.244
+    scale_y: 0.136
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.755
+    anchor_y: 0.042
+    angle: 0.0
+    scale_x: 0.199
+    scale_y: 0.136
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.301
+    anchor_y: 0.521
+    angle: 0.0
+    scale_x: 0.167
+    scale_y: 0.156
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.531
+    anchor_y: 0.814
+    angle: 0.0
+    scale_x: 0.151
+    scale_y: 0.114
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "WOW! HOW DID YOU GET LIKE THAT?"
+  - EVERY TIME I THINK ABOUT HER
+  - ...I DO ONE PUSH-UP.
+  - JESUS CHRIST.

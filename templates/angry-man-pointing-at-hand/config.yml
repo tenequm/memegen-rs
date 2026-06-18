@@ -1,0 +1,35 @@
+name: Angry Man pointing at hand
+source: https://imgflip.com/meme/180517785/Angry-Man-pointing-at-hand
+keywords:
+  - angry man
+  - pointing at hand
+  - painting
+  - demanding
+  - where is it
+  - pay me
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.2
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.29
+    scale_y: 0.23
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.7
+    anchor_y: 0.61
+    angle: 0.0
+    scale_x: 0.22
+    scale_y: 0.15
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me
+  - The money you owe me

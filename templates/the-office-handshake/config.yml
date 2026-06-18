@@ -1,0 +1,35 @@
+name: The Office Handshake
+source: https://imgflip.com/meme/206622427/the-office-handshake
+keywords:
+  - the office
+  - handshake
+  - michael scott
+  - ed truck
+  - young michael scott
+  - mullet
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.11
+    anchor_y: 0.268
+    angle: 0.0
+    scale_x: 0.33
+    scale_y: 0.312
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.2
+    angle: 0.0
+    scale_x: 0.41
+    scale_y: 0.524
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My boss congratulating me
+  - Me who has no idea what I did

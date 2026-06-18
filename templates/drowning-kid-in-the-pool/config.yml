@@ -1,0 +1,60 @@
+name: Drowning Kid in the Pool
+source: https://imgflip.com/meme/138766447/drowning-kid-in-the-pool
+keywords:
+  - drowning kid
+  - skeleton
+  - underwater
+  - pool
+  - mother
+  - favorite child
+  - neglected
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.5
+    anchor_y: 0.226
+    angle: 0.0
+    scale_x: 0.483
+    scale_y: 0.215
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.43
+    anchor_y: 0.168
+    angle: 0.0
+    scale_x: 0.211
+    scale_y: 0.24
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.075
+    anchor_y: 0.358
+    angle: 0.0
+    scale_x: 0.3
+    scale_y: 0.22
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.4
+    anchor_y: 0.69
+    angle: 0.0
+    scale_x: 0.32
+    scale_y: 0.305
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Parent
+  - Favorite child
+  - Me struggling
+  - My responsibilities

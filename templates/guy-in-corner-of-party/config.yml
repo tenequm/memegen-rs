@@ -1,0 +1,22 @@
+name: Guy in corner of party
+source: https://imgflip.com/meme/296034307/Guy-in-corner-of-party
+keywords:
+  - they don't know
+  - party
+  - corner
+  - wojak
+  - introvert
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.28
+    anchor_y: 0.07
+    angle: 0.0
+    scale_x: 0.35
+    scale_y: 0.11
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - They don't know I'm the top contributor on GitHub

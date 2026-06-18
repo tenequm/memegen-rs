@@ -1,0 +1,22 @@
+name: Kermit Window
+source: https://imgflip.com/meme/36698509/kermit-window
+keywords:
+  - kermit
+  - window
+  - rain
+  - sad
+  - muppet
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.155
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - When you forgot to cancel after the free trial and now you owe $458.67

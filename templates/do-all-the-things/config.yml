@@ -1,0 +1,33 @@
+name: Do All the Things
+source: https://imgflip.com/meme/68354308/Do-all-the-things
+keywords:
+  - do all the things
+  - hyperbole and a half
+  - clean all the things
+  - all the things
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.8
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - CLEAN
+  - "ALL THE THINGS!"

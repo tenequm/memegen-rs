@@ -1,0 +1,48 @@
+name: 3rd Place Celebration
+source: https://imgflip.com/meme/224480326/3rd-Place-Celebration
+keywords:
+  - bronze medal
+  - third place
+  - podium
+  - celebration
+  - champagne
+  - kissing
+  - biting medal
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.554
+    anchor_y: 0.697
+    angle: 0.0
+    scale_x: 0.096
+    scale_y: 0.236
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.69
+    anchor_y: 0.674
+    angle: 0.0
+    scale_x: 0.098
+    scale_y: 0.236
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.802
+    anchor_y: 0.718
+    angle: 0.0
+    scale_x: 0.158
+    scale_y: 0.24
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - 2nd Place
+  - 1st Place
+  - Me with my small achievement

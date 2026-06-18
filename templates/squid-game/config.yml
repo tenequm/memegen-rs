@@ -1,0 +1,33 @@
+name: Squid Game Doll Turning
+source: https://imgflip.com/meme/558880671/Squid-Game
+keywords:
+  - squid game
+  - doll
+  - red light green light
+  - two panels
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.45
+    anchor_y: 0.03
+    angle: 0.0
+    scale_x: 0.53
+    scale_y: 0.08
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.45
+    anchor_y: 0.54
+    angle: 0.0
+    scale_x: 0.53
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me doing something risky
+  - When the boss looks away

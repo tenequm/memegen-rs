@@ -1,0 +1,36 @@
+name: Spongebob sitting alone in diner
+source: https://imgflip.com/meme/258651081/Penguin-pointing-at-shipping-label
+keywords:
+  - spongebob
+  - waiting
+  - diner
+  - booth
+  - alone
+  - sad
+  - anxious
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.85
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me waiting for my food to arrive
+  - When the waiter walks past with someone else's order

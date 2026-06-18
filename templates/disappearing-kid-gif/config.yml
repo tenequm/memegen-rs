@@ -1,0 +1,33 @@
+name: Success Kid
+source: https://imgflip.com/meme/222516354/Disappearing-kid-gif
+keywords:
+  - success kid
+  - baby
+  - fist
+  - advice animal
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.004
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.246
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.75
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.24
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - WENT TO BED EARLY
+  - WOKE UP BEFORE MY ALARM

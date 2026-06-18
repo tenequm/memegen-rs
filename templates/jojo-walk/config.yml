@@ -1,0 +1,22 @@
+name: Jojo Walk
+source: file://jojo-walk.mp4
+keywords:
+  - jojo
+  - anime
+  - walking
+  - risotto nero
+  - approaching
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.32
+    anchor_y: 0.3
+    angle: 0.0
+    scale_x: 0.33
+    scale_y: 0.26
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - me walking to the kitchen at 3 AM

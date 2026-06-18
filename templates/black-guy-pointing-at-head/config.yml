@@ -1,0 +1,34 @@
+name: Roll Safe (Black Guy Pointing at Head)
+source: https://imgflip.com/meme/92741429/black-guy-pointing-at-head
+keywords:
+  - roll safe
+  - smart guy
+  - pointing to head
+  - thinking
+  - intelligence
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.002
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.248
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.75
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.24
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - You can't be broke
+  - If you don't check your bank account

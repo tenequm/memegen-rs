@@ -1,0 +1,34 @@
+name: The Rock Driving
+source: https://imgflip.com/memetemplate/21735
+keywords:
+  - the rock driving
+  - dwayne johnson
+  - race to witch mountain
+  - speech bubble
+  - car
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.548
+    anchor_y: 0.04
+    angle: 0.0
+    scale_x: 0.439
+    scale_y: 0.175
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.568
+    anchor_y: 0.37
+    angle: 0.0
+    scale_x: 0.424
+    scale_y: 0.163
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "Hey, where are we going?"
+  - "To the front page of Reddit!"

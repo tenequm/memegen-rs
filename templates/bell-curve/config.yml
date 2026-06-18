@@ -1,0 +1,45 @@
+name: Bell Curve
+source: https://imgflip.com/memetemplate/533936279
+keywords:
+  - bell curve
+  - iq curve
+  - midwit
+  - wojak
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.4
+    angle: 0.0
+    scale_x: 0.28
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.3
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.4
+    scale_y: 0.11
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.7
+    anchor_y: 0.35
+    angle: 0.0
+    scale_x: 0.27
+    scale_y: 0.15
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Just do X
+  - "Nooo you can't just do X, you have to do Y because of Z..."
+  - Just do X

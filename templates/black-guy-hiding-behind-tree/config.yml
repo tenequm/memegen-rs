@@ -1,0 +1,34 @@
+name: Black guy hiding behind tree
+source: https://imgflip.com/meme/195710097/Black-guy-hiding-behind-tree
+keywords:
+  - anthony adams
+  - rubbing hands
+  - yellow suit
+  - hiding behind tree
+  - waiting
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.147
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.85
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.14
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me waiting for the new season to drop
+  - So I can binge it in one night

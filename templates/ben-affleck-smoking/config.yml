@@ -1,0 +1,23 @@
+name: Ben Affleck Smoking
+source: https://imgflip.com/meme/166152128/Ben-affleck-smoking
+keywords:
+  - ben affleck
+  - smoking
+  - tired
+  - exhausted
+  - stressed
+  - sigh
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.135
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - Me taking a 5-minute break after 2 minutes of work

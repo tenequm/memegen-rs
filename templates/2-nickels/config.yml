@@ -1,0 +1,33 @@
+name: Two Nickels
+source: https://imgflip.com/meme/254266401/2-nickels
+keywords:
+  - doofenshmirtz
+  - phineas and ferb
+  - if i had a nickel
+  - weird that it happened twice
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.015
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.135
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.83
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.15
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - If I had a nickel for every time I was replaced by a puppet...
+  - "I'd have two nickels. Which isn't a lot, but it's weird that it happened twice."

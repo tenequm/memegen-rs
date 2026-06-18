@@ -1,0 +1,34 @@
+name: Here it comes
+source: https://imgflip.com/meme/170049790/Here-it-comes
+keywords:
+  - tornado
+  - dust storm
+  - screaming man
+  - here it comes
+  - inevitable
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.26
+    scale_y: 0.74
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.525
+    anchor_y: 0.0
+    angle: 0.0
+    scale_x: 0.47
+    scale_y: 0.99
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - The next wave of exams
+  - Me

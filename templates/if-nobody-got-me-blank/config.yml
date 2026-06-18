@@ -1,0 +1,34 @@
+name: If nobody got me blank
+source: https://imgflip.com/meme/302338182/If-nobody-got-me-blank
+keywords:
+  - if nobody got me
+  - i know got me
+  - can i get an amen
+  - religious
+  - support
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.46
+    anchor_y: 0.115
+    angle: 0.0
+    scale_x: 0.535
+    scale_y: 0.383
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.395
+    anchor_y: 0.605
+    angle: 0.0
+    scale_x: 0.233
+    scale_y: 0.164
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - my cat
+  - he

@@ -1,0 +1,59 @@
+name: Illusion of free choice
+source: https://imgflip.com/meme/143600380/Illusion-of-free-choice
+keywords:
+  - illusion of free choice
+  - cow
+  - two paths
+  - same destination
+  - illusion
+  - choice
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.745
+    anchor_y: 0.258
+    angle: 0.0
+    scale_x: 0.195
+    scale_y: 0.116
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.44
+    angle: 0.0
+    scale_x: 0.28
+    scale_y: 0.178
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.55
+    anchor_y: 0.45
+    angle: 0.0
+    scale_x: 0.29
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.19
+    anchor_y: 0.658
+    angle: 0.0
+    scale_x: 0.155
+    scale_y: 0.212
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - The same outcome
+  - Option A
+  - Option B
+  - Me

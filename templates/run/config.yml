@@ -1,0 +1,35 @@
+name: "Run!"
+source: https://imgflip.com/meme/253352546/Run
+keywords:
+  - orangutan
+  - tricycle
+  - girl running
+  - chase
+  - monkey
+  - ape
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.285
+    anchor_y: 0.078
+    angle: 0.0
+    scale_x: 0.38
+    scale_y: 0.507
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.315
+    angle: 0.0
+    scale_x: 0.285
+    scale_y: 0.65
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My responsibilities
+  - Me

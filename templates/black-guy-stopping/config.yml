@@ -1,0 +1,58 @@
+name: Black Guy Stopping
+source: https://imgflip.com/meme/169798464/black-guy-stopping
+keywords:
+  - gillette
+  - black guy stopping
+  - guy stopping guy
+  - distracted boyfriend alternative
+  - two panels
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.04
+    anchor_y: 0.22
+    angle: 0.0
+    scale_x: 0.35
+    scale_y: 0.28
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.6
+    anchor_y: 0.15
+    angle: 0.0
+    scale_x: 0.34
+    scale_y: 0.34
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.15
+    anchor_y: 0.56
+    angle: 0.0
+    scale_x: 0.51
+    scale_y: 0.43
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.5
+    anchor_y: 0.53
+    angle: 0.0
+    scale_x: 0.38
+    scale_y: 0.46
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - New hobby
+  - Me
+  - My bank account
+  - Me

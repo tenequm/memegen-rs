@@ -1,0 +1,47 @@
+name: Predator Handshake
+source: https://imgflip.com/meme/132869028/Predator-Handshake
+keywords:
+  - epic handshake
+  - dillon
+  - dutch
+  - arnold schwarzenegger
+  - carl weathers
+  - agreement
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.35
+    anchor_y: 0.22
+    angle: 0.0
+    scale_x: 0.2
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.25
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.55
+    anchor_y: 0.5
+    angle: 0.0
+    scale_x: 0.25
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Agreement on something
+  - Group A
+  - Group B

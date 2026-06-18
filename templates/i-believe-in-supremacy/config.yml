@@ -1,0 +1,21 @@
+name: I Believe in Supremacy
+source: https://imgflip.com/meme/275700505/I-believe-in-supremacy
+keywords:
+  - i believe in supremacy
+  - bowing
+  - worship
+  - respect
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.11
+    anchor_y: 0.14
+    angle: 0.0
+    scale_x: 0.79
+    scale_y: 0.19
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - garlic bread

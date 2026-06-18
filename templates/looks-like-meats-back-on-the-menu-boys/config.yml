@@ -1,0 +1,33 @@
+name: "Looks like meat's back on the menu, boys!"
+source: https://imgflip.com/meme/215503300/Looks-like-meats-back-on-the-menu-boys
+keywords:
+  - lord of the rings
+  - orc
+  - meat's back on the menu
+  - uruk-hai
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.02
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.075
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.02
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When the server comes back online
+  - "Looks like meat's back on the menu, boys!"

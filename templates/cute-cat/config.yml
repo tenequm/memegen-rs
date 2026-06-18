@@ -1,0 +1,34 @@
+name: Cute Cat
+source: https://imgflip.com/meme/Cute-Cat
+keywords:
+  - cute cat
+  - standing cat
+  - kitten
+  - sad cat
+  - el pana miguel
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.82
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - PLEASE
+  - CAN I HAVE A LITTLE SALAMI

@@ -1,0 +1,22 @@
+name: This is Worthless
+source: https://imgflip.com/meme/153452716/This-is-Worthless
+keywords:
+  - gravity falls
+  - dipper pines
+  - woah this is worthless
+  - paper
+  - worthless
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.108
+    anchor_y: 0.11
+    angle: 0.0
+    scale_x: 0.764
+    scale_y: 0.344
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My college degree

@@ -1,0 +1,35 @@
+name: Hello Human Resources
+source: https://imgflip.com/meme/268952187/hello-human-resources
+keywords:
+  - know the work rules
+  - appropriate
+  - inappropriate
+  - office
+  - double standard
+  - comic
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.268
+    anchor_y: 0.041
+    angle: 0.0
+    scale_x: 0.279
+    scale_y: 0.115
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.268
+    anchor_y: 0.492
+    angle: 0.0
+    scale_x: 0.279
+    scale_y: 0.113
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Attractive coworker saying hello
+  - Unattractive coworker saying hello

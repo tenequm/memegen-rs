@@ -1,0 +1,46 @@
+name: Shrek For Five Minutes
+source: https://imgflip.com/meme/150365860/Shrek-For-Five-Minutes
+keywords:
+  - shrek
+  - for five minutes
+  - could you not
+  - donkey
+  - laser eyes
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.06
+    anchor_y: 0.425
+    angle: 0.0
+    scale_x: 0.878
+    scale_y: 0.06
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.201
+    anchor_y: 0.625
+    angle: 0.0
+    scale_x: 0.243
+    scale_y: 0.22
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.105
+    anchor_y: 0.91
+    angle: 0.0
+    scale_x: 0.788
+    scale_y: 0.075
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Could you not be annoying
+  - 4chan
+  - "FOR FIVE MINUTES?!"

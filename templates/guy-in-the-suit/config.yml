@@ -1,0 +1,46 @@
+name: Three Spider-Men Pointing
+source: https://imgflip.com/meme/399102239/Guy-in-the-suit
+keywords:
+  - spiderman
+  - pointing
+  - three
+  - imposter
+  - same
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.015
+    anchor_y: 0.12
+    angle: 0.0
+    scale_x: 0.38
+    scale_y: 0.848
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.31
+    anchor_y: 0.014
+    angle: 0.0
+    scale_x: 0.422
+    scale_y: 0.74
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.53
+    anchor_y: 0.16
+    angle: 0.0
+    scale_x: 0.41
+    scale_y: 0.84
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me
+  - My other personality
+  - The voice in my head

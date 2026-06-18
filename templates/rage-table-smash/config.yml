@@ -1,0 +1,46 @@
+name: Keep Calm and Carry On
+source: https://imgflip.com/meme/332777762/Rage-Table-Smash
+keywords:
+  - keep calm
+  - crown
+  - red
+  - british
+  - poster
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.28
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.22
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.51
+    angle: 0.0
+    scale_x: 0.8
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.65
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.3
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - KEEP CALM
+  - AND
+  - CARRY ON

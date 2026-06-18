@@ -1,0 +1,45 @@
+name: Teacher's Copy
+source: https://imgflip.com/meme/318009221/Teachers-Copy
+keywords:
+  - mr incredible becoming uncanny
+  - teachers copy
+  - what you get
+  - comparison
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.0
+    angle: 0.0
+    scale_x: 0.999
+    scale_y: 0.224
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.224
+    angle: 0.0
+    scale_x: 0.494
+    scale_y: 0.19
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.505
+    anchor_y: 0.224
+    angle: 0.0
+    scale_x: 0.494
+    scale_y: 0.19
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Teacher's copy vs. Student's copy
+  - Teacher's copy
+  - What you get

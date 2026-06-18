@@ -1,0 +1,23 @@
+name: I Hate You and Hope You Die
+source: https://imgflip.com/meme/562985409/i-hate-you-and-hope-you-die
+keywords:
+  - i fucking hate you and hope you die
+  - yippee
+  - tbh creature
+  - autism creature
+  - rage comic
+  - speech bubble
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.66
+    anchor_y: 0.565
+    angle: 0.0
+    scale_x: 0.32
+    scale_y: 0.113
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "yippee!"

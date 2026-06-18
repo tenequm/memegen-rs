@@ -1,0 +1,36 @@
+name: Peace sign tombstone
+source: https://imgflip.com/meme/233816164/Peace-sign-tombstone
+keywords:
+  - grant gustin
+  - grave
+  - tombstone
+  - arrow
+  - oliver queen
+  - peace sign
+  - posing
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.135
+    anchor_y: 0.225
+    angle: 0.0
+    scale_x: 0.24
+    scale_y: 0.285
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.55
+    anchor_y: 0.5
+    angle: 0.0
+    scale_x: 0.3
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My productivity
+  - Video games

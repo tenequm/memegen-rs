@@ -1,0 +1,35 @@
+name: Giant vs man
+source: https://imgflip.com/meme/186862637/Giant-vs-man
+keywords:
+  - giant vs man
+  - yhorm the giant
+  - dark souls
+  - ashen one
+  - boss fight
+  - david and goliath
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.48
+    anchor_y: 0.18
+    angle: 0.0
+    scale_x: 0.34
+    scale_y: 0.17
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.12
+    anchor_y: 0.65
+    angle: 0.0
+    scale_x: 0.28
+    scale_y: 0.15
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My student loans
+  - Me with my $5 bill

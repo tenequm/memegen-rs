@@ -1,0 +1,33 @@
+name: Nyan Cat
+source: https://imgflip.com/meme/18168465/Nyan-Cat
+keywords:
+  - nyan cat
+  - rainbow
+  - pop tart cat
+  - pixel art
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.85
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - ME ON MY WAY TO
+  - WASTE MORE TIME ON THE INTERNET

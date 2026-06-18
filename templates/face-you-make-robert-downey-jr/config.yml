@@ -1,0 +1,35 @@
+name: Face You Make Robert Downey Jr
+source: https://imgflip.com/meme/Face-You-Make-Robert-Downey-Jr
+keywords:
+  - robert downey jr
+  - eye roll
+  - sarcastic
+  - annoyed
+  - iron man
+  - tony stark
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.002
+    angle: 0.0
+    scale_x: 0.978
+    scale_y: 0.148
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.85
+    angle: 0.0
+    scale_x: 0.978
+    scale_y: 0.14
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - WHEN SOMEONE SAYS THEY DON'T LIKE MARVEL
+  - AND THEN SAYS DC IS BETTER

@@ -1,0 +1,36 @@
+name: "Patrick, Smart Dumb"
+source: https://imgflip.com/meme/183221332/PAtrick-Smart-Dumb
+keywords:
+  - patrick star
+  - spongebob
+  - smart
+  - dumb
+  - microscope
+  - hammer
+  - board on head
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.51
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me explaining the complex lore of my favorite video game
+  - Me trying to calculate simple math in public

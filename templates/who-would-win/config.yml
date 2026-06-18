@@ -1,0 +1,34 @@
+name: Who Would Win?
+source: https://imgflip.com/meme/Who-Would-Win
+keywords:
+  - who would win
+  - versus
+  - vs
+  - left vs right
+  - comparison
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.18
+    angle: 0.0
+    scale_x: 0.505
+    scale_y: 0.805
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.18
+    angle: 0.0
+    scale_x: 0.47
+    scale_y: 0.805
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - An entire galactic empire
+  - One shiny boy

@@ -1,0 +1,35 @@
+name: Peter Griffin Running From Plane
+source: https://imgflip.com/meme/491107549/Vince-McMahon-Crying
+keywords:
+  - peter griffin
+  - running
+  - plane
+  - north by northwest
+  - family guy
+  - chase
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.15
+    anchor_y: 0.256
+    angle: 0.0
+    scale_x: 0.37
+    scale_y: 0.168
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.45
+    anchor_y: 0.4
+    angle: 0.0
+    scale_x: 0.35
+    scale_y: 0.4
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My responsibilities
+  - Me

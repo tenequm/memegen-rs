@@ -1,0 +1,23 @@
+name: Don Draper Easel Presentation
+source: https://imgflip.com/meme/257142842/X-but-Y
+keywords:
+  - don draper
+  - mad men
+  - easel
+  - presentation
+  - whiteboard
+  - pitch
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.562
+    anchor_y: 0.342
+    angle: 0.0
+    scale_x: 0.223
+    scale_y: 0.614
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Why we need to buy more dogecoin

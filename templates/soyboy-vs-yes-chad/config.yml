@@ -1,0 +1,35 @@
+name: Soyboy Vs Yes Chad
+source: https://imgflip.com/meme/232844223/Soyboy-Vs-Yes-Chad
+keywords:
+  - soyboy
+  - yes chad
+  - wojak
+  - nordic gamer
+  - crying wojak
+  - chad
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.05
+    angle: 0.0
+    scale_x: 0.43
+    scale_y: 0.25
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.05
+    angle: 0.0
+    scale_x: 0.43
+    scale_y: 0.25
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "Nooo! You can't just use a simple meme template!"
+  - Yes.

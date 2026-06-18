@@ -1,0 +1,35 @@
+name: Homer Disappears
+source: file://homer-disappears.mp4
+keywords:
+  - homer simpson
+  - hedge
+  - bush
+  - disappearing
+  - backing away
+  - the simpsons
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.175
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.82
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When someone starts talking about politics
+  - I'm out

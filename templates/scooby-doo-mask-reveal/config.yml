@@ -1,0 +1,59 @@
+name: Scooby Doo Mask Reveal
+source: https://imgflip.com/memetemplate/145139900
+keywords:
+  - scooby doo
+  - fred
+  - mask reveal
+  - unmasking
+  - villain
+  - identity
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.34
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.65
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.33
+    scale_y: 0.35
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.65
+    angle: 0.0
+    scale_x: 0.36
+    scale_y: 0.3
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.65
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.33
+    scale_y: 0.4
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - A 'new' game
+  - Gamers
+  - The exact same game from 5 years ago
+  - Gamers

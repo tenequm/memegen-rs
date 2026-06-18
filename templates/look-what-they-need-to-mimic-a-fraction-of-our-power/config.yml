@@ -1,0 +1,47 @@
+name: Look What They Need To Mimic A Fraction Of Our Power
+source: https://imgflip.com/meme/324268649/Look-What-They-Need-To-Mimic-A-Fraction-Of-Our-Power
+keywords:
+  - omni-man
+  - invincible
+  - look what they need to mimic a fraction of our power
+  - jets
+  - fighter jets
+  - think mark
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.15
+    angle: 0.0
+    scale_x: 0.25
+    scale_y: 0.11
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.55
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.3
+    scale_y: 0.39
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.73
+    anchor_y: 0.75
+    angle: 0.0
+    scale_x: 0.26
+    scale_y: 0.245
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - expensive gaming PC
+  - a mobile phone
+  - mobile gamers

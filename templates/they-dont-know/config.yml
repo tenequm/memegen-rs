@@ -1,0 +1,23 @@
+name: They Dont Know
+source: file://they-dont-know.mp4
+keywords:
+  - they dont know
+  - party
+  - corner
+  - alone
+  - penguin
+  - club
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.38
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.25
+    scale_y: 0.2
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - They don't know I'm a penguin

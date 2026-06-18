@@ -1,0 +1,35 @@
+name: Math is Math
+source: https://imgflip.com/meme/167754325/math-is-math
+keywords:
+  - mr incredible
+  - dash
+  - the incredibles
+  - math is math
+  - yelling
+  - homework
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.979
+    scale_y: 0.175
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.82
+    angle: 0.0
+    scale_x: 0.979
+    scale_y: 0.17
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "Why would they change math?!"
+  - "MATH IS MATH!"

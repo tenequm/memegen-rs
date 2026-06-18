@@ -1,0 +1,22 @@
+name: "Ah shit, here we go again"
+source: https://imgflip.com/meme/172883415/Here-we-go-again
+keywords:
+  - gta
+  - cj
+  - here we go again
+  - video game
+  - san andreas
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.23
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When you wake up at 6 AM on a Monday

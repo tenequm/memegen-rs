@@ -1,0 +1,47 @@
+name: fat man drinking from pipe
+source: https://imgflip.com/meme/279358206/fat-man-drinking-from-pipe
+keywords:
+  - inequality
+  - wealth gap
+  - capitalism
+  - crumbs
+  - rich and poor
+  - baysal
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.45
+    anchor_y: 0.196
+    angle: 0.0
+    scale_x: 0.298
+    scale_y: 0.3
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.538
+    anchor_y: 0.156
+    angle: 0.0
+    scale_x: 0.394
+    scale_y: 0.464
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.076
+    anchor_y: 0.484
+    angle: 0.0
+    scale_x: 0.264
+    scale_y: 0.454
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - tax cuts
+  - billionaires
+  - working class

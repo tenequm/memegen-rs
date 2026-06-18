@@ -1,0 +1,35 @@
+name: Red pill blue pill
+source: https://imgflip.com/meme/84195720/Red-pill-blue-pill
+keywords:
+  - matrix
+  - morpheus
+  - red pill
+  - blue pill
+  - choice
+  - decision
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.05
+    angle: 0.0
+    scale_x: 0.4
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.55
+    anchor_y: 0.05
+    angle: 0.0
+    scale_x: 0.4
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - The painful truth
+  - The blissful ignorance

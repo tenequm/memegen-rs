@@ -1,0 +1,46 @@
+name: What's My Purpose - Butter Robot
+source: https://imgflip.com/meme/111944027/Whats-My-Purpose---Butter-Robot
+keywords:
+  - rick and morty
+  - butter robot
+  - what is my purpose
+  - you pass butter
+  - oh my god
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.5
+    anchor_y: 0.04
+    angle: 0.0
+    scale_x: 0.35
+    scale_y: 0.1
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.15
+    anchor_y: 0.38
+    angle: 0.0
+    scale_x: 0.3
+    scale_y: 0.1
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.5
+    anchor_y: 0.75
+    angle: 0.0
+    scale_x: 0.35
+    scale_y: 0.1
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - What is my purpose?
+  - You pass butter.
+  - Oh my god.

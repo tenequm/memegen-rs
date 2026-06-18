@@ -1,0 +1,47 @@
+name: Simba Shadowy Place
+source: https://imgflip.com/meme/Simba-Shadowy-Place
+keywords:
+  - lion king
+  - mufasa
+  - simba
+  - shadowy place
+  - everything the light touches
+  - disney
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.1
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.88
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.1
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Everything the light touches is our kingdom.
+  - What about that shadowy place?
+  - That's TikTok. You must never go there.

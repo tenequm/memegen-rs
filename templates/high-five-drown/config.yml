@@ -1,0 +1,47 @@
+name: High five drown
+source: https://imgflip.com/meme/168453057/High-five-drown
+keywords:
+  - drowning
+  - high five
+  - gudim
+  - useless help
+  - hand
+  - water
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.18
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.12
+    scale_y: 0.32
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.505
+    anchor_y: 0.015
+    angle: 0.0
+    scale_x: 0.133
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.28
+    scale_y: 0.25
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me struggling with mental health
+  - My friends
+  - "\"You'll get over it!\""

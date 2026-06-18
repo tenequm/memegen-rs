@@ -1,0 +1,34 @@
+name: Megamind peeking
+source: https://imgflip.com/memetemplate/370867422
+keywords:
+  - megamind
+  - no bitches
+  - peeking
+  - close up
+  - staring
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.015
+    anchor_y: 0.015
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.135
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.015
+    anchor_y: 0.83
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.155
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - NO BITCHES?
+  - NO MAIDENS?

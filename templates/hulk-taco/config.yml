@@ -1,0 +1,47 @@
+name: Hulk Taco
+source: https://imgflip.com/meme/184507495/Hulk-Taco
+keywords:
+  - hulk
+  - taco
+  - scott lang
+  - ant-man
+  - avengers endgame
+  - giving taco
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.524
+    anchor_y: 0.206
+    angle: 0.0
+    scale_x: 0.138
+    scale_y: 0.275
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.276
+    anchor_y: 0.012
+    angle: 0.0
+    scale_x: 0.168
+    scale_y: 0.486
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.614
+    anchor_y: 0.887
+    angle: 0.0
+    scale_x: 0.14
+    scale_y: 0.111
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me sad after losing my lunch
+  - Hulk
+  - Two tacos

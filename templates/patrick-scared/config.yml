@@ -1,0 +1,35 @@
+name: Patrick Scared
+source: https://imgflip.com/meme/176735426/patrick-scared
+keywords:
+  - spongebob
+  - patrick star
+  - cops
+  - police
+  - scared
+  - wanted poster
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.448
+    anchor_y: 0.214
+    angle: 0.0
+    scale_x: 0.3
+    scale_y: 0.216
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.546
+    angle: 0.0
+    scale_x: 0.354
+    scale_y: 0.416
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "Wanted: Ugly"
+  - My face

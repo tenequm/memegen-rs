@@ -1,0 +1,33 @@
+name: Gentleman frog
+source: https://imgflip.com/meme/294875301/Gentleman-frog
+keywords:
+  - gentleman frog
+  - it is with great pleasure
+  - frog in suit
+  - toad
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.002
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.013
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.085
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.115
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - IT IS WITH GREAT PLEASURE TO INFORM YOU
+  - THAT TODAY IS MY BIRTHDAY

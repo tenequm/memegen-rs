@@ -1,0 +1,33 @@
+name: Rick and Carl
+source: https://imgflip.com/meme/Rick-and-Carl
+keywords:
+  - rick and carl
+  - walking dead
+  - coral
+  - dad joke
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.45
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.26
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.45
+    anchor_y: 0.52
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.26
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "Hey Carl, what do you call a fake noodle?"
+  - "An impasta, Carl! An impasta!"

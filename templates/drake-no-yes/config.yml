@@ -1,0 +1,34 @@
+name: Drake No/Yes
+source: https://imgflip.com/meme/124276589/Drake-NoYes
+keywords:
+  - drake
+  - hotline bling
+  - no yes
+  - dislike like
+  - prefer
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.46
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.52
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.46
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Doing something the hard way
+  - Finding an easier shortcut

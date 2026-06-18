@@ -1,0 +1,21 @@
+name: Never ask a woman her age
+source: https://imgflip.com/meme/278525960/Never-ask-a-woman-her-age
+keywords:
+  - never ask
+  - woman her age
+  - man his salary
+  - three panels
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.645
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.335
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - A gamer why they broke their controller

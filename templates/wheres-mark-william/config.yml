@@ -1,0 +1,35 @@
+name: Where's Mark William
+source: https://imgflip.com/meme/474085150/Wheres-Mark-William
+keywords:
+  - invincible
+  - omni-man
+  - william
+  - where is mark
+  - car window
+  - staring
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.12
+    anchor_y: 0.15
+    angle: 0.0
+    scale_x: 0.29
+    scale_y: 0.45
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.345
+    angle: 0.0
+    scale_x: 0.225
+    scale_y: 0.345
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me trying to enjoy my weekend
+  - My boss asking for the Monday report

@@ -1,0 +1,22 @@
+name: Gravestone
+source: https://imgflip.com/meme/39982879/Gravestone
+keywords:
+  - gravestone
+  - tombstone
+  - rip
+  - death
+  - here lies
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.15
+    anchor_y: 0.225
+    angle: 0.0
+    scale_x: 0.7
+    scale_y: 0.565
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My hopes and dreams

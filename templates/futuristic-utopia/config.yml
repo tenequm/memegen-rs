@@ -1,0 +1,34 @@
+name: Futuristic Utopia
+source: https://imgflip.com/meme/85934123/Futuristic-Utopia
+keywords:
+  - society if
+  - the world if
+  - future
+  - utopia
+  - flying cars
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.012
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.085
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.013
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Society if people used their turn signals
+  - The world if everyone agreed on one thing

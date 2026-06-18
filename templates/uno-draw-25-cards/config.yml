@@ -1,0 +1,34 @@
+name: UNO Draw 25 Cards
+source: https://imgflip.com/memetemplate/217743513
+keywords:
+  - uno
+  - draw 25
+  - card game
+  - choice
+  - or draw 25
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.04
+    anchor_y: 0.23
+    angle: 0.0
+    scale_x: 0.41
+    scale_y: 0.27
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.62
+    anchor_y: 0.085
+    angle: 0.0
+    scale_x: 0.185
+    scale_y: 0.21
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Acknowledge your mistakes
+  - Me

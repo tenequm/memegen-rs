@@ -1,0 +1,33 @@
+name: Moe Throws Barney
+source: file://moe-throws-barney.mp4
+keywords:
+  - moe
+  - simpsons
+  - dusting hands
+  - barney
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.975
+    scale_y: 0.145
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.3
+    anchor_y: 0.15
+    angle: 0.0
+    scale_x: 0.32
+    scale_y: 0.84
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me deleting an app
+  - Me

@@ -1,0 +1,46 @@
+name: Borat 2 Tonight Queen??
+source: https://imgflip.com/meme/478588645/Borat-2-Tonight-Queen
+keywords:
+  - text message
+  - imessage
+  - tonite
+  - tonight queen
+  - conversation
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.033
+    anchor_y: 0.146
+    angle: 0.0
+    scale_x: 0.523
+    scale_y: 0.146
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.033
+    anchor_y: 0.51
+    angle: 0.0
+    scale_x: 0.693
+    scale_y: 0.146
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.033
+    anchor_y: 0.82
+    angle: 0.0
+    scale_x: 0.523
+    scale_y: 0.146
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - tonite 👀
+  - tonight queen??
+  - tonite 👀

@@ -1,0 +1,33 @@
+name: Liam Neeson Taken
+source: https://imgflip.com/meme/Liam-Neeson-Taken
+keywords:
+  - liam neeson
+  - taken
+  - i will find you
+  - phone
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.21
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.14
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.7
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.135
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - I DON'T KNOW WHO YOU ARE
+  - BUT I WILL FIND YOU AND I WILL KILL YOU

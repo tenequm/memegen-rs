@@ -1,0 +1,34 @@
+name: Sweating Jordan Peele
+source: https://imgflip.com/meme/210959447/Sweating-Jordan-Peele
+keywords:
+  - sweating
+  - jordan peele
+  - nervous
+  - anxious
+  - key and peele
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.09
+    scale_y: 0.02
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.075
+    angle: 0.0
+    scale_x: 0.09
+    scale_y: 0.02
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When she asks to see your search history
+  - And you forgot to use incognito mode

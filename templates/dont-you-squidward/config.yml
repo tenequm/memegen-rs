@@ -1,0 +1,33 @@
+name: Don't You Squidward
+source: https://imgflip.com/meme/Dont-You-Squidward
+keywords:
+  - spongebob
+  - smug
+  - you like krabby patties don't you squidward
+  - grinning
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.82
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - YOU LIKE KRABBY PATTIES
+  - DON'T YOU SQUIDWARD?

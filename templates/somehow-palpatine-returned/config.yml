@@ -1,0 +1,33 @@
+name: Somehow Palpatine returned
+source: https://imgflip.com/meme/322650718/Somehow-Palpatine-returned
+keywords:
+  - somehow palpatine returned
+  - poe dameron
+  - star wars
+  - oscar isaac
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.195
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.8
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When the project you thought was dead gets assigned back to you
+  - "Somehow, Palpatine returned."

@@ -1,0 +1,34 @@
+name: "Gentlemen, it is with great pleasure to inform you that"
+source: https://imgflip.com/meme/313581692/Gentlemen-it-is-with-great-pleasure-to-inform-you-that
+keywords:
+  - gentlemen
+  - frog
+  - suit
+  - it is with great pleasure
+  - announcement
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.82
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "GENTLEMEN, IT IS WITH GREAT PLEASURE TO INFORM YOU THAT"
+  - TODAY IS MY BIRTHDAY

@@ -1,0 +1,33 @@
+name: Monkey Puppet
+source: https://imgflip.com/memetemplate/148909805
+keywords:
+  - monkey puppet
+  - awkward look
+  - side eye
+  - puppet
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.015
+    anchor_y: 0.015
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.33
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.015
+    anchor_y: 0.88
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.11
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When you hear someone talking about how bad they are at saving money
+  - Me with $3 in my bank account

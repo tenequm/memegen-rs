@@ -1,0 +1,23 @@
+name: I think i might miss my wife
+source: https://imgflip.com/meme/552930213/I-think-i-might-miss-my-wife-blank
+keywords:
+  - omni-man
+  - invincible
+  - nolan grayson
+  - speech bubble
+  - sad
+  - space
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.042
+    anchor_y: 0.445
+    angle: 0.0
+    scale_x: 0.224
+    scale_y: 0.327
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - I think I might miss my wife.

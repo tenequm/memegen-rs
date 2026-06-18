@@ -1,0 +1,35 @@
+name: Spiderman Glasses
+source: https://imgflip.com/meme/153355886/Spiderman-Glasses
+keywords:
+  - peter parker
+  - glasses
+  - tobey maguire
+  - blurry
+  - clear
+  - truth
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.05
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.4
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.52
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.46
+    scale_y: 0.4
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - What it looks like to others
+  - What it actually is

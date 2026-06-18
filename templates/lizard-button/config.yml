@@ -1,0 +1,35 @@
+name: "That's the neat part, you don't"
+source: https://imgflip.com/meme/609104982/Lizard-button
+keywords:
+  - invincible
+  - omni-man
+  - mark grayson
+  - nolan
+  - neat part
+  - you don't
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.85
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - How do we make a successful meme?
+  - "That's the neat part, you don't."

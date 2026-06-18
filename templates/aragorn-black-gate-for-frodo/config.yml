@@ -1,0 +1,34 @@
+name: Aragorn Black Gate for Frodo
+source: https://imgflip.com/meme/73966654/Aragorn-Black-Gate-for-Frodo
+keywords:
+  - aragorn
+  - for frodo
+  - lord of the rings
+  - black gate
+  - battle
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.019
+    anchor_y: 0.398
+    angle: 0.0
+    scale_x: 0.351
+    scale_y: 0.091
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.61
+    anchor_y: 0.89
+    angle: 0.0
+    scale_x: 0.37
+    scale_y: 0.099
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - For Frodo.
+  - Me doing something stupid for my friends

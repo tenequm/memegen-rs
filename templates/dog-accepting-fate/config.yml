@@ -1,0 +1,35 @@
+name: Dog accepting fate
+source: https://imgflip.com/meme/569492762/Dog-accepting-fate
+keywords:
+  - dog
+  - accepting fate
+  - peaceful
+  - sunset
+  - labrador
+  - calm
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.147
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.83
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.155
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When you accept your fate
+  - It is what it is

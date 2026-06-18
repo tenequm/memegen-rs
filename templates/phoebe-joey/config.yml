@@ -1,0 +1,106 @@
+name: Phoebe Joey
+source: https://imgflip.com/meme/231451789/Phoebe-Joey
+keywords:
+  - phoebe teaching joey
+  - friends
+  - french
+  - learning
+  - misunderstanding
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.18
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.065
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.18
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.065
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.43
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.065
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.43
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.065
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.68
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.065
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.68
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.065
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.93
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.065
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.93
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.065
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Je
+  - Je
+  - m'ap
+  - m'ap
+  - pelle
+  - pelle
+  - Je m'appelle
+  - "Joey!"

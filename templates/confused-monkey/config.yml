@@ -1,0 +1,35 @@
+name: Young Michael Scott Shaking Hands
+source: https://imgflip.com/meme/511357979/Confused-Monkey
+keywords:
+  - michael scott
+  - ed truck
+  - the office
+  - handshake
+  - young michael scott
+  - mullet
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.15
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.18
+    scale_y: 0.14
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.62
+    anchor_y: 0.17
+    angle: 0.0
+    scale_x: 0.18
+    scale_y: 0.21
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My boss
+  - Me

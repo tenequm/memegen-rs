@@ -1,0 +1,45 @@
+name: Car Salesman Slaps Roof Of Car
+source: https://imgflip.com/meme/Car-Salesman-Slaps-Roof-Of-Car
+keywords:
+  - car salesman
+  - slaps roof of car
+  - this bad boy can fit so much
+  - slapping
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.015
+    anchor_y: 0.015
+    angle: 0.0
+    scale_x: 0.585
+    scale_y: 0.295
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.15
+    anchor_y: 0.45
+    angle: 0.0
+    scale_x: 0.35
+    scale_y: 0.3
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.78
+    anchor_y: 0.35
+    angle: 0.0
+    scale_x: 0.21
+    scale_y: 0.5
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "Car Salesman: *slaps roof of car* This bad boy can fit so much spaghetti in it"
+  - my stomach
+  - me at 2 AM

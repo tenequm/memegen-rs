@@ -1,0 +1,59 @@
+name: I think I forgot something
+source: https://imgflip.com/meme/198386501/I-think-I-forgot-something
+keywords:
+  - two and a half men
+  - forgot
+  - rain
+  - charlie
+  - alan
+  - jake
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.15
+    angle: 0.0
+    scale_x: 0.25
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.66
+    anchor_y: 0.15
+    angle: 0.0
+    scale_x: 0.24
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.6
+    angle: 0.0
+    scale_x: 0.25
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.65
+    anchor_y: 0.65
+    angle: 0.0
+    scale_x: 0.2
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me
+  - My brain
+  - Me
+  - The homework due at midnight

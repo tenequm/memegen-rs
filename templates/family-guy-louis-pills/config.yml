@@ -1,0 +1,34 @@
+name: Family Guy Lois Pills
+source: https://imgflip.com/meme/408741985/family-guy-louis-pills
+keywords:
+  - family guy
+  - lois griffin
+  - pills
+  - pill bottle
+  - addiction
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.586
+    anchor_y: 0.23
+    angle: 0.0
+    scale_x: 0.168
+    scale_y: 0.548
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.254
+    anchor_y: 0.404
+    angle: 0.0
+    scale_x: 0.15
+    scale_y: 0.414
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me
+  - Checking my phone every 5 minutes

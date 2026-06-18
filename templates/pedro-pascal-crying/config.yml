@@ -1,0 +1,21 @@
+name: Fernanfloo dressed up
+source: https://imgflip.com/meme/345987437/Pedro-Pascal-crying
+keywords:
+  - fernanfloo
+  - suit
+  - casual vs formal
+  - my graduation vs
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.15
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My graduation vs. The release of Shrek 5

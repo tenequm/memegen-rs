@@ -1,0 +1,35 @@
+name: Laughing Men In Suits
+source: https://imgflip.com/meme/Laughing-Men-In-Suits
+keywords:
+  - laughing
+  - men in suits
+  - politicians
+  - reagan
+  - bush
+  - rich men laughing
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.002
+    angle: 0.0
+    scale_x: 0.978
+    scale_y: 0.098
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.88
+    angle: 0.0
+    scale_x: 0.978
+    scale_y: 0.115
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - And then I told them...
+  - "The wealth will trickle down!"

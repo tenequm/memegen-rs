@@ -1,0 +1,22 @@
+name: Futurama Zero Days Since Last Blank
+source: https://imgflip.com/meme/448742875/Futurama-Zero-Days-Since-Last-Blank
+keywords:
+  - futurama
+  - zero days since last
+  - sign
+  - accident
+  - days since last
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.546
+    angle: 0.0
+    scale_x: 0.648
+    scale_y: 0.202
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - ACCIDENT

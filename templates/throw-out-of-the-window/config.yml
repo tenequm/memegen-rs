@@ -1,0 +1,58 @@
+name: Throw out of the window
+source: https://imgflip.com/meme/174192307/throw-out-of-the-window
+keywords:
+  - boardroom meeting suggestion
+  - boss
+  - employees
+  - defenestration
+  - office
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.285
+    anchor_y: 0.0
+    angle: 0.0
+    scale_x: 0.645
+    scale_y: 0.085
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.032
+    anchor_y: 0.376
+    angle: 0.0
+    scale_x: 0.222
+    scale_y: 0.05
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.315
+    anchor_y: 0.389
+    angle: 0.0
+    scale_x: 0.182
+    scale_y: 0.048
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.599
+    anchor_y: 0.389
+    angle: 0.0
+    scale_x: 0.3
+    scale_y: 0.083
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - How can we improve our product?
+  - "Add more features!"
+  - "Make it more expensive!"
+  - Fix the existing bugs first.

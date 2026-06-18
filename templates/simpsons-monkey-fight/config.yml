@@ -1,0 +1,59 @@
+name: Simpsons Monkey Fight
+source: https://imgflip.com/meme/145808514/Simpsons-Monkey-Fight
+keywords:
+  - simpsons
+  - monkey fight
+  - monkeys
+  - knife fight
+  - spectators
+  - betting
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.16
+    anchor_y: 0.245
+    angle: 0.0
+    scale_x: 0.255
+    scale_y: 0.525
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.715
+    anchor_y: 0.275
+    angle: 0.0
+    scale_x: 0.275
+    scale_y: 0.63
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.195
+    anchor_y: 0.53
+    angle: 0.0
+    scale_x: 0.3
+    scale_y: 0.35
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.455
+    anchor_y: 0.48
+    angle: 0.0
+    scale_x: 0.305
+    scale_y: 0.33
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - People watching
+  - People betting
+  - Left fighter
+  - Right fighter

@@ -1,0 +1,23 @@
+name: Spongebob Burning Paper
+source: file://spongebob-burning-paper.mp4
+keywords:
+  - spongebob
+  - burning paper
+  - fire
+  - opinion
+  - fact
+  - ignoring
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.08
+    anchor_y: 0.09
+    angle: 0.0
+    scale_x: 0.305
+    scale_y: 0.34
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Cartoons are just for kids.

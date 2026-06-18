@@ -1,0 +1,35 @@
+name: PTSD Chihuahua
+source: https://imgflip.com/meme/196853374/PTSD-Chihuahua
+keywords:
+  - ptsd
+  - chihuahua
+  - vietnam
+  - flashback
+  - dog
+  - scared
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.989
+    scale_y: 0.147
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.85
+    angle: 0.0
+    scale_x: 0.989
+    scale_y: 0.145
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When you hear a helicopter
+  - And remember the trees speaking Vietnamese

@@ -1,0 +1,46 @@
+name: Sweaty Speedrunner
+source: https://imgflip.com/meme/305074372/Sweaty-Speedrunner
+keywords:
+  - are ya winning son
+  - depression
+  - wholesome
+  - stick figure
+  - doorway
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.048
+    anchor_y: 0.044
+    angle: 0.0
+    scale_x: 0.312
+    scale_y: 0.286
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.566
+    anchor_y: 0.088
+    angle: 0.0
+    scale_x: 0.41
+    scale_y: 0.123
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.048
+    anchor_y: 0.527
+    angle: 0.0
+    scale_x: 0.312
+    scale_y: 0.283
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Dad
+  - My depression
+  - Dad

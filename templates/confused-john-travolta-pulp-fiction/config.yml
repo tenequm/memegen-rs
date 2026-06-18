@@ -1,0 +1,35 @@
+name: He Chose Poorly Waiting
+source: https://imgflip.com/meme/386198399/Confused-John-Travolta-Pulp-Fiction
+keywords:
+  - indiana jones
+  - grail knight
+  - skeleton
+  - waiting
+  - computer
+  - still waiting
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.51
+    angle: 0.0
+    scale_x: 0.96
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me waiting for GTA 6 to release
+  - Still waiting...

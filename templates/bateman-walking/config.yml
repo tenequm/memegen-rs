@@ -1,0 +1,35 @@
+name: Dr. Evil Air Quotes
+source: https://imgflip.com/meme/373996592/Bateman-walking
+keywords:
+  - dr evil
+  - air quotes
+  - laser
+  - austin powers
+  - suspicious
+  - sarcastic
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.978
+    scale_y: 0.147
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.85
+    angle: 0.0
+    scale_x: 0.978
+    scale_y: 0.14
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "\"LASER\""
+  - OR SO THEY CLAIM

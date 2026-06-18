@@ -1,0 +1,23 @@
+name: Summer Camp Island Presentation
+source: https://imgflip.com/meme/139917843/Lisa-Simpsons-Presentation
+keywords:
+  - presentation
+  - lisa simpson
+  - board
+  - pointer
+  - susie
+  - summer camp island
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.014
+    anchor_y: 0.15
+    angle: 0.0
+    scale_x: 0.732
+    scale_y: 0.804
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "Your opinion is valid, but mine is louder."

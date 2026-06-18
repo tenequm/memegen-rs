@@ -1,0 +1,35 @@
+name: Train Hitting School Bus
+source: https://imgflip.com/memetemplate/247113703
+keywords:
+  - train hitting school bus
+  - train
+  - school bus
+  - crash
+  - destruction
+  - my plans
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.48
+    anchor_y: 0.238
+    angle: 0.0
+    scale_x: 0.42
+    scale_y: 0.08
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.14
+    anchor_y: 0.59
+    angle: 0.0
+    scale_x: 0.34
+    scale_y: 0.22
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My plans for the weekend
+  - An urgent work email

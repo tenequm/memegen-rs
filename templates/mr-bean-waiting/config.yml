@@ -1,0 +1,22 @@
+name: Mr Bean Waiting
+source: https://imgflip.com/meme/123104217/Mr-bean-waiting
+keywords:
+  - mr bean
+  - waiting
+  - bored
+  - impatient
+  - four panels
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.0
+    angle: 0.0
+    scale_x: 1.0
+    scale_y: 0.173
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me waiting for my code to compile

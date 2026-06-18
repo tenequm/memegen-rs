@@ -1,0 +1,33 @@
+name: Skinner Out Of Touch
+source: https://imgflip.com/meme/93160967/Skinner-Out-Of-Touch
+keywords:
+  - simpsons
+  - principal skinner
+  - am i out of touch
+  - "no, it's the children who are wrong"
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.4
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.09
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.9
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.09
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Am I out of touch?
+  - "No, it's the children who are wrong."

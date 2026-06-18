@@ -1,0 +1,21 @@
+name: Why is my sister's name Rose
+source: https://imgflip.com/meme/152073600/Why-is-my-sisters-name-Rose
+keywords:
+  - dad why is my sisters name
+  - no problem
+  - father and son in car
+  - thanks dad
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.36
+    anchor_y: 0.288
+    angle: 0.0
+    scale_x: 0.59
+    scale_y: 0.064
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - Bitcoin

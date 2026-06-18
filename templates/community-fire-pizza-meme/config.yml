@@ -1,0 +1,47 @@
+name: Community Fire Pizza Meme
+source: https://imgflip.com/meme/235571786/Community-Fire-Pizza-Meme
+keywords:
+  - community
+  - troy
+  - pizza
+  - fire
+  - chaos
+  - donald glover
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.38
+    anchor_y: 0.06
+    angle: 0.0
+    scale_x: 0.41
+    scale_y: 0.445
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.325
+    anchor_y: 0.385
+    angle: 0.0
+    scale_x: 0.345
+    scale_y: 0.125
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.0
+    anchor_y: 0.512
+    angle: 0.0
+    scale_x: 0.998
+    scale_y: 0.488
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me entering the group chat
+  - A funny meme I found
+  - The political argument already happening

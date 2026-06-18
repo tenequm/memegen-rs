@@ -1,0 +1,27 @@
+name: Be Like Bill
+source: https://imgflip.com/meme/Be-Like-Bill
+keywords:
+  - be like bill
+  - stick figure
+  - bill
+  - smart
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.05
+    angle: 0.0
+    scale_x: 0.55
+    scale_y: 0.9
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - |-
+    This is Bill.
+    Bill is on the internet.
+    Bill sees something that offends him.
+    Bill moves on.
+    Bill is smart.
+    Be like Bill.

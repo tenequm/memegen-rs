@@ -1,0 +1,34 @@
+name: Blank Sybau Maker
+source: https://imgflip.com/meme/598480093/blank-sybau-maker
+keywords:
+  - shut your bitch ass up
+  - sybau
+  - background
+  - street
+  - building
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.147
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.85
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.14
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - shut your bitch ass up
+  - i'm trying to sleep

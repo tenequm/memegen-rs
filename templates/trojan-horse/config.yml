@@ -1,0 +1,47 @@
+name: Trojan Horse
+source: https://imgflip.com/meme/144961820/Trojan-Horse
+keywords:
+  - trojan horse
+  - greek
+  - gift
+  - hidden threat
+  - surprise
+  - disguise
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.09
+    anchor_y: 0.23
+    angle: 0.0
+    scale_x: 0.54
+    scale_y: 0.25
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.138
+    anchor_y: 0.485
+    angle: 0.0
+    scale_x: 0.347
+    scale_y: 0.165
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.59
+    anchor_y: 0.71
+    angle: 0.0
+    scale_x: 0.275
+    scale_y: 0.26
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - free game download
+  - virus
+  - my computer

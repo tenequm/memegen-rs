@@ -1,0 +1,22 @@
+name: Albert Einstein Quotes
+source: https://imgflip.com/meme/117614675/albert-einstein-quotes
+keywords:
+  - albert einstein
+  - quote
+  - fake quote
+  - science
+  - genius
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.5
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.45
+    scale_y: 0.8
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - "\"Don't believe everything you read on the internet just because there's a picture with a quote next to it.\""

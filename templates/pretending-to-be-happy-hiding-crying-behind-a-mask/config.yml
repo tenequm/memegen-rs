@@ -1,0 +1,35 @@
+name: "Pretending To Be Happy, Hiding Crying Behind A Mask"
+source: https://imgflip.com/meme/99924861/Pretending-To-Be-Happy-Hiding-Crying-Behind-A-Mask
+keywords:
+  - crying behind mask
+  - wojak
+  - smug mask
+  - sad
+  - happy
+  - pretending
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.22
+    anchor_y: 0.35
+    angle: 0.0
+    scale_x: 0.28
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.55
+    anchor_y: 0.35
+    angle: 0.0
+    scale_x: 0.33
+    scale_y: 0.3
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me crying inside
+  - My social media posts

@@ -1,0 +1,34 @@
+name: Big book small book
+source: https://imgflip.com/meme/237236273/Big-book-small-book
+keywords:
+  - thick book
+  - thin book
+  - comparison
+  - history
+  - lore
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.048
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.468
+    scale_y: 0.504
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.55
+    anchor_y: 0.6
+    angle: 0.0
+    scale_x: 0.416
+    scale_y: 0.152
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Greek mythology
+  - Greek mythology without Zeus's affairs

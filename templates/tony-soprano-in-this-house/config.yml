@@ -1,0 +1,35 @@
+name: Tony Soprano in this house
+source: https://imgflip.com/meme/323402576/Tony-Soprano-in-this-house
+keywords:
+  - tony soprano
+  - sopranos
+  - in this house
+  - pointing
+  - bathrobe
+  - angry
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.147
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.83
+    angle: 0.0
+    scale_x: 0.97
+    scale_y: 0.16
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "IN THIS HOUSE, CHRISTOPHER COLUMBUS IS A HERO!"
+  - "END OF STORY!"

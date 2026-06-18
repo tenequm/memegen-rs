@@ -1,0 +1,34 @@
+name: No - Yes
+source: https://imgflip.com/memetemplate/129315248
+keywords:
+  - drake
+  - hotline bling
+  - no yes
+  - dislike like
+  - preference
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.392
+    anchor_y: 0.035
+    angle: 0.0
+    scale_x: 0.591
+    scale_y: 0.46
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.392
+    anchor_y: 0.505
+    angle: 0.0
+    scale_x: 0.591
+    scale_y: 0.46
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Doing something the hard way
+  - Doing it the easy way

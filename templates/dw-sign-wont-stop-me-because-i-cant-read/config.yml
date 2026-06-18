@@ -1,0 +1,23 @@
+name: DW Sign Won't Stop Me Because I Can't Read
+source: https://imgflip.com/meme/147910794/DW-Sign-Wont-Stop-Me-Because-I-Cant-Read
+keywords:
+  - dw
+  - arthur
+  - sign
+  - won't stop me
+  - because i can't read
+  - yellow sign
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.025
+    anchor_y: 0.075
+    angle: 0.0
+    scale_x: 0.56
+    scale_y: 0.32
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Rules of the road

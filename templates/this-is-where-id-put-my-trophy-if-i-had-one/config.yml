@@ -1,0 +1,34 @@
+name: This Is Where I'd Put My Trophy If I Had One
+source: https://imgflip.com/memetemplate/3218037
+keywords:
+  - fairly oddparents
+  - timmy turner dad
+  - if i had one
+  - trophy
+  - empty pedestal
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.015
+    anchor_y: 0.015
+    angle: 0.0
+    scale_x: 0.965
+    scale_y: 0.1
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.015
+    anchor_y: 0.515
+    angle: 0.0
+    scale_x: 0.965
+    scale_y: 0.1
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - This is where I'd put my motivation
+  - "IF I HAD ONE!"

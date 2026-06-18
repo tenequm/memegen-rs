@@ -1,0 +1,33 @@
+name: Disaster Girl
+source: https://imgflip.com/meme/21170207/Burning-House-Girl
+keywords:
+  - disaster girl
+  - burning house girl
+  - fire
+  - evil smile
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.005
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.145
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.005
+    anchor_y: 0.85
+    angle: 0.0
+    scale_x: 0.99
+    scale_y: 0.145
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me watching the drama unfold
+  - That I started

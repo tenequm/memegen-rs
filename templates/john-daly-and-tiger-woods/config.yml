@@ -1,0 +1,35 @@
+name: John Daly and Tiger Woods
+source: https://imgflip.com/meme/401650351/John-Daly-and-Tiger-Woods
+keywords:
+  - golf
+  - tiger woods
+  - john daly
+  - comparison
+  - serious vs relaxed
+  - professional vs casual
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.14
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.22
+    scale_y: 0.24
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.59
+    anchor_y: 0.32
+    angle: 0.0
+    scale_x: 0.25
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me trying to stick to my diet
+  - The box of donuts in the breakroom

@@ -1,0 +1,33 @@
+name: Pawn Stars Best I Can Do
+source: https://imgflip.com/memetemplate/77045868
+keywords:
+  - pawn stars
+  - best i can do
+  - rick harrison
+  - chumlee
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.002
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.178
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.81
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.18
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - A rare historical artifact worth millions
+  - Best I can do is five dollars

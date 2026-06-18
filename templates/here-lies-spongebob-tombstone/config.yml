@@ -1,0 +1,22 @@
+name: Here Lies Spongebob Tombstone
+source: https://imgflip.com/meme/275732129/Here-Lies-Spongebob-Tombstone
+keywords:
+  - here lies
+  - tombstone
+  - grave
+  - spongebob
+  - hopes and dreams
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.14
+    anchor_y: 0.25
+    angle: 0.0
+    scale_x: 0.72
+    scale_y: 0.6
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My hopes and dreams

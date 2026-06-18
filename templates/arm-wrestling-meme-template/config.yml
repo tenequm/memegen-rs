@@ -1,0 +1,47 @@
+name: Arm wrestling meme template
+source: https://imgflip.com/meme/148465772/Arm-wrestling-meme-template
+keywords:
+  - epic handshake
+  - arm wrestling
+  - predator
+  - dillon
+  - dutch
+  - agreement
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.36
+    anchor_y: 0.2
+    angle: 0.0
+    scale_x: 0.12
+    scale_y: 0.13
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.18
+    anchor_y: 0.55
+    angle: 0.0
+    scale_x: 0.2
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.6
+    anchor_y: 0.48
+    angle: 0.0
+    scale_x: 0.18
+    scale_y: 0.17
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - shared interest
+  - group A
+  - group B

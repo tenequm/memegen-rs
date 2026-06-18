@@ -1,0 +1,35 @@
+name: Cuphead Flower
+source: https://imgflip.com/meme/213473065/Cuphead-Flower
+keywords:
+  - cuphead
+  - flower
+  - cagney carnation
+  - angry
+  - cute
+  - comparison
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.5
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.49
+    scale_y: 0.49
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.5
+    anchor_y: 0.52
+    angle: 0.0
+    scale_x: 0.49
+    scale_y: 0.47
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - When someone makes a tiny mistake
+  - When I make a huge mistake

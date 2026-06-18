@@ -1,0 +1,45 @@
+name: Poke with stick
+source: https://imgflip.com/meme/323356702/Poke-with-stick
+keywords:
+  - c'mon do something
+  - poke with a stick
+  - white guy poking
+  - do something
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.015
+    anchor_y: 0.015
+    angle: 0.0
+    scale_x: 0.405
+    scale_y: 0.26
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.21
+    anchor_y: 0.365
+    angle: 0.0
+    scale_x: 0.49
+    scale_y: 0.1
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.428
+    anchor_y: 0.695
+    angle: 0.0
+    scale_x: 0.507
+    scale_y: 0.295
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Defense Contractors
+  - C'mon do a war
+  - USA

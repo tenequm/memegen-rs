@@ -1,0 +1,34 @@
+name: Google Did You Mean
+source: https://imgflip.com/meme/641445912/Higuruma
+keywords:
+  - google
+  - search
+  - did you mean
+  - typo
+  - correction
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.185
+    anchor_y: 0.26
+    angle: 0.0
+    scale_x: 0.675
+    scale_y: 0.135
+    align: left
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.34
+    anchor_y: 0.755
+    angle: 0.0
+    scale_x: 0.075
+    scale_y: 0.09
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - how to be happy
+  - how to sleep 12 hours

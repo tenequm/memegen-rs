@@ -1,0 +1,34 @@
+name: Powder that makes you say yes
+source: https://imgflip.com/meme/142097891/Powder-that-makes-you-say-yes
+keywords:
+  - plastic man
+  - powder
+  - say yes
+  - comic
+  - speech bubble
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.425
+    anchor_y: 0.0
+    angle: 0.0
+    scale_x: 0.395
+    scale_y: 0.205
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.68
+    anchor_y: 0.44
+    angle: 0.0
+    scale_x: 0.315
+    scale_y: 0.295
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Yes
+  - Powder that makes you say yes

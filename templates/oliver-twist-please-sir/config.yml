@@ -1,0 +1,35 @@
+name: Oliver Twist Please Sir
+source: https://imgflip.com/meme/13872228/Oliver-Twist-Please-Sir
+keywords:
+  - oliver twist
+  - please sir
+  - more
+  - asking
+  - begging
+  - bowl
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.05
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.75
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me asking my boss for a raise
+  - "Please sir, can I have some more pixels?"

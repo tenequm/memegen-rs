@@ -1,0 +1,23 @@
+name: Is Calling You
+source: https://imgflip.com/meme/159070349/is-calling-you
+keywords:
+  - iphone
+  - incoming call
+  - phone
+  - calling
+  - decline
+  - accept
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.15
+    angle: 0.0
+    scale_x: 0.9
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Your Mom

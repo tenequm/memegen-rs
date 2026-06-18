@@ -1,0 +1,46 @@
+name: "Daring today, aren't we squidward"
+source: https://imgflip.com/meme/190895576/Daring-today-arent-we-squidward
+keywords:
+  - spongebob
+  - squidward
+  - how original
+  - daring today aren't we
+  - fish
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.09
+    anchor_y: 0.265
+    angle: 0.0
+    scale_x: 0.29
+    scale_y: 0.055
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.56
+    anchor_y: 0.59
+    angle: 0.0
+    scale_x: 0.37
+    scale_y: 0.065
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.56
+    anchor_y: 0.89
+    angle: 0.0
+    scale_x: 0.37
+    scale_y: 0.108
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - I'll have a...
+  - How original
+  - "Daring today, aren't we"

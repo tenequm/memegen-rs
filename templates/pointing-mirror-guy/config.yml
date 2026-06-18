@@ -1,0 +1,34 @@
+name: Pointing mirror guy
+source: https://imgflip.com/meme/102165628/Pointing-mirror-guy
+keywords:
+  - pointing mirror guy
+  - mirror
+  - pointing at yourself
+  - reflection
+  - wikihow
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.1
+    anchor_y: 0.15
+    angle: 0.0
+    scale_x: 0.34
+    scale_y: 0.3
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.48
+    anchor_y: 0.12
+    angle: 0.0
+    scale_x: 0.3
+    scale_y: 0.33
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me
+  - The person responsible for all my problems

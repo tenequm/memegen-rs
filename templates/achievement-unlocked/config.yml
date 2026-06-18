@@ -1,0 +1,22 @@
+name: Achievement Unlocked
+source: https://imgflip.com/meme/3227693/achievement-unlocked
+keywords:
+  - xbox
+  - achievement
+  - unlocked
+  - gaming
+  - gamer
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.24
+    anchor_y: 0.47
+    angle: 0.0
+    scale_x: 0.66
+    scale_y: 0.13
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - Got out of bed before noon

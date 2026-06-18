@@ -1,0 +1,35 @@
+name: Homer and Bart worst day so far
+source: https://imgflip.com/meme/558768990/Homer-and-Bart-worst-day-so-far
+keywords:
+  - the simpsons
+  - homer simpson
+  - bart simpson
+  - worst day of my life
+  - so far
+  - two panels
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.41
+    angle: 0.0
+    scale_x: 0.959
+    scale_y: 0.08
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.02
+    anchor_y: 0.908
+    angle: 0.0
+    scale_x: 0.959
+    scale_y: 0.082
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - This is the worst day of my life.
+  - The worst day of your life so far.

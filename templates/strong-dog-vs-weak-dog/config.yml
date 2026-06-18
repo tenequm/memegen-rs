@@ -1,0 +1,34 @@
+name: Strong dog vs weak dog
+source: https://imgflip.com/meme/246939379/Strong-dog-vs-weak-dog
+keywords:
+  - swole doge vs cheems
+  - buff doge vs crying cheems
+  - doge
+  - cheems
+  - comparison
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.1
+    angle: 0.0
+    scale_x: 0.4
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.55
+    anchor_y: 0.3
+    angle: 0.0
+    scale_x: 0.4
+    scale_y: 0.2
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My parents at age 25
+  - Me at age 25

@@ -1,0 +1,47 @@
+name: Soldier protecting sleeping child
+source: https://imgflip.com/memetemplate/171305372
+keywords:
+  - soldier
+  - protecting
+  - sleeping child
+  - knives
+  - grenades
+  - sacrifice
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.05
+    anchor_y: 0.01
+    angle: 0.0
+    scale_x: 0.27
+    scale_y: 0.14
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.16
+    anchor_y: 0.2
+    angle: 0.0
+    scale_x: 0.47
+    scale_y: 0.76
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.51
+    anchor_y: 0.73
+    angle: 0.0
+    scale_x: 0.435
+    scale_y: 0.15
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My parents' sacrifices
+  - My parents
+  - Me playing video games

@@ -1,0 +1,23 @@
+name: Wolverine Remember
+source: https://imgflip.com/meme/47169131/Wolverine-Remember
+keywords:
+  - wolverine
+  - crush
+  - remember
+  - sad
+  - picture frame
+  - x-men
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.27
+    anchor_y: 0.535
+    angle: 0.0
+    scale_x: 0.52
+    scale_y: 0.447
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My old favorite video game

@@ -1,0 +1,60 @@
+name: Whatcha Got There?
+source: https://imgflip.com/meme/164065279/Whatcha-Got-There
+keywords:
+  - icarly
+  - spencer
+  - carly
+  - ostrich
+  - smoothie
+  - whatcha got there
+  - a smoothie
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.408
+    anchor_y: 0.06
+    angle: 0.0
+    scale_x: 0.322
+    scale_y: 0.445
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.03
+    anchor_y: 0.52
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.48
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.254
+    anchor_y: 0.605
+    angle: 0.0
+    scale_x: 0.556
+    scale_y: 0.395
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.62
+    anchor_y: 0.84
+    angle: 0.0
+    scale_x: 0.09
+    scale_y: 0.135
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - My parents
+  - A room full of empty soda cans
+  - Me
+  - A clean desk

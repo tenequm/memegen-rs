@@ -1,0 +1,35 @@
+name: Captain Kirk Khan
+source: https://imgflip.com/meme/100708178/Captain-Kirk-Khan
+keywords:
+  - captain kirk
+  - khan
+  - star trek
+  - william shatner
+  - screaming
+  - angry
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.197
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.8
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.19
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - WHEN YOU FORGET TO SAVE
+  - "KHAN!"

@@ -1,0 +1,34 @@
+name: Happy Wojak vs Depressed Wojak
+source: https://imgflip.com/meme/337688860/Happy-Wojak-vs-Depressed-Wojak
+keywords:
+  - happy wojak
+  - depressed wojak
+  - wojak
+  - comparison
+  - four panels
+text:
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.5
+    anchor_y: 0.02
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.47
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: black
+    font: thick
+    anchor_x: 0.5
+    anchor_y: 0.53
+    angle: 0.0
+    scale_x: 0.48
+    scale_y: 0.45
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - Me when I start a new project
+  - Me when I have to debug it

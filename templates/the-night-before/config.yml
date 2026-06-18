@@ -1,0 +1,21 @@
+name: The night before
+source: https://imgflip.com/meme/607849363/The-night-before
+keywords:
+  - step brothers
+  - the night before
+  - bed
+  - sleeping
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.48
+    anchor_y: 0.88
+    angle: 0.0
+    scale_x: 0.5
+    scale_y: 0.115
+    align: left
+    start: 0.0
+    stop: 1.0
+example:
+  - the exam

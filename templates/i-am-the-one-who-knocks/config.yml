@@ -1,0 +1,33 @@
+name: I am the one who knocks
+source: https://imgflip.com/meme/46134782/I-am-the-one-who-knocks
+keywords:
+  - walter white
+  - breaking bad
+  - bryan cranston
+  - i am the danger
+text:
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.003
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.177
+    align: center
+    start: 0.0
+    stop: 1.0
+  - style: upper
+    color: white
+    font: thick
+    anchor_x: 0.01
+    anchor_y: 0.81
+    angle: 0.0
+    scale_x: 0.98
+    scale_y: 0.17
+    align: center
+    start: 0.0
+    stop: 1.0
+example:
+  - "I AM NOT IN DANGER, SKYLER."
+  - "I AM THE ONE WHO KNOCKS!"
