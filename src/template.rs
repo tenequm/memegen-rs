@@ -12,9 +12,13 @@ pub(crate) struct TextBox {
     #[serde(default = "default_color")]
     pub(crate) color: String,
     #[serde(default)]
+    pub(crate) font: String,
+    #[serde(default)]
     pub(crate) anchor_x: f32,
     #[serde(default)]
     pub(crate) anchor_y: f32,
+    #[serde(default)]
+    pub(crate) angle: f32,
     #[serde(default = "one")]
     pub(crate) scale_x: f32,
     #[serde(default = "default_scale_y")]
@@ -54,8 +58,10 @@ fn default_text() -> Vec<TextBox> {
         TextBox {
             style: default_style(),
             color: default_color(),
+            font: String::new(),
             anchor_x: 0.0,
             anchor_y: 0.0,
+            angle: 0.0,
             scale_x: 1.0,
             scale_y: 0.2,
             align: default_align(),
@@ -63,8 +69,10 @@ fn default_text() -> Vec<TextBox> {
         TextBox {
             style: default_style(),
             color: default_color(),
+            font: String::new(),
             anchor_x: 0.0,
             anchor_y: 0.8,
+            angle: 0.0,
             scale_x: 1.0,
             scale_y: 0.2,
             align: default_align(),
@@ -116,6 +124,18 @@ impl Template {
             .iter()
             .map(|ext| self.dir.join(format!("{stem}.{ext}")))
             .find(|p| p.is_file())
+    }
+
+    /// The animated `.gif` source for a style, if one exists (used for animated
+    /// output; `background` would otherwise prefer a static still).
+    pub(crate) fn animated_source(&self, style: &str) -> Option<PathBuf> {
+        let style = if style.is_empty() { "default" } else { style };
+        [
+            self.dir.join(format!("{style}.gif")),
+            self.dir.join("default.gif"),
+        ]
+        .into_iter()
+        .find(|p| p.is_file())
     }
 
     /// A render URL that is guaranteed valid for smoke tests.

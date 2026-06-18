@@ -6,7 +6,7 @@
 
 A minimal, stateless meme generator HTTP API in pure Rust.
 
-Every meme is described entirely by its URL - there is no database, no cache server, and nothing to log in to. Backgrounds and caption geometry come from a directory of template folders, and each request renders an image on demand. It is a deliberately small reimplementation of [jacebrowning/memegen](https://github.com/jacebrowning/memegen): three endpoint groups, static image output, one embedded font, no SaaS plumbing - around 1,000 lines across three source files.
+Every meme is described entirely by its URL - there is no database, no cache server, and nothing to log in to. Backgrounds and caption geometry come from a directory of template folders, and each request renders an image on demand. It is a deliberately small reimplementation of [jacebrowning/memegen](https://github.com/jacebrowning/memegen): three endpoint groups, embedded fonts, no SaaS plumbing - around 1,000 lines across three source files.
 
 ## Table of Contents
 
@@ -87,17 +87,19 @@ This repository ships a corpus of ~780 templates under `templates/`, read once a
 - **[axum](https://crates.io/crates/axum)** for HTTP routing, **[utoipa](https://crates.io/crates/utoipa)** for the OpenAPI spec (no Swagger UI).
 - **[image](https://crates.io/crates/image)** + **[imageproc](https://crates.io/crates/imageproc)** + **[ab_glyph](https://crates.io/crates/ab_glyph)** for rendering. A caption is autosized to its box, word-wrapped, drawn with a white fill and a black outline, and composited onto the background.
 - **[serde-saphyr](https://crates.io/crates/serde-saphyr)** (pure-Rust YAML) parses each `config.yml`.
-- The display font (**[Anton](https://fonts.google.com/specimen/Anton)**, SIL OFL 1.1) is embedded in the binary via `include_bytes!` - no font directory, and it works on a fonts-less container.
+- Fonts (**[Anton](https://fonts.google.com/specimen/Anton)** for the Impact look, **[Kalam](https://fonts.google.com/specimen/Kalam)** for handwriting; both SIL OFL 1.1) are embedded in the binary via `include_bytes!` - no font directory, and it works on a fonts-less container.
 
 Three source files: `template.rs` (model, registry, URL codec, styling), `render.rs` (the rendering pipeline), `main.rs` (router, handlers, OpenAPI, error mapping).
 
 ## Scope
 
-Static image output (`png`, `jpg`, `webp`, single-frame `gif`). The following are intentionally out of scope for now and can be layered on without restructuring:
+Image output in `png`, `jpg`, `webp`, and `gif` - animated when the template's source is an animated GIF, otherwise a single frame. Per-template font selection (Anton plus a Kalam handwriting face) and text rotation are honored.
 
-- Animation (animated GIF/WebP, MP4)
+Still out of scope, layerable without restructuring:
+
+- Animated WebP / MP4 output
 - Overlay-image compositing
-- Per-template font selection and color emoji
+- Color emoji and the full upstream font set
 
 Templates whose only background is an undecodable video (`default.mp4` with no static still) are listed in the API but return `422` on render.
 
@@ -133,7 +135,7 @@ The full machine-readable contract is served at `/openapi.json`.
 
 This project is a reimplementation of [**memegen**](https://github.com/jacebrowning/memegen) by [Jace Browning](https://github.com/jacebrowning) ([memegen.link](https://memegen.link)). The URL scheme, the template format, and the overall API shape are his design; this repository simply rebuilds a minimal subset of it in Rust. All credit for the original idea and the template ecosystem goes to him and the memegen contributors.
 
-Also thanks to the [Anton](https://github.com/googlefonts/AntonFont) typeface (SIL OFL 1.1) and the maintainers of [axum](https://github.com/tokio-rs/axum), [image](https://github.com/image-rs/image), [imageproc](https://github.com/image-rs/imageproc), and [ab_glyph](https://github.com/alexheretic/ab-glyph).
+Also thanks to the [Anton](https://github.com/googlefonts/AntonFont) and [Kalam](https://github.com/googlefonts/kalam) typefaces (SIL OFL 1.1) and the maintainers of [axum](https://github.com/tokio-rs/axum), [image](https://github.com/image-rs/image), [imageproc](https://github.com/image-rs/imageproc), and [ab_glyph](https://github.com/alexheretic/ab-glyph).
 
 ## Contributing
 
@@ -141,7 +143,7 @@ Issues and pull requests are welcome - open an [issue](https://github.com/tenequ
 
 ## License
 
-Code, build scripts, and template `config.yml` markup are [MIT](LICENSE) (c) 2026 Misha Kolesnik. The embedded Anton font is [SIL OFL 1.1](assets/OFL-Anton.txt).
+Code, build scripts, and template `config.yml` markup are [MIT](LICENSE) (c) 2026 Misha Kolesnik. The embedded [Anton](assets/OFL-Anton.txt) and [Kalam](assets/OFL-Kalam.txt) fonts are SIL OFL 1.1.
 
 ### Template images
 

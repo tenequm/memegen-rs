@@ -1,15 +1,31 @@
-use std::io::Cursor;
+use std::fs::File;
+use std::io::{BufReader, Cursor};
+use std::path::Path;
 use std::sync::LazyLock;
 
 use ab_glyph::{Font, FontArc, PxScale, ScaleFont};
+use image::codecs::gif::{GifDecoder, GifEncoder, Repeat};
 use image::imageops::FilterType;
-use image::{DynamicImage, ImageFormat, Rgba, RgbaImage, imageops};
+use image::{AnimationDecoder, DynamicImage, Frame, ImageFormat, Rgba, RgbaImage, imageops};
+use imageproc::geometric_transformations::{Border, Interpolation, rotate_about_center};
 
 use crate::template::{Template, stylize};
 
-static FONT: LazyLock<FontArc> = LazyLock::new(|| {
-    FontArc::try_from_slice(include_bytes!("../assets/Anton-Regular.ttf")).expect("valid font")
-});
+static ANTON: LazyLock<FontArc> =
+    LazyLock::new(|| load_font(include_bytes!("../assets/Anton-Regular.ttf")));
+static KALAM: LazyLock<FontArc> =
+    LazyLock::new(|| load_font(include_bytes!("../assets/Kalam-Regular.ttf")));
+
+fn load_font(bytes: &'static [u8]) -> FontArc {
+    FontArc::try_from_slice(bytes).expect("valid font")
+}
+
+fn font(name: &str) -> &'static FontArc {
+    match name {
+        "comic" | "kalam" => &KALAM,
+        _ => &ANTON,
+    }
+}
 
 #[derive(Debug)]
 pub(crate) enum RenderError {
@@ -32,6 +48,12 @@ pub(crate) fn render(
     template: &Template,
     spec: &Spec,
 ) -> Result<(Vec<u8>, &'static str), RenderError> {
+    if spec.ext == "gif"
+        && let Some(gif) = template.animated_source(spec.style)
+        && let Some(out) = animated_gif(&gif, template, spec)?
+    {
+        return Ok((out, "image/gif"));
+    }
     let bg = template
         .background(spec.style)
         .ok_or(RenderError::NoBackground)?;
@@ -62,6 +84,14 @@ fn finish(
     boxes: &[Box],
     spec: &Spec,
 ) -> Result<(Vec<u8>, &'static str), RenderError> {
+    compose(&mut img, boxes, spec);
+    if spec.size.0 > 0 && spec.size.1 > 0 {
+        img = pad_to(&img, spec.size.0, spec.size.1);
+    }
+    encode(img, spec.ext)
+}
+
+fn compose(img: &mut RgbaImage, boxes: &[Box], spec: &Spec) {
     let (w, h) = (img.width() as f32, img.height() as f32);
     for (i, b) in boxes.iter().enumerate() {
         let Some(raw) = spec.lines.get(i) else {
@@ -82,18 +112,50 @@ fn finish(
             w: b.scale_x * w,
             h: b.scale_y * h,
         };
-        draw_caption(&mut img, &caption, rect, &b.align, color);
+        draw_caption(img, font(&b.font), &caption, rect, &b.align, b.angle, color);
     }
+}
 
-    if spec.size.0 > 0 && spec.size.1 > 0 {
-        img = pad_to(&img, spec.size.0, spec.size.1);
+fn animated_gif(
+    gif: &Path,
+    template: &Template,
+    spec: &Spec,
+) -> Result<Option<Vec<u8>>, RenderError> {
+    let decode = |e: image::ImageError| RenderError::Decode(e.to_string());
+    let file = File::open(gif).map_err(|e| RenderError::Decode(e.to_string()))?;
+    let frames = GifDecoder::new(BufReader::new(file))
+        .map_err(decode)?
+        .into_frames()
+        .collect_frames()
+        .map_err(decode)?;
+    if frames.len() <= 1 {
+        return Ok(None);
     }
-    encode(img, spec.ext)
+    let boxes = effective_boxes(template, spec.layout, spec.lines.len());
+    let out_frames: Vec<Frame> = frames
+        .into_iter()
+        .map(|fr| {
+            let (left, top, delay) = (fr.left(), fr.top(), fr.delay());
+            let mut buf = fr.into_buffer();
+            compose(&mut buf, &boxes, spec);
+            Frame::from_parts(buf, left, top, delay)
+        })
+        .collect();
+    let mut out = Cursor::new(Vec::new());
+    {
+        let mut enc = GifEncoder::new(&mut out);
+        let encode = |e: image::ImageError| RenderError::Encode(e.to_string());
+        enc.set_repeat(Repeat::Infinite).map_err(encode)?;
+        enc.encode_frames(out_frames).map_err(encode)?;
+    }
+    Ok(Some(out.into_inner()))
 }
 
 struct Box {
     style: String,
     color: String,
+    font: String,
+    angle: f32,
     anchor_x: f32,
     anchor_y: f32,
     scale_x: f32,
@@ -111,6 +173,8 @@ fn effective_boxes(template: &Template, layout: &str, lines: usize) -> Vec<Box> 
         .map(|t| Box {
             style: t.style.clone(),
             color: t.color.clone(),
+            font: t.font.clone(),
+            angle: t.angle,
             anchor_x: t.anchor_x,
             anchor_y: t.anchor_y,
             scale_x: t.scale_x,
@@ -126,6 +190,8 @@ fn top_boxes(lines: usize) -> Vec<Box> {
         .map(|i| Box {
             style: "none".into(),
             color: "white".into(),
+            font: String::new(),
+            angle: 0.0,
             anchor_x: 0.0,
             anchor_y: i as f32 * (0.2 / n),
             scale_x: 1.0,
@@ -136,26 +202,19 @@ fn top_boxes(lines: usize) -> Vec<Box> {
 }
 
 fn default_boxes() -> Vec<Box> {
-    vec![
-        Box {
+    [0.0, 0.8]
+        .map(|y| Box {
             style: "upper".into(),
             color: "white".into(),
+            font: String::new(),
+            angle: 0.0,
             anchor_x: 0.0,
-            anchor_y: 0.0,
+            anchor_y: y,
             scale_x: 1.0,
             scale_y: 0.2,
             align: "center".into(),
-        },
-        Box {
-            style: "upper".into(),
-            color: "white".into(),
-            anchor_x: 0.0,
-            anchor_y: 0.8,
-            scale_x: 1.0,
-            scale_y: 0.2,
-            align: "center".into(),
-        },
-    ]
+        })
+        .into()
 }
 
 struct Rect {
@@ -165,21 +224,29 @@ struct Rect {
     h: f32,
 }
 
-fn draw_caption(img: &mut RgbaImage, caption: &str, rect: Rect, align: &str, fill: Rgba<u8>) {
-    let (px, lines) = layout_text(caption, rect.w, rect.h);
-    let scaled = FONT.as_scaled(PxScale::from(px));
-    let line_h = scaled.height();
+fn draw_caption(
+    img: &mut RgbaImage,
+    f: &FontArc,
+    caption: &str,
+    rect: Rect,
+    align: &str,
+    angle: f32,
+    fill: Rgba<u8>,
+) {
+    let (px, lines) = layout_text(f, caption, rect.w, rect.h);
+    let line_h = f.as_scaled(PxScale::from(px)).height();
     let total_h = line_h * lines.len() as f32;
-    let block_top = rect.y + (rect.h - total_h).max(0.0) / 2.0;
+    let block_top = (rect.h - total_h).max(0.0) / 2.0;
     let stroke = (px / 12.0).round().clamp(1.0, 4.0) as i32;
     let outline = stroke_color(fill);
 
+    let mut layer = RgbaImage::new(rect.w.max(1.0) as u32, rect.h.max(1.0) as u32);
     for (i, line) in lines.iter().enumerate() {
-        let line_w = measure(line, px);
+        let line_w = measure(f, line, px);
         let x = match align {
-            "left" => rect.x,
-            "right" => rect.x + rect.w - line_w,
-            _ => rect.x + (rect.w - line_w) / 2.0,
+            "left" => 0.0,
+            "right" => rect.w - line_w,
+            _ => (rect.w - line_w) / 2.0,
         };
         let y = block_top + i as f32 * line_h;
         let (xi, yi) = (x.round() as i32, y.round() as i32);
@@ -187,26 +254,44 @@ fn draw_caption(img: &mut RgbaImage, caption: &str, rect: Rect, align: &str, fil
         for dy in -stroke..=stroke {
             for dx in -stroke..=stroke {
                 if dx * dx + dy * dy <= stroke * stroke {
-                    draw_line(img, outline, xi + dx, yi + dy, px, line);
+                    draw_line(&mut layer, f, outline, xi + dx, yi + dy, px, line);
                 }
             }
         }
-        draw_line(img, fill, xi, yi, px, line);
+        draw_line(&mut layer, f, fill, xi, yi, px, line);
     }
+
+    if angle.abs() > f32::EPSILON {
+        layer = rotate_about_center(
+            &layer,
+            -angle.to_radians(),
+            Interpolation::Bilinear,
+            Border::Constant(Rgba([0, 0, 0, 0])),
+        );
+    }
+    imageops::overlay(img, &layer, rect.x as i64, rect.y as i64);
 }
 
-fn draw_line(img: &mut RgbaImage, color: Rgba<u8>, x: i32, y: i32, px: f32, text: &str) {
-    imageproc::drawing::draw_text_mut(img, color, x, y, PxScale::from(px), &*FONT, text);
+fn draw_line(
+    img: &mut RgbaImage,
+    f: &FontArc,
+    color: Rgba<u8>,
+    x: i32,
+    y: i32,
+    px: f32,
+    text: &str,
+) {
+    imageproc::drawing::draw_text_mut(img, color, x, y, PxScale::from(px), f, text);
 }
 
 /// Find the largest font size where the word-wrapped caption fits the box.
-fn layout_text(caption: &str, box_w: f32, box_h: f32) -> (f32, Vec<String>) {
+fn layout_text(f: &FontArc, caption: &str, box_w: f32, box_h: f32) -> (f32, Vec<String>) {
     let mut px = box_h.max(8.0);
     loop {
-        let lines = wrap(caption, px, box_w);
-        let line_h = FONT.as_scaled(PxScale::from(px)).height();
+        let lines = wrap(f, caption, px, box_w);
+        let line_h = f.as_scaled(PxScale::from(px)).height();
         let total_h = line_h * lines.len() as f32;
-        let widest = lines.iter().map(|l| measure(l, px)).fold(0.0, f32::max);
+        let widest = lines.iter().map(|l| measure(f, l, px)).fold(0.0, f32::max);
         if (total_h <= box_h && widest <= box_w) || px <= 8.0 {
             return (px, lines);
         }
@@ -214,7 +299,7 @@ fn layout_text(caption: &str, box_w: f32, box_h: f32) -> (f32, Vec<String>) {
     }
 }
 
-fn wrap(caption: &str, px: f32, box_w: f32) -> Vec<String> {
+fn wrap(f: &FontArc, caption: &str, px: f32, box_w: f32) -> Vec<String> {
     let mut lines = Vec::new();
     let mut current = String::new();
     for word in caption.split_whitespace() {
@@ -223,7 +308,7 @@ fn wrap(caption: &str, px: f32, box_w: f32) -> Vec<String> {
         } else {
             format!("{current} {word}")
         };
-        if measure(&candidate, px) <= box_w || current.is_empty() {
+        if measure(f, &candidate, px) <= box_w || current.is_empty() {
             current = candidate;
         } else {
             lines.push(std::mem::take(&mut current));
@@ -239,12 +324,12 @@ fn wrap(caption: &str, px: f32, box_w: f32) -> Vec<String> {
     lines
 }
 
-fn measure(text: &str, px: f32) -> f32 {
-    let scaled = FONT.as_scaled(PxScale::from(px));
+fn measure(f: &FontArc, text: &str, px: f32) -> f32 {
+    let scaled = f.as_scaled(PxScale::from(px));
     let mut width = 0.0;
     let mut prev = None;
     for ch in text.chars() {
-        let glyph = FONT.glyph_id(ch);
+        let glyph = f.glyph_id(ch);
         if let Some(p) = prev {
             width += scaled.kern(p, glyph);
         }
