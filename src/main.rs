@@ -10,8 +10,13 @@ use axum::extract::{Path, Query, State};
 use axum::http::{StatusCode, header};
 use axum::response::{IntoResponse, Response};
 use axum::routing::get;
+use maud::{DOCTYPE, Markup, PreEscaped, html};
 use serde::{Deserialize, Serialize};
+use tower_governor::GovernorLayer;
+use tower_governor::governor::GovernorConfigBuilder;
+use tower_governor::key_extractor::GlobalKeyExtractor;
 use utoipa::{OpenApi, ToSchema};
+use utoipa_scalar::{Scalar, Servable};
 
 use render::{RenderError, Spec};
 use template::{Registry, Template, decode};
@@ -24,15 +29,28 @@ async fn main() -> anyhow::Result<()> {
     let registry = Arc::new(Registry::load(&PathBuf::from(&dir))?);
     println!("loaded {} templates from {dir}", registry.len());
 
+    // Global hard cap of 5 requests/second (bucket of 5, one slot refilled every
+    // 200ms). Behind a reverse proxy the peer IP is the proxy, so a global key is
+    // both the simplest and the only meaningful choice here.
+    let governor_conf = GovernorConfigBuilder::default()
+        .burst_size(5)
+        .per_millisecond(200)
+        .key_extractor(GlobalKeyExtractor)
+        .finish()
+        .expect("valid rate-limit config");
+
     let app = Router::new()
-        .route("/", get(index))
         .route("/openapi.json", get(openapi))
         .route("/templates", get(list_templates))
         .route("/templates/{id}", get(get_template))
         .route("/images/custom/{*text}", get(render_custom))
         .route("/images/{id}/{*text}", get(render_text))
         .route("/images/{filename}", get(render_blank))
-        .with_state(registry);
+        .route("/", get(homepage))
+        .with_state(registry)
+        // Scalar API docs (rendered from the OpenAPI spec).
+        .merge(Scalar::with_url("/docs", ApiDoc::openapi()))
+        .layer(GovernorLayer::new(governor_conf));
 
     let port = std::env::var("PORT").unwrap_or_else(|_| "5005".into());
     let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{port}")).await?;
@@ -79,23 +97,88 @@ fn to_dto(t: &Template) -> TemplateDto {
 
 // ---------- Handlers ----------
 
-#[derive(Serialize)]
-struct Index {
-    name: &'static str,
-    templates: usize,
-    openapi: &'static str,
-}
-
-async fn index(State(reg): State<AppState>) -> Json<Index> {
-    Json(Index {
-        name: "memegen-rs",
-        templates: reg.len(),
-        openapi: "/openapi.json",
-    })
-}
-
 async fn openapi() -> Json<utoipa::openapi::OpenApi> {
     Json(ApiDoc::openapi())
+}
+
+const HOMEPAGE_CSS: &str = r#"
+:root{--bg:#0d1117;--card:#161b22;--fg:#e6edf3;--muted:#8b949e;--accent:#f0883e;--border:#30363d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6}
+.wrap{max-width:52rem;margin:0 auto;padding:4rem 1.25rem}
+h1{font-size:3rem;margin:0;letter-spacing:-.03em;background:linear-gradient(90deg,#f0883e,#e3b341);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tagline{font-size:1.2rem;color:var(--muted);margin:.5rem 0 2.5rem}
+.examples{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:0 0 2.5rem}
+@media(max-width:40rem){.examples{grid-template-columns:1fr}}
+figure{margin:0;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.75rem}
+figure img{width:100%;border-radius:8px;display:block}
+figcaption{margin-top:.5rem;font-size:.7rem;color:var(--muted);word-break:break-all}
+h2{font-size:1.4rem;margin:2rem 0 .5rem}
+pre{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;overflow:auto}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em}
+pre code{color:var(--accent)}
+:not(pre)>code{background:var(--card);border:1px solid var(--border);padding:.1em .4em;border-radius:5px;color:var(--accent)}
+.muted{color:var(--muted);font-size:.9rem}
+.links{display:flex;gap:.75rem;flex-wrap:wrap;margin:2.5rem 0 0}
+.btn{text-decoration:none;color:var(--fg);background:var(--card);border:1px solid var(--border);padding:.6rem 1.2rem;border-radius:8px;font-weight:600;transition:border-color .15s}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:#0d1117;border-color:var(--accent)}
+footer{margin-top:3rem;border-top:1px solid var(--border);padding-top:1.5rem}
+"#;
+
+async fn homepage(State(reg): State<AppState>) -> Markup {
+    let count = reg.len();
+    html! {
+        (DOCTYPE)
+        html lang="en" {
+            head {
+                meta charset="utf-8";
+                meta name="viewport" content="width=device-width, initial-scale=1";
+                title { "memegen.rs - meme generator API" }
+                meta name="description" content="A tiny, stateless meme generator API in pure Rust. Every meme is just a URL.";
+                style { (PreEscaped(HOMEPAGE_CSS)) }
+            }
+            body {
+                main class="wrap" {
+                    header {
+                        h1 { "memegen.rs" }
+                        p class="tagline" {
+                            "A tiny, stateless meme generator API in pure Rust. Every meme is just a URL."
+                        }
+                    }
+                    section class="examples" {
+                        figure {
+                            img src="/images/drake/running_a_whole_CMS/a_URL_that_is_the_meme.png" alt="example meme" loading="lazy";
+                            figcaption { code { "/images/drake/running_a_whole_CMS/a_URL_that_is_the_meme.png" } }
+                        }
+                        figure {
+                            img src="/images/fry/not_sure_if_homepage/or_just_api_docs.png" alt="example meme" loading="lazy";
+                            figcaption { code { "/images/fry/not_sure_if_homepage/or_just_api_docs.png" } }
+                        }
+                    }
+                    section {
+                        h2 { "How it works" }
+                        p { "Build a URL, get a PNG. Underscores become spaces, slashes separate caption lines." }
+                        pre { code { "GET /images/{template}/{top}/{bottom}.png" } }
+                        p class="muted" {
+                            (count) " templates loaded. Caption any image on the web with "
+                            code { "/images/custom/top/bottom.png?background=<url>" } "."
+                        }
+                    }
+                    nav class="links" {
+                        a class="btn primary" href="/docs" { "API docs" }
+                        a class="btn" href="/openapi.json" { "OpenAPI spec" }
+                        a class="btn" href="https://github.com/tenequm/memegen-rs" { "GitHub" }
+                    }
+                    footer {
+                        p class="muted" {
+                            "Built with Rust, axum & maud. MIT licensed. Template images belong to their respective owners."
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 #[utoipa::path(get, path = "/templates", responses((status = 200, body = [TemplateDto])))]
