@@ -1,0 +1,35 @@
+[package]
+name = "memegen-rs"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+
+[dependencies]
+axum = "0.8.9"
+tokio = { version = "1.52.3", features = ["rt-multi-thread", "macros", "net"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.150"
+serde-saphyr = { version = "0.0.27", default-features = false, features = ["deserialize"] }
+utoipa = { version = "5.5.0", features = ["axum_extras"] }
+utoipa-axum = "0.2.0"
+image = "0.25.10"
+imageproc = { version = "0.27.0", default-features = false, features = ["text"] }
+ab_glyph = "0.2.32"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
+anyhow = "1.0"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+
+[lints.rust]
+unsafe_code = "forbid"
+unreachable_pub = "warn"
+
+[lints.clippy]
+all = { level = "deny", priority = -1 }
+uninlined_format_args = "warn"
+semicolon_if_nothing_returned = "warn"
+implicit_clone = "warn"
+dbg_macro = "warn"
+todo = "warn"
