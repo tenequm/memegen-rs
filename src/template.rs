@@ -268,8 +268,11 @@ fn mock(text: &str) -> String {
 
 const UNDERSCORE_SENTINEL: char = '\u{0}';
 
-/// Encode caption lines into a URL path slug (simplified scheme):
-/// lines joined by `/`, space <-> `_`, literal underscore as `__`, blank as `_`.
+/// Encode caption lines into a URL path slug: lines joined by `/`, space <-> `_`,
+/// literal underscore as `__`, blank as `_`. URL-reserved characters get
+/// upstream-memegen-compatible `~` escapes so a caption can safely contain them
+/// (notably `?`, which would otherwise start the query string, and `/`, which
+/// would otherwise read as a line separator).
 pub(crate) fn encode(lines: &[String]) -> String {
     lines
         .iter()
@@ -277,7 +280,14 @@ pub(crate) fn encode(lines: &[String]) -> String {
             if line.is_empty() {
                 "_".to_string()
             } else {
-                line.replace('_', "__").replace(' ', "_")
+                line.replace('_', "__")
+                    .replace(' ', "_")
+                    .replace('?', "~q")
+                    .replace('&', "~a")
+                    .replace('%', "~p")
+                    .replace('#', "~h")
+                    .replace('/', "~s")
+                    .replace('"', "''")
             }
         })
         .collect::<Vec<_>>()
@@ -294,6 +304,12 @@ pub(crate) fn decode(slug: &str) -> Vec<String> {
                 seg.replace("__", &UNDERSCORE_SENTINEL.to_string())
                     .replace('_', " ")
                     .replace(UNDERSCORE_SENTINEL, "_")
+                    .replace("~q", "?")
+                    .replace("~a", "&")
+                    .replace("~p", "%")
+                    .replace("~h", "#")
+                    .replace("~s", "/")
+                    .replace("''", "\"")
             }
         })
         .collect()
@@ -310,6 +326,9 @@ mod tests {
             vec!["one_two".to_string()],
             vec![String::new(), "bottom only".to_string()],
             vec!["a".to_string(), "b".to_string(), "c".to_string()],
+            vec!["for the better, right?".to_string()],
+            vec!["50% off & more".to_string(), "a/b #1".to_string()],
+            vec!["say \"hi\"".to_string()],
         ] {
             assert_eq!(
                 decode(&encode(&lines)),

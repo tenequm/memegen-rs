@@ -491,7 +491,7 @@ const GALLERY_JS: &str = r#"
 
 const BUILDER_JS: &str = r#"
 (function(){var id=document.body.dataset.template;var inputs=[].slice.call(document.querySelectorAll('.cap'));var img=document.getElementById('preview');var urlEl=document.getElementById('url');var gif=document.getElementById('gif');var t;
-function enc(s){return s===''?'_':s.replace(/_/g,'__').replace(/ /g,'_');}
+function enc(s){return s===''?'_':s.replace(/_/g,'__').replace(/ /g,'_').replace(/\?/g,'~q').replace(/&/g,'~a').replace(/%/g,'~p').replace(/#/g,'~h').replace(/\//g,'~s').replace(/"/g,"''");}
 function path(){var ext=(gif&&gif.checked)?'gif':'png';return '/images/'+id+'/'+inputs.map(function(i){return enc(i.value);}).join('/')+'.'+ext;}
 function update(){var p=path();urlEl.textContent=location.origin+p;clearTimeout(t);t=setTimeout(function(){img.src=p;},400);}
 inputs.forEach(function(i){i.addEventListener('input',update);});if(gif)gif.addEventListener('change',update);update();
