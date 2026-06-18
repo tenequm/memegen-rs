@@ -3,6 +3,16 @@ name = "memegen-rs"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.95"
+description = "A minimal, stateless meme generator HTTP API and web UI in pure Rust. Every meme is just a URL."
+authors = ["Misha Kolesnik <misha@kolesnik.io>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://memegen.rs"
+repository = "https://github.com/tenequm/memegen-rs"
+keywords = ["meme", "image", "generator", "axum", "api"]
+categories = ["multimedia::images", "web-programming::http-server"]
+# An application (shipped as a container image + ClawHub skill), not a crate.
+publish = false
 
 [dependencies]
 axum = "0.8.9"
