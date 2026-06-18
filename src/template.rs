@@ -1,4 +1,5 @@
-use std::collections::BTreeMap;
+use std::cmp::Ordering;
+use std::collections::{BTreeMap, HashMap};
 use std::path::{Path, PathBuf};
 
 use serde::{Deserialize, Deserializer};
@@ -90,6 +91,10 @@ pub(crate) struct Template {
     pub(crate) source: Option<String>,
     #[serde(default, deserialize_with = "string_list")]
     pub(crate) keywords: Vec<String>,
+    /// Legacy / alternate slugs that resolve to this template (old IDs preserved
+    /// after the canonical-slug migration so existing URLs keep working).
+    #[serde(default, deserialize_with = "string_list")]
+    pub(crate) aliases: Vec<String>,
     #[serde(default = "default_text")]
     pub(crate) text: Vec<TextBox>,
     #[serde(default, deserialize_with = "string_list")]
@@ -102,6 +107,10 @@ pub(crate) struct Template {
     pub(crate) is_gif: bool,
     #[serde(skip)]
     pub(crate) default_background: Option<PathBuf>,
+    /// Overall popularity rank (1 = most popular) sourced from imgflip; `None`
+    /// for templates with no popularity signal (they sort after ranked ones).
+    #[serde(skip)]
+    pub(crate) rank: Option<u32>,
 }
 
 impl Template {
@@ -159,6 +168,12 @@ impl Template {
 
 pub(crate) struct Registry {
     templates: BTreeMap<String, Template>,
+    /// Alternate-slug -> canonical-id lookup, populated from each template's
+    /// `aliases` list so legacy IDs resolve via [`Registry::get`].
+    aliases: HashMap<String, String>,
+    /// Canonical IDs in display order: ranked templates first (ascending rank),
+    /// then the unranked tail alphabetically.
+    order: Vec<String>,
 }
 
 impl Registry {
@@ -203,19 +218,76 @@ impl Registry {
         if templates.is_empty() {
             anyhow::bail!("no templates loaded from {}", dir.display());
         }
-        Ok(Self { templates })
+
+        // Apply popularity ranks from the sidecar file (keyed by canonical slug).
+        for (slug, rank) in load_popularity(&dir.join("popularity.json")) {
+            if let Some(t) = templates.get_mut(&slug) {
+                t.rank = Some(rank);
+            }
+        }
+
+        // Build the alias -> canonical lookup. A canonical ID always wins over an
+        // alias that happens to collide with it.
+        let mut aliases = HashMap::new();
+        for (id, t) in &templates {
+            for alias in &t.aliases {
+                if !templates.contains_key(alias) {
+                    aliases.insert(alias.clone(), id.clone());
+                }
+            }
+        }
+
+        // Precompute display order: ranked first (ascending), then alphabetical.
+        let mut order: Vec<String> = templates.keys().cloned().collect();
+        order.sort_by(|a, b| match (templates[a].rank, templates[b].rank) {
+            (Some(x), Some(y)) => x.cmp(&y).then_with(|| a.cmp(b)),
+            (Some(_), None) => Ordering::Less,
+            (None, Some(_)) => Ordering::Greater,
+            (None, None) => a.cmp(b),
+        });
+
+        Ok(Self {
+            templates,
+            aliases,
+            order,
+        })
     }
 
     pub(crate) fn get(&self, id: &str) -> Option<&Template> {
-        self.templates.get(id)
+        self.templates
+            .get(id)
+            .or_else(|| self.aliases.get(id).and_then(|c| self.templates.get(c)))
     }
 
     pub(crate) fn all(&self) -> impl Iterator<Item = &Template> {
-        self.templates.values()
+        self.order.iter().filter_map(|id| self.templates.get(id))
     }
 
     pub(crate) fn len(&self) -> usize {
         self.templates.len()
+    }
+}
+
+/// Read the popularity sidecar (`{ "<slug>": { "rank": N, .. }, .. }`) and return
+/// `(slug, rank)` pairs. A missing or malformed file is non-fatal: the registry
+/// simply falls back to alphabetical ordering.
+fn load_popularity(path: &Path) -> Vec<(String, u32)> {
+    #[derive(Deserialize)]
+    struct Pop {
+        rank: Option<u32>,
+    }
+    let Ok(raw) = std::fs::read_to_string(path) else {
+        return Vec::new();
+    };
+    match serde_json::from_str::<HashMap<String, Pop>>(&raw) {
+        Ok(map) => map
+            .into_iter()
+            .filter_map(|(slug, p)| p.rank.map(|r| (slug, r)))
+            .collect(),
+        Err(e) => {
+            eprintln!("ignoring {}: {e}", path.display());
+            Vec::new()
+        }
     }
 }
 
@@ -352,5 +424,53 @@ mod tests {
         assert_eq!(stylize("lower", "HI"), "hi");
         assert_eq!(stylize("none", "Mixed Case"), "Mixed Case");
         assert_eq!(stylize("mock", "abcd"), "aBcD");
+    }
+
+    fn registry() -> Registry {
+        let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("templates");
+        Registry::load(&dir).expect("load templates")
+    }
+
+    #[test]
+    fn legacy_ids_resolve_via_alias() {
+        let reg = registry();
+        // Old cryptic IDs were renamed to canonical imgflip slugs but kept as aliases.
+        assert_eq!(
+            reg.get("db").map(|t| t.id.as_str()),
+            Some("distracted-boyfriend")
+        );
+        assert_eq!(reg.get("fry").map(|t| t.id.as_str()), Some("futurama-fry"));
+        // A merged duplicate's old ID resolves to the surviving canonical template.
+        assert_eq!(
+            reg.get("burning-house-girl").map(|t| t.id.as_str()),
+            Some("disaster-girl")
+        );
+        // Canonical lookups still work.
+        assert!(reg.get("drake-hotline-bling").is_some());
+    }
+
+    #[test]
+    fn popularity_orders_listing() {
+        let reg = registry();
+        let order: Vec<_> = reg.all().collect();
+        assert_eq!(order[0].id, "drake-hotline-bling", "rank 1 sorts first");
+        // Ranked templates are contiguous at the front in ascending rank order,
+        // and every unranked template follows them.
+        let mut prev = 0u32;
+        let mut seen_unranked = false;
+        for t in &order {
+            match t.rank {
+                Some(r) => {
+                    assert!(
+                        !seen_unranked,
+                        "{} (ranked) appears after an unranked",
+                        t.id
+                    );
+                    assert!(r >= prev, "ranks out of order at {}", t.id);
+                    prev = r;
+                }
+                None => seen_unranked = true,
+            }
+        }
     }
 }

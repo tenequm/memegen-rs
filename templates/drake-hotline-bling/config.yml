@@ -34,3 +34,7 @@ text:
 example:
   - Using a pre-made library
   - Writing it from scratch yourself
+aliases:
+  - drake-blank
+  - drake-no-yes
+  - not-that-but-this

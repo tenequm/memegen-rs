@@ -114,6 +114,10 @@ struct TemplateDto {
     styles: Vec<String>,
     source: Option<String>,
     keywords: Vec<String>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    aliases: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    rank: Option<u32>,
     blank: String,
     example: ExampleDto,
 }
@@ -126,6 +130,8 @@ fn to_dto(t: &Template) -> TemplateDto {
         styles: t.styles.clone(),
         source: t.source.clone(),
         keywords: t.keywords.clone(),
+        aliases: t.aliases.clone(),
+        rank: t.rank,
         blank: t.blank_path(),
         example: ExampleDto {
             text: t.example.clone(),

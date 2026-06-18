@@ -443,7 +443,9 @@ pub(crate) fn thumbnail(bytes: &[u8], size: u32) -> Result<(Vec<u8>, &'static st
             &src,
             &mut dst,
             &ResizeOptions::new()
-                .resize_alg(ResizeAlg::Convolution(fast_image_resize::FilterType::Lanczos3))
+                .resize_alg(ResizeAlg::Convolution(
+                    fast_image_resize::FilterType::Lanczos3,
+                ))
                 .crop((w as f64 - side) / 2.0, (h as f64 - side) / 2.0, side, side),
         )
         .map_err(to_err)?;

@@ -36,3 +36,5 @@ overlay:
     scale: 0.23
     start: 0.0
     stop: 1.0
+aliases:
+  - say-the-line-bart-simpsons

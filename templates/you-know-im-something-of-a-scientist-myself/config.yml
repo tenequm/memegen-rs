@@ -31,3 +31,5 @@ text:
 example:
   - When I plug in the USB correctly on the first try
   - "You know, I'm something of a scientist myself"
+aliases:
+  - you-know-im-something-of-a-myself

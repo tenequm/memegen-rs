@@ -20,3 +20,5 @@ text:
     stop: 1.0
 example:
   - The world if everyone used the correct meme template
+aliases:
+  - society-if
