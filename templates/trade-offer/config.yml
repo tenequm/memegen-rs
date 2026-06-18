@@ -41,6 +41,6 @@ text:
     start: 0.0
     stop: 1.0
 example:
-  - "POV: You are my cat"
+  - ""
   - 3 treats
   - You let me sleep
