@@ -63,7 +63,11 @@ pub(crate) fn render(
     let bg = template
         .background(spec.style)
         .ok_or(RenderError::NoBackground)?;
-    let img = image::open(&bg)
+    // Decode by content, not file extension: a handful of corpus files carry a
+    // `.jpg` name but PNG bytes (and vice versa), which `image::open` (which
+    // picks the decoder from the extension) rejects.
+    let bytes = std::fs::read(&bg).map_err(|e| RenderError::Decode(e.to_string()))?;
+    let img = image::load_from_memory(&bytes)
         .map_err(|e| RenderError::Decode(e.to_string()))?
         .to_rgba8();
     let boxes = effective_boxes(template, spec.layout, spec.lines.len());
