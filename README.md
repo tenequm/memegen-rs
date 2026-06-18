@@ -84,7 +84,7 @@ This repository ships a corpus of ~780 templates under `templates/`, read once a
 
 ## Architecture
 
-- **[axum](https://crates.io/crates/axum)** for HTTP routing, **[utoipa](https://crates.io/crates/utoipa)** for the OpenAPI spec (no Swagger UI).
+- **[axum](https://crates.io/crates/axum)** for HTTP routing and **[utoipa](https://crates.io/crates/utoipa)** for the OpenAPI spec, rendered as interactive docs by **[Scalar](https://github.com/scalar/scalar)** at `/docs`. **[maud](https://crates.io/crates/maud)** renders the web UI (a searchable template gallery and a meme builder) at compile time, and **[tower_governor](https://crates.io/crates/tower-governor)** caps meme rendering at a global 5 requests/second.
 - **[image](https://crates.io/crates/image)** + **[imageproc](https://crates.io/crates/imageproc)** + **[ab_glyph](https://crates.io/crates/ab_glyph)** for rendering. A caption is autosized to its box, word-wrapped, drawn with a white fill and a black outline, and composited onto the background.
 - **[serde-saphyr](https://crates.io/crates/serde-saphyr)** (pure-Rust YAML) parses each `config.yml`.
 - Fonts (**[Anton](https://fonts.google.com/specimen/Anton)** for the Impact look, **[Kalam](https://fonts.google.com/specimen/Kalam)** for handwriting; both SIL OFL 1.1) are embedded in the binary via `include_bytes!` - no font directory, and it works on a fonts-less container.
@@ -113,6 +113,10 @@ Templates whose only background is an undecodable video (`default.mp4` with no s
 | `GET` | `/images/{id}/{lines}.{ext}` | Captioned meme |
 | `GET` | `/images/custom/{lines}.{ext}?background=<url>` | Caption any image by URL |
 | `GET` | `/openapi.json` | OpenAPI 3.1 spec |
+| `GET` | `/` | Web UI: searchable template gallery |
+| `GET` | `/edit/{id}` | Web UI: meme builder (live preview, copy link/image) |
+| `GET` | `/docs` | Interactive API docs (Scalar) |
+| `GET` | `/SKILL.md`, `/llms.txt` | Agent usage docs (case-insensitive) |
 
 Path encoding for `{lines}`: lines are separated by `/`; a space is `_`; a literal underscore is `__`; a blank line is `_`.
 
