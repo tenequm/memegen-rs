@@ -15,8 +15,35 @@ interface Env {
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    const container = getContainer(env.MEMEGEN);
-    return container.fetch(request);
+  async fetch(
+    request: Request,
+    env: Env,
+    ctx: ExecutionContext,
+  ): Promise<Response> {
+    // The container is reached via the Durable Object binding, not a CDN
+    // fetch(), so its responses are never auto-cached. We cache rendered images
+    // explicitly: a HIT is served at the edge and never reaches the container,
+    // so it costs nothing and doesn't count against the 5/s render limiter.
+    if (request.method !== "GET") {
+      return getContainer(env.MEMEGEN).fetch(request);
+    }
+
+    const cache = caches.default;
+    // Same URL == same image forever, so the URL alone is a perfect cache key.
+    const key = new Request(new URL(request.url).toString(), { method: "GET" });
+
+    const hit = await cache.match(key);
+    if (hit) return hit;
+
+    const res = await getContainer(env.MEMEGEN).fetch(request);
+
+    // Cache only immutable assets - the Rust origin marks rendered images,
+    // thumbnails, and the font with a long `immutable` Cache-Control. HTML and
+    // JSON carry none, so they stay fresh on every deploy.
+    const type = res.headers.get("content-type") ?? "";
+    if (res.ok && (type.startsWith("image/") || type.startsWith("font/"))) {
+      ctx.waitUntil(cache.put(key, res.clone()));
+    }
+    return res;
   },
 } satisfies ExportedHandler<Env>;

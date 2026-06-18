@@ -98,6 +98,10 @@ pub(crate) struct Template {
     pub(crate) dir: PathBuf,
     #[serde(skip)]
     pub(crate) styles: Vec<String>,
+    #[serde(skip)]
+    pub(crate) is_gif: bool,
+    #[serde(skip)]
+    pub(crate) default_background: Option<PathBuf>,
 }
 
 impl Template {
@@ -190,6 +194,10 @@ impl Registry {
             template.id = id.clone();
             template.styles = list_styles(&path);
             template.dir = path;
+            // Resolve the filesystem probes once; both are immutable per template
+            // and sit on hot, unthrottled paths (thumbnails, gallery cards).
+            template.is_gif = template.animated_source("default").is_some();
+            template.default_background = template.background("default");
             templates.insert(id, template);
         }
         if templates.is_empty() {

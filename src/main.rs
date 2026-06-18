@@ -2,13 +2,14 @@ mod render;
 mod template;
 
 use std::path::PathBuf;
-use std::sync::Arc;
+use std::sync::{Arc, OnceLock};
 
 use axum::Json;
 use axum::Router;
+use axum::body::Bytes;
 use axum::extract::{Path, Query, State};
-use axum::http::{StatusCode, header};
-use axum::response::{IntoResponse, Response};
+use axum::http::{StatusCode, Uri, header};
+use axum::response::{Html, IntoResponse, Response};
 use axum::routing::get;
 use maud::{DOCTYPE, Markup, PreEscaped, html};
 use serde::{Deserialize, Serialize};
@@ -22,6 +23,10 @@ use render::{RenderError, Spec};
 use template::{Registry, Template, decode};
 
 type AppState = Arc<Registry>;
+
+/// Rendered memes are fully described by their URL, so the same URL is the same
+/// image forever - safe to cache hard at the browser and the Cloudflare edge.
+const IMMUTABLE: &str = "public, max-age=31536000, s-maxage=31536000, immutable";
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -39,18 +44,30 @@ async fn main() -> anyhow::Result<()> {
         .finish()
         .expect("valid rate-limit config");
 
-    let app = Router::new()
-        .route("/openapi.json", get(openapi))
-        .route("/templates", get(list_templates))
-        .route("/templates/{id}", get(get_template))
+    // The 5/s cap protects *rendering* (CPU for drawing, the outbound fetch in
+    // /custom, animated-GIF frame encoding) - not page views or static thumbnails.
+    // So the limiter wraps only the render endpoints; the gallery, builder, docs,
+    // JSON, fonts, and on-disk thumbnails are served unthrottled.
+    let throttled = Router::new()
         .route("/images/custom/{*text}", get(render_custom))
         .route("/images/{id}/{*text}", get(render_text))
         .route("/images/{filename}", get(render_blank))
-        .route("/", get(homepage))
-        .with_state(registry)
+        .layer(GovernorLayer::new(governor_conf));
+
+    let app = Router::new()
+        .route("/", get(gallery))
+        .route("/edit/{id}", get(builder))
+        .route("/thumbs/{id}", get(thumb))
+        .route("/font/anton.ttf", get(anton_font))
+        .route("/openapi.json", get(openapi))
+        .route("/templates", get(list_templates))
+        .route("/templates/{id}", get(get_template))
+        .merge(throttled)
         // Scalar API docs (rendered from the OpenAPI spec).
         .merge(Scalar::with_url("/docs", ApiDoc::openapi()))
-        .layer(GovernorLayer::new(governor_conf));
+        // /SKILL.md, /llms.txt, and any-case variants serve the embedded doc.
+        .fallback(docs_fallback)
+        .with_state(registry);
 
     let port = std::env::var("PORT").unwrap_or_else(|_| "5005".into());
     let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{port}")).await?;
@@ -95,90 +112,10 @@ fn to_dto(t: &Template) -> TemplateDto {
     }
 }
 
-// ---------- Handlers ----------
+// ---------- API handlers ----------
 
 async fn openapi() -> Json<utoipa::openapi::OpenApi> {
     Json(ApiDoc::openapi())
-}
-
-const HOMEPAGE_CSS: &str = r#"
-:root{--bg:#0d1117;--card:#161b22;--fg:#e6edf3;--muted:#8b949e;--accent:#f0883e;--border:#30363d}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6}
-.wrap{max-width:52rem;margin:0 auto;padding:4rem 1.25rem}
-h1{font-size:3rem;margin:0;letter-spacing:-.03em;background:linear-gradient(90deg,#f0883e,#e3b341);-webkit-background-clip:text;background-clip:text;color:transparent}
-.tagline{font-size:1.2rem;color:var(--muted);margin:.5rem 0 2.5rem}
-.examples{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:0 0 2.5rem}
-@media(max-width:40rem){.examples{grid-template-columns:1fr}}
-figure{margin:0;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.75rem}
-figure img{width:100%;border-radius:8px;display:block}
-figcaption{margin-top:.5rem;font-size:.7rem;color:var(--muted);word-break:break-all}
-h2{font-size:1.4rem;margin:2rem 0 .5rem}
-pre{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;overflow:auto}
-code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em}
-pre code{color:var(--accent)}
-:not(pre)>code{background:var(--card);border:1px solid var(--border);padding:.1em .4em;border-radius:5px;color:var(--accent)}
-.muted{color:var(--muted);font-size:.9rem}
-.links{display:flex;gap:.75rem;flex-wrap:wrap;margin:2.5rem 0 0}
-.btn{text-decoration:none;color:var(--fg);background:var(--card);border:1px solid var(--border);padding:.6rem 1.2rem;border-radius:8px;font-weight:600;transition:border-color .15s}
-.btn:hover{border-color:var(--accent)}
-.btn.primary{background:var(--accent);color:#0d1117;border-color:var(--accent)}
-footer{margin-top:3rem;border-top:1px solid var(--border);padding-top:1.5rem}
-"#;
-
-async fn homepage(State(reg): State<AppState>) -> Markup {
-    let count = reg.len();
-    html! {
-        (DOCTYPE)
-        html lang="en" {
-            head {
-                meta charset="utf-8";
-                meta name="viewport" content="width=device-width, initial-scale=1";
-                title { "memegen.rs - meme generator API" }
-                meta name="description" content="A tiny, stateless meme generator API in pure Rust. Every meme is just a URL.";
-                style { (PreEscaped(HOMEPAGE_CSS)) }
-            }
-            body {
-                main class="wrap" {
-                    header {
-                        h1 { "memegen.rs" }
-                        p class="tagline" {
-                            "A tiny, stateless meme generator API in pure Rust. Every meme is just a URL."
-                        }
-                    }
-                    section class="examples" {
-                        figure {
-                            img src="/images/drake/running_a_whole_CMS/a_URL_that_is_the_meme.png" alt="example meme" loading="lazy";
-                            figcaption { code { "/images/drake/running_a_whole_CMS/a_URL_that_is_the_meme.png" } }
-                        }
-                        figure {
-                            img src="/images/fry/not_sure_if_homepage/or_just_api_docs.png" alt="example meme" loading="lazy";
-                            figcaption { code { "/images/fry/not_sure_if_homepage/or_just_api_docs.png" } }
-                        }
-                    }
-                    section {
-                        h2 { "How it works" }
-                        p { "Build a URL, get a PNG. Underscores become spaces, slashes separate caption lines." }
-                        pre { code { "GET /images/{template}/{top}/{bottom}.png" } }
-                        p class="muted" {
-                            (count) " templates loaded. Caption any image on the web with "
-                            code { "/images/custom/top/bottom.png?background=<url>" } "."
-                        }
-                    }
-                    nav class="links" {
-                        a class="btn primary" href="/docs" { "API docs" }
-                        a class="btn" href="/openapi.json" { "OpenAPI spec" }
-                        a class="btn" href="https://github.com/tenequm/memegen-rs" { "GitHub" }
-                    }
-                    footer {
-                        p class="muted" {
-                            "Built with Rust, axum & maud. MIT licensed. Template images belong to their respective owners."
-                        }
-                    }
-                }
-            }
-        }
-    }
 }
 
 #[utoipa::path(get, path = "/templates", responses((status = 200, body = [TemplateDto])))]
@@ -251,7 +188,7 @@ async fn render_text(
         color: q.color.as_deref(),
     };
     let (bytes, mime) = render::render(template, &spec).map_err(AppError::from)?;
-    Ok(image_response(bytes, mime))
+    Ok(cached_bytes(bytes, mime))
 }
 
 #[utoipa::path(
@@ -278,7 +215,7 @@ async fn render_blank(
         color: q.color.as_deref(),
     };
     let (bytes, mime) = render::render(template, &spec).map_err(AppError::from)?;
-    Ok(image_response(bytes, mime))
+    Ok(cached_bytes(bytes, mime))
 }
 
 #[utoipa::path(
@@ -310,7 +247,321 @@ async fn render_custom(
         color: q.color.as_deref(),
     };
     let (out, mime) = render::render_custom(&bytes, &spec).map_err(AppError::from)?;
-    Ok(image_response(out, mime))
+    Ok(cached_bytes(out, mime))
+}
+
+// ---------- Static-ish handlers (unthrottled) ----------
+
+/// Serve a template's blank background straight from disk - no rendering. This
+/// is what makes a gallery of hundreds of thumbnails viable under the 5/s render
+/// cap: thumbnails never touch the renderer.
+async fn thumb(State(reg): State<AppState>, Path(id): Path<String>) -> Result<Response, AppError> {
+    let template = reg
+        .get(&id)
+        .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
+    let path = template
+        .default_background
+        .as_ref()
+        .ok_or_else(|| AppError::NotFound(format!("no background for {id}")))?;
+    let bytes = tokio::fs::read(path)
+        .await
+        .map_err(|e| AppError::Internal(e.to_string()))?;
+    Ok(cached_bytes(bytes, mime_for(path)))
+}
+
+/// The same Anton face the memes are captioned in, served as a webfont so the UI
+/// headlines match the rendered output. Embedded at compile time (the binary
+/// already ships it), so it works on a fonts-less container.
+async fn anton_font() -> Response {
+    const ANTON_TTF: &[u8] = include_bytes!("../assets/Anton-Regular.ttf");
+    (
+        [
+            (header::CONTENT_TYPE, "font/ttf"),
+            (header::CACHE_CONTROL, IMMUTABLE),
+        ],
+        Bytes::from_static(ANTON_TTF),
+    )
+        .into_response()
+}
+
+/// `/SKILL.md`, `/llms.txt`, and any-case variants (`/skill.md`, `/LLMS.TXT`,
+/// ...) all serve the same embedded agent doc. Everything else is a 404.
+async fn docs_fallback(uri: Uri) -> Response {
+    let path = uri.path();
+    if path.eq_ignore_ascii_case("/skill.md") {
+        return agent_doc("text/markdown; charset=utf-8");
+    }
+    if path.eq_ignore_ascii_case("/llms.txt") {
+        return agent_doc("text/plain; charset=utf-8");
+    }
+    (
+        StatusCode::NOT_FOUND,
+        Json(serde_json::json!({ "error": "not found" })),
+    )
+        .into_response()
+}
+
+fn agent_doc(mime: &'static str) -> Response {
+    (
+        [
+            (header::CONTENT_TYPE, mime),
+            (header::CACHE_CONTROL, "public, max-age=3600"),
+        ],
+        SKILL_MD,
+    )
+        .into_response()
+}
+
+// ---------- Front-end (gallery + builder) ----------
+
+const PAGE_CSS: &str = r#"
+@font-face{font-family:"Anton";src:url("/font/anton.ttf") format("truetype");font-display:swap}
+:root{--bg:#0b0c0e;--surface:#15171c;--surface2:#1c1f26;--border:#272b33;--fg:#eceef2;--muted:#8b919e;--accent:#ff7a45;--accent-ink:#1a0d06;--radius:14px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:72rem;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+.topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:1rem;padding:.7rem 1.25rem;background:color-mix(in oklab,var(--bg) 82%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.brand{font-family:"Anton",Impact,sans-serif;font-size:1.4rem;letter-spacing:.02em;text-decoration:none;color:var(--fg)}
+.brand .dot{color:var(--accent)}
+.topbar .spacer{flex:1}
+.gh{display:inline-flex;color:var(--muted);opacity:.65;transition:opacity .15s,color .15s}
+.gh:hover{opacity:1;color:var(--fg)}
+.gh svg{width:22px;height:22px;display:block;fill:currentColor}
+.hero{padding:2.5rem 0 .5rem;max-width:46rem}
+.hero h1{font-family:"Anton",Impact,sans-serif;font-weight:400;font-size:clamp(2.4rem,7vw,4rem);line-height:.98;letter-spacing:.01em;margin:0 0 .7rem;text-transform:uppercase}
+.hero h1 .accent{color:var(--accent)}
+.hero p{color:var(--muted);font-size:1.1rem;margin:0}
+.toolbar{display:flex;align-items:center;gap:.9rem;margin:1.75rem 0 1.25rem}
+#search{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--fg);border-radius:10px;padding:.7rem .9rem;font-size:1rem;outline:none}
+#search:focus{border-color:var(--accent)}
+.count{color:var(--muted);font-size:.85rem;white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;text-decoration:none;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.thumb{width:100%;aspect-ratio:1;object-fit:cover;background:var(--surface2);display:block}
+.meta{padding:.55rem .65rem;display:flex;flex-direction:column;gap:.4rem}
+.tname{font-family:"Anton",Impact,sans-serif;font-size:.95rem;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase}
+.tags{display:flex;gap:.35rem;flex-wrap:wrap}
+.badge{font-size:.62rem;color:var(--muted);border:1px solid var(--border);border-radius:999px;padding:.05rem .45rem;letter-spacing:.03em}
+.badge.gif{color:var(--accent-ink);background:var(--accent);border-color:var(--accent);font-weight:700}
+.card[hidden]{display:none}
+.empty{color:var(--muted);padding:2rem 0}
+.builder{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.25rem}
+@media(max-width:46rem){.builder{grid-template-columns:1fr}}
+.preview-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;position:sticky;top:5rem;align-self:start}
+#preview{width:100%;border-radius:8px;display:block;background:var(--surface2);min-height:140px}
+.panel h1{font-family:"Anton",Impact,sans-serif;font-weight:400;font-size:2rem;margin:.2rem 0 .25rem;text-transform:uppercase;letter-spacing:.01em}
+.panel .src{color:var(--muted);font-size:.85rem;margin:0 0 1.25rem}
+.field{margin:0 0 .9rem}
+.field label{display:block;font-size:.72rem;color:var(--muted);margin:0 0 .3rem;letter-spacing:.05em;text-transform:uppercase}
+.field input[type=text]{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--fg);border-radius:10px;padding:.65rem .8rem;font-size:1rem;outline:none}
+.field input[type=text]:focus{border-color:var(--accent)}
+.toggle{display:inline-flex;align-items:center;gap:.5rem;color:var(--muted);font-size:.85rem;margin:.1rem 0 1rem}
+.urlbox{background:#0e1014;border:1px solid var(--border);border-radius:10px;padding:.7rem .85rem;margin:.3rem 0 1.1rem;overflow:auto}
+.urlbox code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;color:var(--accent);white-space:nowrap}
+.actions{display:flex;gap:.7rem;flex-wrap:wrap}
+.btn{cursor:pointer;font:inherit;font-weight:600;text-decoration:none;border-radius:10px;padding:.65rem 1.1rem;border:1px solid var(--border);background:var(--surface);color:var(--fg);transition:border-color .15s,background .15s,filter .15s}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.07)}
+.back{display:inline-block;color:var(--muted);text-decoration:none;font-size:.85rem;margin:0 0 .5rem}
+.back:hover{color:var(--fg)}
+footer{margin-top:3.5rem;border-top:1px solid var(--border);padding-top:1.5rem;color:var(--muted);font-size:.85rem;max-width:72rem;margin-left:auto;margin-right:auto;padding-left:1.25rem;padding-right:1.25rem}
+footer a{color:var(--muted);text-decoration:underline;text-underline-offset:2px}
+footer a:hover{color:var(--fg)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+"#;
+
+const GH_ICON: &str = r#"<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>"#;
+
+const GALLERY_JS: &str = r#"
+(function(){var q=document.getElementById('search');var cards=[].slice.call(document.querySelectorAll('.card'));var none=document.getElementById('empty');if(!q)return;q.addEventListener('input',function(){var v=q.value.trim().toLowerCase();var shown=0;for(var i=0;i<cards.length;i++){var hit=v===''||cards[i].dataset.search.indexOf(v)!==-1;cards[i].hidden=!hit;if(hit)shown++;}if(none)none.hidden=shown!==0;});})();
+"#;
+
+const BUILDER_JS: &str = r#"
+(function(){var id=document.body.dataset.template;var inputs=[].slice.call(document.querySelectorAll('.cap'));var img=document.getElementById('preview');var urlEl=document.getElementById('url');var gif=document.getElementById('gif');var t;
+function enc(s){return s===''?'_':s.replace(/_/g,'__').replace(/ /g,'_');}
+function path(){var ext=(gif&&gif.checked)?'gif':'png';return '/images/'+id+'/'+inputs.map(function(i){return enc(i.value);}).join('/')+'.'+ext;}
+function update(){var p=path();urlEl.textContent=location.origin+p;clearTimeout(t);t=setTimeout(function(){img.src=p;},400);}
+inputs.forEach(function(i){i.addEventListener('input',update);});if(gif)gif.addEventListener('change',update);update();
+function flash(b,m){b.textContent=m;setTimeout(function(){b.textContent=b.dataset.label;},1300);}
+var link=document.getElementById('copy-link');link.dataset.label=link.textContent;
+link.addEventListener('click',function(){navigator.clipboard.writeText(location.origin+path()).then(function(){flash(link,'Copied!');},function(){flash(link,'Copy failed');});});
+var ci=document.getElementById('copy-img');ci.dataset.label=ci.textContent;
+ci.addEventListener('click',function(){fetch(path()).then(function(r){if(!r.ok){flash(ci,r.status===429?'Rate limited':'Error');return null;}return r.blob();}).then(function(b){if(!b)return;return navigator.clipboard.write([new ClipboardItem(Object.fromEntries([[b.type,b]]))]).then(function(){flash(ci,'Copied!');});}).catch(function(){flash(ci,'Copy failed');});});})();
+"#;
+
+fn display_name(t: &Template) -> &str {
+    if t.name.is_empty() { &t.id } else { &t.name }
+}
+
+fn search_blob(t: &Template) -> String {
+    format!("{} {} {}", t.id, t.name, t.keywords.join(" ")).to_lowercase()
+}
+
+fn lines_label(n: usize) -> String {
+    if n == 1 {
+        "1 line".into()
+    } else {
+        format!("{n} lines")
+    }
+}
+
+fn topbar() -> Markup {
+    html! {
+        header class="topbar" {
+            a class="brand" href="/" { "memegen" span class="dot" { ".rs" } }
+            span class="spacer" {}
+            a class="gh" href="https://github.com/tenequm/memegen-rs"
+                title="GitHub repository" target="_blank" rel="noreferrer" {
+                (PreEscaped(GH_ICON))
+            }
+        }
+    }
+}
+
+fn page_head(title: &str, desc: &str) -> Markup {
+    html! {
+        head {
+            meta charset="utf-8";
+            meta name="viewport" content="width=device-width, initial-scale=1";
+            title { (title) }
+            meta name="description" content=(desc);
+            style { (PreEscaped(PAGE_CSS)) }
+        }
+    }
+}
+
+fn page_footer() -> Markup {
+    html! {
+        footer {
+            "Built with Rust, axum & maud - "
+            a href="https://github.com/tenequm/memegen-rs" { "source on GitHub" }
+            ". A minimal reimplementation of "
+            a href="https://github.com/jacebrowning/memegen" { "memegen" }
+            ". Template images belong to their respective owners."
+        }
+    }
+}
+
+// The gallery is a pure function of the immutable registry, so render it once
+// and serve the cached string on every hit (no per-request HTML build or stats).
+async fn gallery(State(reg): State<AppState>) -> Html<&'static str> {
+    static CACHE: OnceLock<String> = OnceLock::new();
+    Html(
+        CACHE
+            .get_or_init(|| gallery_markup(&reg).into_string())
+            .as_str(),
+    )
+}
+
+fn gallery_markup(reg: &Registry) -> Markup {
+    let count = reg.len();
+    html! {
+        (DOCTYPE)
+        html lang="en" {
+            (page_head(
+                "memegen.rs - meme generator",
+                "A tiny, stateless meme generator in pure Rust. Pick a template, type your caption, copy the link."
+            ))
+            body {
+                (topbar())
+                main class="wrap" {
+                    section class="hero" {
+                        h1 { "Every meme is " span class="accent" { "just a URL" } "." }
+                        p { "A tiny, stateless meme generator in pure Rust. Pick a template, type your caption, copy the link or the image." }
+                    }
+                    div class="toolbar" {
+                        input #search type="search" placeholder="Search templates by name or keyword..."
+                            autocomplete="off" aria-label="Search templates";
+                        span class="count" { (count) " templates" }
+                    }
+                    p #empty class="empty" hidden { "No templates match that search." }
+                    div class="grid" {
+                        @for t in reg.all() {
+                            @let is_gif = t.is_gif;
+                            a class="card" href={ "/edit/" (t.id) } data-search=(search_blob(t)) {
+                                img class="thumb" src={ "/thumbs/" (t.id) } loading="lazy"
+                                    decoding="async" alt=(display_name(t));
+                                div class="meta" {
+                                    span class="tname" { (display_name(t)) }
+                                    div class="tags" {
+                                        @if is_gif { span class="badge gif" { "GIF" } }
+                                        span class="badge" { (lines_label(t.lines())) }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                (page_footer())
+                script { (PreEscaped(GALLERY_JS)) }
+            }
+        }
+    }
+}
+
+async fn builder(State(reg): State<AppState>, Path(id): Path<String>) -> Result<Markup, AppError> {
+    let t = reg
+        .get(&id)
+        .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
+    let n = t.lines().max(1);
+    let is_gif = t.is_gif;
+    let name = display_name(t);
+    let initial = t.example_path();
+    let markup = html! {
+        (DOCTYPE)
+        html lang="en" {
+            (page_head(
+                &format!("{name} - memegen.rs"),
+                &format!("Caption the {name} meme template and copy the link or the image.")
+            ))
+            body data-template=(t.id) {
+                (topbar())
+                main class="wrap" {
+                    a class="back" href="/" { "Back to all templates" }
+                    div class="builder" {
+                        div class="preview-wrap" {
+                            img #preview src=(initial) alt={ (name) " preview" };
+                        }
+                        div class="panel" {
+                            h1 { (name) }
+                            @if let Some(src) = &t.source {
+                                p class="src" {
+                                    a href=(src) target="_blank" rel="noreferrer" { "source" }
+                                }
+                            }
+                            @for i in 0..n {
+                                @let val = t.example.get(i).map(String::as_str).unwrap_or("");
+                                div class="field" {
+                                    label for=(format!("cap{i}")) { "Caption " (i + 1) }
+                                    input #(format!("cap{i}")) class="cap" type="text"
+                                        value=(val) placeholder=(format!("Caption {}", i + 1));
+                                }
+                            }
+                            @if is_gif {
+                                label class="toggle" {
+                                    input #gif type="checkbox"; "Animated GIF output"
+                                }
+                            }
+                            div class="urlbox" { code #url { (initial) } }
+                            div class="actions" {
+                                button #copy-link class="btn primary" type="button" { "Copy link" }
+                                button #copy-img class="btn" type="button" { "Copy image" }
+                                a class="btn" href="/docs" { "More options" }
+                            }
+                        }
+                    }
+                }
+                (page_footer())
+                script { (PreEscaped(BUILDER_JS)) }
+            }
+        }
+    };
+    Ok(markup)
 }
 
 // ---------- Helpers ----------
@@ -319,8 +570,25 @@ fn split_ext(s: &str) -> (&str, &str) {
     s.rsplit_once('.').unwrap_or((s, "png"))
 }
 
-fn image_response(bytes: Vec<u8>, mime: &'static str) -> Response {
-    ([(header::CONTENT_TYPE, mime)], bytes).into_response()
+fn mime_for(p: &std::path::Path) -> &'static str {
+    match p.extension().and_then(|e| e.to_str()) {
+        Some("png") => "image/png",
+        Some("jpg" | "jpeg") => "image/jpeg",
+        Some("webp") => "image/webp",
+        Some("gif") => "image/gif",
+        _ => "application/octet-stream",
+    }
+}
+
+fn cached_bytes(bytes: Vec<u8>, mime: &'static str) -> Response {
+    (
+        [
+            (header::CONTENT_TYPE, mime),
+            (header::CACHE_CONTROL, IMMUTABLE),
+        ],
+        bytes,
+    )
+        .into_response()
 }
 
 async fn fetch(url: &str) -> Result<Vec<u8>, AppError> {
@@ -380,6 +648,13 @@ impl IntoResponse for AppError {
         (status, Json(serde_json::json!({ "error": message }))).into_response()
     }
 }
+
+// ---------- Agent-facing docs (llms.txt / SKILL.md) ----------
+
+/// Served at `/SKILL.md`, `/llms.txt`, and any-case variants. `assets/SKILL.md`
+/// is the single source of truth (root `SKILL.md` is a symlink to it; the
+/// release pipeline publishes the same file to ClawHub).
+const SKILL_MD: &str = include_str!("../assets/SKILL.md");
 
 #[derive(OpenApi)]
 #[openapi(
