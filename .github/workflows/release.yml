@@ -79,3 +79,40 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-file NOTES.md --verify-tag
+
+  # Publish the agent skill (assets/SKILL.md) to ClawHub under the slug
+  # "memegen-rs". Independent of the image build, so it runs in parallel.
+  publish-skill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+
+      - name: Install ClawHub CLI
+        run: npm install -g clawhub
+
+      - name: Publish skill to ClawHub
+        env:
+          CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
+          CLAWHUB_DISABLE_TELEMETRY: "1"
+          TAG: ${{ github.ref_name }}
+        run: |
+          if [ -z "$CLAWHUB_TOKEN" ]; then
+            echo "::warning::CLAWHUB_TOKEN not set - skipping ClawHub publish."
+            exit 0
+          fi
+          VERSION="${TAG#v}"
+          # Stage a clean, text-only bundle (the repo root carries binaries that
+          # would blow ClawHub's 50 MB text-only limit).
+          mkdir -p dist/skill
+          cp assets/SKILL.md dist/skill/SKILL.md
+          # Keep the published metadata.version in sync with the release tag.
+          sed -i -E "s/^(\s*version:\s*).*/\1\"${VERSION}\"/" dist/skill/SKILL.md
+          clawhub login --token "$CLAWHUB_TOKEN" --no-browser
+          clawhub --no-input publish ./dist/skill \
+            --slug memegen-rs \
+            --name memegen-rs \
+            --version "$VERSION" \
+            --changelog "memegen-rs ${TAG} - https://github.com/tenequm/memegen-rs/releases/tag/${TAG}" \
+            --tags latest
