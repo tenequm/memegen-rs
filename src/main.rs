@@ -28,6 +28,15 @@ type AppState = Arc<Registry>;
 /// image forever - safe to cache hard at the browser and the Cloudflare edge.
 const IMMUTABLE: &str = "public, max-age=31536000, s-maxage=31536000, immutable";
 
+/// Canonical origin for absolute URLs in social-share metadata (og:url,
+/// og:image) - link crawlers reject relative URLs.
+const SITE: &str = "https://memegen.rs";
+
+/// Homepage share card: a meme rendered by the app itself, padded to the
+/// universal 1200x630 social size as JPEG (edge-cached like any render).
+const BRAND_OG: &str =
+    "https://memegen.rs/images/buzz/memes/memes_everywhere.jpg?width=1200&height=630";
+
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let dir = std::env::var("MEMEGEN_TEMPLATES_DIR").unwrap_or_else(|_| "templates".into());
@@ -59,6 +68,12 @@ async fn main() -> anyhow::Result<()> {
         .route("/edit/{id}", get(builder))
         .route("/thumbs/{id}", get(thumb))
         .route("/font/anton.ttf", get(anton_font))
+        .route("/favicon.ico", get(favicon_ico))
+        .route("/favicon.svg", get(favicon_svg))
+        .route("/apple-touch-icon.png", get(apple_touch_icon))
+        .route("/icon-192.png", get(icon_192))
+        .route("/icon-512.png", get(icon_512))
+        .route("/manifest.webmanifest", get(manifest))
         .route("/openapi.json", get(openapi))
         .route("/templates", get(list_templates))
         .route("/templates/{id}", get(get_template))
@@ -273,13 +288,61 @@ async fn thumb(State(reg): State<AppState>, Path(id): Path<String>) -> Result<Re
 /// headlines match the rendered output. Embedded at compile time (the binary
 /// already ships it), so it works on a fonts-less container.
 async fn anton_font() -> Response {
-    const ANTON_TTF: &[u8] = include_bytes!("../assets/Anton-Regular.ttf");
+    static_asset(include_bytes!("../assets/Anton-Regular.ttf"), "font/ttf")
+}
+
+// Favicon set (2026 minimal): .ico + svg + apple-touch 180 + 192/512 PNGs +
+// manifest. All embedded at compile time and served immutable.
+async fn favicon_ico() -> Response {
+    static_asset(include_bytes!("../assets/favicon.ico"), "image/x-icon")
+}
+async fn favicon_svg() -> Response {
+    static_asset(include_bytes!("../assets/favicon.svg"), "image/svg+xml")
+}
+async fn apple_touch_icon() -> Response {
+    static_asset(
+        include_bytes!("../assets/apple-touch-icon.png"),
+        "image/png",
+    )
+}
+async fn icon_192() -> Response {
+    static_asset(include_bytes!("../assets/icon-192.png"), "image/png")
+}
+async fn icon_512() -> Response {
+    static_asset(include_bytes!("../assets/icon-512.png"), "image/png")
+}
+
+async fn manifest() -> Response {
     (
         [
-            (header::CONTENT_TYPE, "font/ttf"),
+            (header::CONTENT_TYPE, "application/manifest+json"),
+            (header::CACHE_CONTROL, "public, max-age=86400"),
+        ],
+        MANIFEST,
+    )
+        .into_response()
+}
+
+const MANIFEST: &str = r##"{
+  "name": "memegen.rs",
+  "short_name": "memegen",
+  "icons": [
+    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
+  ],
+  "theme_color": "#0b0c0e",
+  "background_color": "#0b0c0e",
+  "display": "standalone"
+}"##;
+
+fn static_asset(bytes: &'static [u8], mime: &'static str) -> Response {
+    (
+        [
+            (header::CONTENT_TYPE, mime),
             (header::CACHE_CONTROL, IMMUTABLE),
         ],
-        Bytes::from_static(ANTON_TTF),
+        Bytes::from_static(bytes),
     )
         .into_response()
 }
@@ -423,16 +486,48 @@ fn topbar() -> Markup {
     }
 }
 
-fn page_head(title: &str, desc: &str) -> Markup {
+// Social-share metadata first (Slack reads only the first 32 KB of <head>, so
+// the OG block precedes the stylesheet). One 1200x630 JPEG card + the OG tags +
+// twitter:card=summary_large_image is the cross-platform lowest common
+// denominator (Telegram, Slack, Discord, LinkedIn, Reddit, X, Facebook).
+fn page_head(title: &str, desc: &str, path: &str, og_image: &str) -> Markup {
+    let canonical = format!("{SITE}{path}");
     html! {
         head {
             meta charset="utf-8";
             meta name="viewport" content="width=device-width, initial-scale=1";
             title { (title) }
             meta name="description" content=(desc);
+            link rel="canonical" href=(canonical);
+
+            meta property="og:type" content="website";
+            meta property="og:site_name" content="memegen.rs";
+            meta property="og:title" content=(title);
+            meta property="og:description" content=(desc);
+            meta property="og:url" content=(canonical);
+            meta property="og:image" content=(og_image);
+            meta property="og:image:type" content="image/jpeg";
+            meta property="og:image:width" content="1200";
+            meta property="og:image:height" content="630";
+            meta property="og:image:alt" content=(title);
+            meta name="twitter:card" content="summary_large_image";
+            meta name="twitter:image" content=(og_image);
+
+            link rel="icon" href="/favicon.ico" sizes="32x32";
+            link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any";
+            link rel="apple-touch-icon" href="/apple-touch-icon.png";
+            link rel="manifest" href="/manifest.webmanifest";
+            meta name="theme-color" content="#0b0c0e";
+
             style { (PreEscaped(PAGE_CSS)) }
         }
     }
+}
+
+/// A template's own example meme as a 1200x630 JPEG social card.
+fn og_image_for(t: &Template) -> String {
+    let jpg = t.example_path().replace(".png", ".jpg");
+    format!("{SITE}{jpg}?width=1200&height=630")
 }
 
 fn page_footer() -> Markup {
@@ -465,7 +560,9 @@ fn gallery_markup(reg: &Registry) -> Markup {
         html lang="en" {
             (page_head(
                 "memegen.rs - meme generator",
-                "A tiny, stateless meme generator in pure Rust. Pick a template, type your caption, copy the link."
+                "A tiny, stateless meme generator in pure Rust. Pick a template, type your caption, copy the link.",
+                "/",
+                BRAND_OG,
             ))
             body {
                 (topbar())
@@ -517,7 +614,9 @@ async fn builder(State(reg): State<AppState>, Path(id): Path<String>) -> Result<
         html lang="en" {
             (page_head(
                 &format!("{name} - memegen.rs"),
-                &format!("Caption the {name} meme template and copy the link or the image.")
+                &format!("Caption the {name} meme template and copy the link or the image."),
+                &format!("/edit/{}", t.id),
+                &og_image_for(t),
             ))
             body data-template=(t.id) {
                 (topbar())
