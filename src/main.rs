@@ -13,9 +13,6 @@ use axum::response::{Html, IntoResponse, Response};
 use axum::routing::get;
 use maud::{DOCTYPE, Markup, PreEscaped, html};
 use serde::{Deserialize, Serialize};
-use tower_governor::GovernorLayer;
-use tower_governor::governor::GovernorConfigBuilder;
-use tower_governor::key_extractor::GlobalKeyExtractor;
 use utoipa::{OpenApi, ToSchema};
 use utoipa_scalar::{Scalar, Servable};
 
@@ -43,26 +40,8 @@ async fn main() -> anyhow::Result<()> {
     let registry = Arc::new(Registry::load(&PathBuf::from(&dir))?);
     println!("loaded {} templates from {dir}", registry.len());
 
-    // Global hard cap of 5 requests/second (bucket of 5, one slot refilled every
-    // 200ms). Behind a reverse proxy the peer IP is the proxy, so a global key is
-    // both the simplest and the only meaningful choice here.
-    let governor_conf = GovernorConfigBuilder::default()
-        .burst_size(5)
-        .per_millisecond(200)
-        .key_extractor(GlobalKeyExtractor)
-        .finish()
-        .expect("valid rate-limit config");
-
-    // The 5/s cap protects *rendering* (CPU for drawing, the outbound fetch in
-    // /custom, animated-GIF frame encoding) - not page views or static thumbnails.
-    // So the limiter wraps only the render endpoints; the gallery, builder, docs,
-    // JSON, fonts, and on-disk thumbnails are served unthrottled.
-    let throttled = Router::new()
-        .route("/images/custom/{*text}", get(render_custom))
-        .route("/images/{id}/{*text}", get(render_text))
-        .route("/images/{filename}", get(render_blank))
-        .layer(GovernorLayer::new(governor_conf));
-
+    // Rate limiting is enforced at the edge (Cloudflare Worker, see worker.ts),
+    // not here - the Worker rejects render abuse before it reaches this origin.
     let app = Router::new()
         .route("/", get(gallery))
         .route("/edit/{id}", get(builder))
@@ -77,7 +56,9 @@ async fn main() -> anyhow::Result<()> {
         .route("/openapi.json", get(openapi))
         .route("/templates", get(list_templates))
         .route("/templates/{id}", get(get_template))
-        .merge(throttled)
+        .route("/images/custom/{*text}", get(render_custom))
+        .route("/images/{id}/{*text}", get(render_text))
+        .route("/images/{filename}", get(render_blank))
         // Scalar API docs (rendered from the OpenAPI spec).
         .merge(Scalar::with_url("/docs", ApiDoc::openapi()))
         // /SKILL.md, /llms.txt, and any-case variants serve the embedded doc.

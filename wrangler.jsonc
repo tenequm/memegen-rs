@@ -10,6 +10,18 @@
   "routes": [
     { "pattern": "memegen.rs", "custom_domain": true }
   ],
+  // A runaway-bill backstop, not a fairness limiter - enforced at the edge
+  // (worker.ts) on a single shared key, so it caps *aggregate* render
+  // throughput per Cloudflare location regardless of how many IPs flood it.
+  // Generous on purpose (no real user should ever trip it); only cache-miss
+  // renders count. period must be 10 or 60s; 10000 / 60s is ~166 renders/s.
+  "ratelimits": [
+    {
+      "name": "RENDER_LIMITER",
+      "namespace_id": "1001",
+      "simple": { "limit": 10000, "period": 60 }
+    }
+  ],
   "containers": [
     {
       // For the first deploy, wrangler builds this Containerfile locally and
@@ -19,10 +31,9 @@
       "class_name": "MemegenContainer",
       "instance_type": "basic",
       // The Worker routes all traffic to one instance via getContainer() (the
-      // built-in cf-singleton-container id), so the in-container 5 req/s limiter
-      // is a true global cap. Pin the ceiling to 1 so the platform can never
-      // hold more than one instance (avoids stray instances from earlier
-      // experiments lingering against the cap during a rollout).
+      // built-in cf-singleton-container id). Pin the ceiling to 1 so the
+      // platform can never hold more than one instance (avoids stray instances
+      // from earlier experiments lingering against the cap during a rollout).
       "max_instances": 1,
       // Replace an active instance immediately on deploy instead of waiting out
       // a grace period (paired with --containers-rollout=immediate in CI and

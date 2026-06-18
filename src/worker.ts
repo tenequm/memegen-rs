@@ -2,8 +2,7 @@ import { Container, getContainer } from "@cloudflare/containers";
 
 /**
  * Wraps the memegen-rs Rust server (binds 0.0.0.0:5005 inside the container).
- * Pinned to a single instance so the in-container 5 req/s limiter is a true
- * global cap (a global limit and multi-instance fan-out are mutually exclusive).
+ * Pinned to a single instance (getContainer's built-in singleton id).
  */
 export class MemegenContainer extends Container {
   defaultPort = 5005; // matches the Rust server's bind port
@@ -12,6 +11,14 @@ export class MemegenContainer extends Container {
 
 interface Env {
   MEMEGEN: DurableObjectNamespace<MemegenContainer>;
+  RENDER_LIMITER: RateLimit;
+}
+
+// Render endpoints are the only CPU-heavy paths (drawing, GIF encoding, the
+// outbound fetch in /custom). The gallery, builder, docs, JSON, fonts, and
+// on-disk thumbnails are cheap and stay unthrottled.
+function isRenderPath(pathname: string): boolean {
+  return pathname.startsWith("/images/");
 }
 
 export default {
@@ -28,12 +35,27 @@ export default {
       return getContainer(env.MEMEGEN).fetch(request);
     }
 
+    const url = new URL(request.url);
     const cache = caches.default;
     // Same URL == same image forever, so the URL alone is a perfect cache key.
-    const key = new Request(new URL(request.url).toString(), { method: "GET" });
+    const key = new Request(url.toString(), { method: "GET" });
 
     const hit = await cache.match(key);
     if (hit) return hit;
+
+    // Only a render that actually reaches the origin counts against the limit -
+    // cache hits above are free. A single shared key caps aggregate render
+    // throughput per location (a bill backstop, not a per-user limit), so a
+    // distributed flood can't multiply the cost across many IPs.
+    if (isRenderPath(url.pathname)) {
+      const { success } = await env.RENDER_LIMITER.limit({ key: "render" });
+      if (!success) {
+        return new Response("429: render capacity is busy, try again shortly", {
+          status: 429,
+          headers: { "retry-after": "10", "content-type": "text/plain" },
+        });
+      }
+    }
 
     const res = await getContainer(env.MEMEGEN).fetch(request);
 
