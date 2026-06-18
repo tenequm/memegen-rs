@@ -20,6 +20,12 @@ fn load_font(bytes: &'static [u8]) -> FontArc {
     FontArc::try_from_slice(bytes).expect("valid font")
 }
 
+/// Caption autosizing defaults. A horizontal safe-margin keeps text off the
+/// edges, and a cap on font size (as a fraction of image height) stops short
+/// one- or two-word captions from ballooning to fill the whole text band.
+const SAFE_MARGIN: f32 = 0.05; // each side, fraction of the box width
+const MAX_FONT_FRAC: f32 = 0.14; // fraction of image height
+
 fn font(name: &str) -> &'static FontArc {
     match name {
         "comic" | "kalam" => &KALAM,
@@ -116,10 +122,12 @@ fn caption_layers(size: (u32, u32), boxes: &[Box], spec: &Spec) -> Vec<Caption> 
                 .and_then(|c| c.split(',').next())
                 .map(parse_color)
                 .unwrap_or_else(|| parse_color(&b.color));
+            let box_w = b.scale_x * w;
+            let inset = SAFE_MARGIN * box_w;
             let rect = Rect {
-                x: b.anchor_x * w,
+                x: b.anchor_x * w + inset,
                 y: b.anchor_y * h,
-                w: b.scale_x * w,
+                w: (box_w - 2.0 * inset).max(1.0),
                 h: b.scale_y * h,
             };
             Some(build_caption(
@@ -129,6 +137,7 @@ fn caption_layers(size: (u32, u32), boxes: &[Box], spec: &Spec) -> Vec<Caption> 
                 &b.align,
                 b.angle,
                 color,
+                MAX_FONT_FRAC * h,
             ))
         })
         .collect()
@@ -253,8 +262,9 @@ fn build_caption(
     align: &str,
     angle: f32,
     fill: Rgba<u8>,
+    max_px: f32,
 ) -> Caption {
-    let (px, lines) = layout_text(f, caption, rect.w, rect.h);
+    let (px, lines) = layout_text(f, caption, rect.w, rect.h, max_px);
     let line_h = f.as_scaled(PxScale::from(px)).height();
     let total_h = line_h * lines.len() as f32;
     let block_top = (rect.h - total_h).max(0.0) / 2.0;
@@ -317,8 +327,14 @@ fn draw_line(
 }
 
 /// Find the largest font size where the word-wrapped caption fits the box.
-fn layout_text(f: &FontArc, caption: &str, box_w: f32, box_h: f32) -> (f32, Vec<String>) {
-    let mut px = box_h.max(8.0);
+fn layout_text(
+    f: &FontArc,
+    caption: &str,
+    box_w: f32,
+    box_h: f32,
+    max_px: f32,
+) -> (f32, Vec<String>) {
+    let mut px = box_h.min(max_px).max(8.0);
     loop {
         let lines = wrap(f, caption, px, box_w);
         let line_h = f.as_scaled(PxScale::from(px)).height();
