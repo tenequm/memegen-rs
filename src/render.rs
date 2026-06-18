@@ -79,40 +79,64 @@ pub(crate) fn render_custom(
     finish(img, &boxes, spec)
 }
 
+/// A pre-rendered caption layer and where to composite it on the background.
+struct Caption {
+    layer: RgbaImage,
+    x: i64,
+    y: i64,
+}
+
 fn finish(
     mut img: RgbaImage,
     boxes: &[Box],
     spec: &Spec,
 ) -> Result<(Vec<u8>, &'static str), RenderError> {
-    compose(&mut img, boxes, spec);
+    let captions = caption_layers(img.dimensions(), boxes, spec);
+    overlay_captions(&mut img, &captions);
     if spec.size.0 > 0 && spec.size.1 > 0 {
         img = pad_to(&img, spec.size.0, spec.size.1);
     }
     encode(img, spec.ext)
 }
 
-fn compose(img: &mut RgbaImage, boxes: &[Box], spec: &Spec) {
-    let (w, h) = (img.width() as f32, img.height() as f32);
-    for (i, b) in boxes.iter().enumerate() {
-        let Some(raw) = spec.lines.get(i) else {
-            continue;
-        };
-        let caption = stylize(&b.style, raw);
-        if caption.trim().is_empty() {
-            continue;
-        }
-        let color = spec
-            .color
-            .and_then(|c| c.split(',').next())
-            .map(parse_color)
-            .unwrap_or_else(|| parse_color(&b.color));
-        let rect = Rect {
-            x: b.anchor_x * w,
-            y: b.anchor_y * h,
-            w: b.scale_x * w,
-            h: b.scale_y * h,
-        };
-        draw_caption(img, font(&b.font), &caption, rect, &b.align, b.angle, color);
+/// Build each caption layer once for a given canvas size - the layout, stroke,
+/// and rotation are frame-invariant, so this is computed once and reused.
+fn caption_layers(size: (u32, u32), boxes: &[Box], spec: &Spec) -> Vec<Caption> {
+    let (w, h) = (size.0 as f32, size.1 as f32);
+    boxes
+        .iter()
+        .enumerate()
+        .filter_map(|(i, b)| {
+            let caption = stylize(&b.style, spec.lines.get(i)?);
+            if caption.trim().is_empty() {
+                return None;
+            }
+            let color = spec
+                .color
+                .and_then(|c| c.split(',').next())
+                .map(parse_color)
+                .unwrap_or_else(|| parse_color(&b.color));
+            let rect = Rect {
+                x: b.anchor_x * w,
+                y: b.anchor_y * h,
+                w: b.scale_x * w,
+                h: b.scale_y * h,
+            };
+            Some(build_caption(
+                font(&b.font),
+                &caption,
+                rect,
+                &b.align,
+                b.angle,
+                color,
+            ))
+        })
+        .collect()
+}
+
+fn overlay_captions(img: &mut RgbaImage, captions: &[Caption]) {
+    for c in captions {
+        imageops::overlay(img, &c.layer, c.x, c.y);
     }
 }
 
@@ -132,21 +156,19 @@ fn animated_gif(
         return Ok(None);
     }
     let boxes = effective_boxes(template, spec.layout, spec.lines.len());
-    let out_frames: Vec<Frame> = frames
-        .into_iter()
-        .map(|fr| {
-            let (left, top, delay) = (fr.left(), fr.top(), fr.delay());
-            let mut buf = fr.into_buffer();
-            compose(&mut buf, &boxes, spec);
-            Frame::from_parts(buf, left, top, delay)
-        })
-        .collect();
+    let captions = caption_layers(frames[0].buffer().dimensions(), &boxes, spec);
     let mut out = Cursor::new(Vec::new());
     {
-        let mut enc = GifEncoder::new(&mut out);
         let encode = |e: image::ImageError| RenderError::Encode(e.to_string());
+        let mut enc = GifEncoder::new(&mut out);
         enc.set_repeat(Repeat::Infinite).map_err(encode)?;
-        enc.encode_frames(out_frames).map_err(encode)?;
+        for fr in frames {
+            let (left, top, delay) = (fr.left(), fr.top(), fr.delay());
+            let mut buf = fr.into_buffer();
+            overlay_captions(&mut buf, &captions);
+            enc.encode_frame(Frame::from_parts(buf, left, top, delay))
+                .map_err(encode)?;
+        }
     }
     Ok(Some(out.into_inner()))
 }
@@ -224,15 +246,14 @@ struct Rect {
     h: f32,
 }
 
-fn draw_caption(
-    img: &mut RgbaImage,
+fn build_caption(
     f: &FontArc,
     caption: &str,
     rect: Rect,
     align: &str,
     angle: f32,
     fill: Rgba<u8>,
-) {
+) -> Caption {
     let (px, lines) = layout_text(f, caption, rect.w, rect.h);
     let line_h = f.as_scaled(PxScale::from(px)).height();
     let total_h = line_h * lines.len() as f32;
@@ -240,15 +261,22 @@ fn draw_caption(
     let stroke = (px / 12.0).round().clamp(1.0, 4.0) as i32;
     let outline = stroke_color(fill);
 
-    let mut layer = RgbaImage::new(rect.w.max(1.0) as u32, rect.h.max(1.0) as u32);
+    // Pad the layer by the stroke width so the outline isn't clipped at the box
+    // edge (and rotation has room to spread).
+    let margin = stroke as f32;
+    let mut layer = RgbaImage::new(
+        (rect.w.max(1.0) + 2.0 * margin) as u32,
+        (rect.h.max(1.0) + 2.0 * margin) as u32,
+    );
     for (i, line) in lines.iter().enumerate() {
         let line_w = measure(f, line, px);
-        let x = match align {
-            "left" => 0.0,
-            "right" => rect.w - line_w,
-            _ => (rect.w - line_w) / 2.0,
-        };
-        let y = block_top + i as f32 * line_h;
+        let x = margin
+            + match align {
+                "left" => 0.0,
+                "right" => rect.w - line_w,
+                _ => (rect.w - line_w) / 2.0,
+            };
+        let y = margin + block_top + i as f32 * line_h;
         let (xi, yi) = (x.round() as i32, y.round() as i32);
 
         for dy in -stroke..=stroke {
@@ -269,7 +297,11 @@ fn draw_caption(
             Border::Constant(Rgba([0, 0, 0, 0])),
         );
     }
-    imageops::overlay(img, &layer, rect.x as i64, rect.y as i64);
+    Caption {
+        layer,
+        x: (rect.x - margin) as i64,
+        y: (rect.y - margin) as i64,
+    }
 }
 
 fn draw_line(
