@@ -32,3 +32,5 @@ text:
 example:
   - This is the worst day of my life.
   - The worst day of your life so far.
+aliases:
+  - worst

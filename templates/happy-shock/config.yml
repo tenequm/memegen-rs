@@ -33,3 +33,6 @@ text:
 example:
   - When you find a great meme template
   - But you have to write a caption for it
+aliases:
+  - dbg
+  - expectation-vs-reality

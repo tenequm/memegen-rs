@@ -19,3 +19,5 @@ text:
     stop: 1.0
 example:
   - My graduation vs. The release of Shrek 5
+aliases:
+  - funeral

@@ -31,3 +31,5 @@ text:
 example:
   - Am I out of touch?
   - "No, it's the children who are wrong."
+aliases:
+  - touch

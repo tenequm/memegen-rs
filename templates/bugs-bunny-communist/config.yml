@@ -32,3 +32,6 @@ text:
 example:
   - My mom buys food
   - Our food
+aliases:
+  - cbb
+  - our

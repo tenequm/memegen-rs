@@ -31,3 +31,5 @@ text:
 example:
   - ONE DOES NOT SIMPLY
   - WALK INTO MORDOR
+aliases:
+  - mordor
