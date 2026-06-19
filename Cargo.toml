@@ -1,6 +1,6 @@
 [package]
 name = "memegen-rs"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 rust-version = "1.95"
 description = "A minimal, stateless meme generator HTTP API and web UI in pure Rust. Every meme is just a URL."

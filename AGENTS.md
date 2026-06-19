@@ -10,7 +10,7 @@ Stateless meme-generator HTTP API + web UI in **pure Rust**. Every meme is fully
 - `ops/worker/` - Cloudflare Worker edge layer (`worker.ts`: cache + rate limit + analytics injection) and its toolchain (`wrangler.jsonc`, `package.json`, `tsconfig.json`, generated `worker-configuration.d.ts`). Not Rust.
 - `ops/docker/` - `Containerfile` + `Containerfile.dockerignore` for the container image build.
 - `templates/<id>/` - 701 template folders, each `config.yml` (upstream memegen schema) + `default.{png,jpg,webp,gif}`. `templates/popularity.json` ranks them. **Committed to the repo and baked into the image.**
-- `assets/` - embedded fonts (Anton, Kalam; SIL OFL), favicons, OG image, `SKILL.md` (the ClawHub agent skill; `SKILL.md` at root is a symlink to it).
+- `assets/` - embedded fonts (Anton, Pangolin; SIL OFL), favicons, OG image, `SKILL.md` (the ClawHub agent skill; `SKILL.md` at root is a symlink to it). `Anton-Regular.ttf` is the Cyrillic-extended v2.300 build from [Tural/AntonFont](https://github.com/Tural/AntonFont) (unmerged upstream as [google/fonts#7552](https://github.com/google/fonts/issues/7552)); both fonts cover Latin + full Cyrillic/Ukrainian.
 
 ## Stack
 

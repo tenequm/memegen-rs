@@ -13,8 +13,8 @@ use crate::template::{Template, stylize};
 
 static ANTON: LazyLock<FontArc> =
     LazyLock::new(|| load_font(include_bytes!("../assets/Anton-Regular.ttf")));
-static KALAM: LazyLock<FontArc> =
-    LazyLock::new(|| load_font(include_bytes!("../assets/Kalam-Regular.ttf")));
+static PANGOLIN: LazyLock<FontArc> =
+    LazyLock::new(|| load_font(include_bytes!("../assets/Pangolin-Regular.ttf")));
 
 fn load_font(bytes: &'static [u8]) -> FontArc {
     FontArc::try_from_slice(bytes).expect("valid font")
@@ -28,7 +28,7 @@ const MAX_FONT_FRAC: f32 = 0.14; // fraction of image height
 
 fn font(name: &str) -> &'static FontArc {
     match name {
-        "comic" | "kalam" => &KALAM,
+        "comic" | "kalam" => &PANGOLIN,
         _ => &ANTON,
     }
 }
@@ -548,5 +548,21 @@ fn parse_hex(hex: &str) -> Rgba<u8> {
             expand(&hex[6..8]),
         ]),
         _ => Rgba([255, 255, 255, 255]),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // Guards against a font swap silently dropping Cyrillic; the Ukrainian
+    // letters i/yi/ye/ghe-upturn are the ones generic Cyrillic fonts miss.
+    #[test]
+    fn embedded_fonts_cover_ukrainian() {
+        for f in [&*ANTON, &*PANGOLIN] {
+            for c in ['А', 'я', 'і', 'ї', 'є', 'ґ', 'І', 'Ї', 'Є', 'Ґ'] {
+                assert_ne!(f.glyph_id(c).0, 0, "missing glyph for {c:?}");
+            }
+        }
     }
 }
