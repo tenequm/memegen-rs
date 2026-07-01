@@ -3,6 +3,9 @@
 node_modules/
 .wrangler/
 
+# Local launch/demo video assets - not part of the app
+/demo-assets/
+
 # Agent config (local, not shared)
 /CLAUDE.md
 /.claude
