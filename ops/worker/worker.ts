@@ -7,6 +7,9 @@ import { Container, getContainer } from "@cloudflare/containers";
 export class MemegenContainer extends Container {
   defaultPort = 5005; // matches the Rust server's bind port
   sleepAfter = "10m"; // scale to zero when idle; pay only for active time
+  // Brand watermark on rendered images. Unset locally (no watermark by
+  // default); production bakes "memegen.rs" into every render.
+  envVars = { MEMEGEN_WATERMARK: "memegen.rs" };
 }
 
 // `Env` (with MEMEGEN + RENDER_LIMITER) is generated from wrangler.jsonc

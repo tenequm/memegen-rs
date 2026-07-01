@@ -15,10 +15,22 @@ static ANTON: LazyLock<FontArc> =
     LazyLock::new(|| load_font(include_bytes!("../assets/Anton-Regular.ttf")));
 static PANGOLIN: LazyLock<FontArc> =
     LazyLock::new(|| load_font(include_bytes!("../assets/Pangolin-Regular.ttf")));
+// Neutral sans used only for the watermark (Manrope variable, default weight).
+static MANROPE: LazyLock<FontArc> =
+    LazyLock::new(|| load_font(include_bytes!("../assets/Manrope-Regular.ttf")));
 
 fn load_font(bytes: &'static [u8]) -> FontArc {
     FontArc::try_from_slice(bytes).expect("valid font")
 }
+
+/// Optional bottom-left brand label, read once from `MEMEGEN_WATERMARK`.
+/// Unset or blank means no watermark (the default).
+static WATERMARK: LazyLock<Option<String>> = LazyLock::new(|| {
+    std::env::var("MEMEGEN_WATERMARK")
+        .ok()
+        .map(|s| s.trim().to_string())
+        .filter(|s| !s.is_empty())
+});
 
 /// Caption autosizing defaults. A horizontal safe-margin keeps text off the
 /// edges, and a cap on font size (as a fraction of image height) stops short
@@ -106,6 +118,7 @@ fn finish(
     if spec.size.0 > 0 && spec.size.1 > 0 {
         img = pad_to(&img, spec.size.0, spec.size.1);
     }
+    draw_watermark(&mut img);
     encode(img, spec.ext)
 }
 
@@ -153,6 +166,58 @@ fn overlay_captions(img: &mut RgbaImage, captions: &[Caption]) {
     }
 }
 
+/// Draw the `MEMEGEN_WATERMARK` label bottom-left as a small brand mark (soft
+/// dark halo behind a faded white label, so it stays legible on any background),
+/// echoing upstream memegen. No-op when unset, and skipped on thumbnail-sized
+/// output where a height-proportional label would dominate.
+fn draw_watermark(img: &mut RgbaImage) {
+    let Some(label) = WATERMARK.as_deref() else {
+        return;
+    };
+    let (w, h) = img.dimensions();
+    if w.min(h) < 200 {
+        return;
+    }
+    let f = &MANROPE;
+    let px = (h as f32 * 0.024).max(11.0);
+    let line_h = f.as_scaled(PxScale::from(px)).height();
+    let text_w = measure(f, label, px);
+    let blur = (px * 0.11).max(1.4);
+    let pad = (blur * 2.0).ceil() as i32 + 2;
+    let lw = (text_w.ceil() as i32 + 2 * pad).max(1) as u32;
+    let lh = (line_h.ceil() as i32 + 2 * pad).max(1) as u32;
+
+    // A soft dark halo (blurred, kept near full strength) is what keeps the mark
+    // legible on light *and* dark backgrounds - the industry-standard fix. On a
+    // dark background the halo just blends in, so strengthening it only helps the
+    // bright-background case. Only the white label is faded, to stay subtle.
+    let mut layer = RgbaImage::new(lw, lh);
+    draw_line(&mut layer, f, Rgba([0, 0, 0, 255]), pad, pad, px, label);
+    let mut layer = imageops::fast_blur(&layer, blur);
+    for p in layer.pixels_mut() {
+        p.0[3] = ((p.0[3] as f32 * 2.2) as u32).min(225) as u8;
+    }
+    let mut text = RgbaImage::new(lw, lh);
+    draw_line(
+        &mut text,
+        f,
+        Rgba([255, 255, 255, 255]),
+        pad,
+        pad,
+        px,
+        label,
+    );
+    for p in text.pixels_mut() {
+        p.0[3] = (p.0[3] as f32 * 0.92) as u8;
+    }
+    imageops::overlay(&mut layer, &text, 0, 0);
+
+    let m = (h as f32 * 0.016).max(6.0);
+    let x = (m - pad as f32).round() as i64;
+    let y = (h as f32 - m - line_h - pad as f32).round() as i64;
+    imageops::overlay(img, &layer, x, y);
+}
+
 fn animated_gif(
     gif: &Path,
     template: &Template,
@@ -179,6 +244,7 @@ fn animated_gif(
             let (left, top, delay) = (fr.left(), fr.top(), fr.delay());
             let mut buf = fr.into_buffer();
             overlay_captions(&mut buf, &captions);
+            draw_watermark(&mut buf);
             enc.encode_frame(Frame::from_parts(buf, left, top, delay))
                 .map_err(encode)?;
         }

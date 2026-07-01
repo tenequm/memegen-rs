@@ -56,6 +56,7 @@ Environment variables:
 |---|---|---|
 | `PORT` | `5005` | Listen port |
 | `MEMEGEN_TEMPLATES_DIR` | `templates` | Path to the template corpus |
+| `MEMEGEN_WATERMARK` | _(unset)_ | Brand label drawn bottom-left on rendered images; unset means no watermark |
 
 Render a meme:
 
@@ -89,7 +90,7 @@ This repository ships a corpus of ~780 templates under `templates/`, read once a
 - **[axum](https://crates.io/crates/axum)** for HTTP routing and **[utoipa](https://crates.io/crates/utoipa)** for the OpenAPI spec, rendered as interactive docs by **[Scalar](https://github.com/scalar/scalar)** at `/docs`. **[maud](https://crates.io/crates/maud)** renders the web UI (a searchable template gallery and a meme builder) at compile time, and **[tower_governor](https://crates.io/crates/tower-governor)** caps meme rendering at a global 5 requests/second.
 - **[image](https://crates.io/crates/image)** + **[imageproc](https://crates.io/crates/imageproc)** + **[ab_glyph](https://crates.io/crates/ab_glyph)** for rendering. A caption is autosized to its box, word-wrapped, drawn with a white fill and a black outline, and composited onto the background.
 - **[serde-saphyr](https://crates.io/crates/serde-saphyr)** (pure-Rust YAML) parses each `config.yml`.
-- Fonts (**[Anton](https://fonts.google.com/specimen/Anton)** for the Impact look, **[Pangolin](https://fonts.google.com/specimen/Pangolin)** for handwriting; both SIL OFL 1.1) are embedded in the binary via `include_bytes!` - no font directory, and it works on a fonts-less container. Both cover Latin + full Cyrillic/Ukrainian; the Anton build is the Cyrillic-extended v2.300 fork from [Tural/AntonFont](https://github.com/Tural/AntonFont) (pending upstream as [google/fonts#7552](https://github.com/google/fonts/issues/7552)).
+- Fonts (**[Anton](https://fonts.google.com/specimen/Anton)** for the Impact look, **[Pangolin](https://fonts.google.com/specimen/Pangolin)** for handwriting, **[Manrope](https://fonts.google.com/specimen/Manrope)** for the watermark; all SIL OFL 1.1) are embedded in the binary via `include_bytes!` - no font directory, and it works on a fonts-less container. Anton and Pangolin cover Latin + full Cyrillic/Ukrainian; the Anton build is the Cyrillic-extended v2.300 fork from [Tural/AntonFont](https://github.com/Tural/AntonFont) (pending upstream as [google/fonts#7552](https://github.com/google/fonts/issues/7552)).
 
 Three source files: `template.rs` (model, registry, URL codec, styling), `render.rs` (the rendering pipeline), `main.rs` (router, handlers, OpenAPI, error mapping).
 
@@ -141,7 +142,7 @@ The full machine-readable contract is served at `/openapi.json`.
 
 This project is a reimplementation of [**memegen**](https://github.com/jacebrowning/memegen) by [Jace Browning](https://github.com/jacebrowning) ([memegen.link](https://memegen.link)). The URL scheme, the template format, and the overall API shape are his design; this repository simply rebuilds a minimal subset of it in Rust. All credit for the original idea and the template ecosystem goes to him and the memegen contributors.
 
-Also thanks to the [Anton](https://github.com/googlefonts/AntonFont) (Cyrillic extension by [Tural/AntonFont](https://github.com/Tural/AntonFont)) and [Pangolin](https://github.com/googlefonts/pangolin) typefaces (SIL OFL 1.1) and the maintainers of [axum](https://github.com/tokio-rs/axum), [image](https://github.com/image-rs/image), [imageproc](https://github.com/image-rs/imageproc), and [ab_glyph](https://github.com/alexheretic/ab-glyph).
+Also thanks to the [Anton](https://github.com/googlefonts/AntonFont) (Cyrillic extension by [Tural/AntonFont](https://github.com/Tural/AntonFont)), [Pangolin](https://github.com/googlefonts/pangolin), and [Manrope](https://github.com/sharanda/manrope) typefaces (SIL OFL 1.1) and the maintainers of [axum](https://github.com/tokio-rs/axum), [image](https://github.com/image-rs/image), [imageproc](https://github.com/image-rs/imageproc), and [ab_glyph](https://github.com/alexheretic/ab-glyph).
 
 ## Contributing
 
@@ -149,7 +150,7 @@ Issues and pull requests are welcome - open an [issue](https://github.com/tenequ
 
 ## License
 
-Code, build scripts, and template `config.yml` markup are [MIT](LICENSE) (c) 2026 Misha Kolesnik. The embedded [Anton](assets/OFL-Anton.txt) and [Pangolin](assets/OFL-Pangolin.txt) fonts are SIL OFL 1.1.
+Code, build scripts, and template `config.yml` markup are [MIT](LICENSE) (c) 2026 Misha Kolesnik. The embedded [Anton](assets/OFL-Anton.txt), [Pangolin](assets/OFL-Pangolin.txt), and [Manrope](assets/OFL-Manrope.txt) fonts are SIL OFL 1.1.
 
 ### Template images
 
