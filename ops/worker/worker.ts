@@ -23,7 +23,32 @@ function isRenderPath(pathname: string): boolean {
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(
+    request: Request,
+    env: Env,
+    ctx: ExecutionContext,
+  ): Promise<Response> {
+    const url = new URL(request.url);
+
+    // Secret-guarded purge hit by CI post-deploy: a deploy busts the
+    // version-keyed cache, but the container rollout can repopulate it from the
+    // old image, and images are `immutable`. Only the Worker can purge its own
+    // Workers Cache (zone/dashboard purges can't).
+    if (url.pathname === "/__purge") {
+      const secret = (env as unknown as { PURGE_SECRET?: string }).PURGE_SECRET;
+      if (!secret || request.headers.get("x-purge-secret") !== secret) {
+        return new Response("forbidden\n", { status: 403 });
+      }
+      const cache = (
+        ctx as unknown as {
+          cache?: { purge(o: { purgeEverything: boolean }): Promise<void> };
+        }
+      ).cache;
+      if (!cache) return new Response("purge unavailable\n", { status: 501 });
+      await cache.purge({ purgeEverything: true });
+      return new Response("purged\n", { status: 200 });
+    }
+
     // Caching lives in Workers Caching (`cache.enabled` in wrangler.jsonc), not
     // here: it is tiered (one render anywhere fills a network-wide upper tier,
     // unlike the per-datacenter Cache API) and collapses concurrent requests
@@ -35,8 +60,6 @@ export default {
     if (request.method !== "GET") {
       return getContainer(env.MEMEGEN).fetch(request);
     }
-
-    const url = new URL(request.url);
 
     // Only a render that actually reaches the origin counts against the limit -
     // cache hits never get here. A single shared key caps aggregate render
