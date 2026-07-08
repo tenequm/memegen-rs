@@ -341,9 +341,15 @@ fn build_caption(
     let stroke = (px / 12.0).round().clamp(1.0, 4.0) as i32;
     let outline = stroke_color(fill);
 
-    // Pad the layer by the stroke width so the outline isn't clipped at the box
-    // edge (and rotation has room to spread).
-    let margin = stroke as f32;
+    // Pad the layer so neither the outline nor a rotated block is clipped at the
+    // box edge. Rotating a rect.w x rect.h block by `angle` needs it to grow to
+    // (w*|cos|+h*|sin|) x (w*|sin|+h*|cos|); pad by half that growth (the largest
+    // of the two axes, applied symmetrically) so the box center stays put.
+    let a = angle.to_radians().abs();
+    let (ca, sa) = (a.cos(), a.sin());
+    let pad_w = ((rect.w * ca + rect.h * sa) - rect.w).max(0.0) / 2.0;
+    let pad_h = ((rect.w * sa + rect.h * ca) - rect.h).max(0.0) / 2.0;
+    let margin = stroke as f32 + pad_w.max(pad_h);
     let mut layer = RgbaImage::new(
         (rect.w.max(1.0) + 2.0 * margin) as u32,
         (rect.h.max(1.0) + 2.0 * margin) as u32,
