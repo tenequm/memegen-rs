@@ -23,29 +23,23 @@ function isRenderPath(pathname: string): boolean {
 }
 
 export default {
-  async fetch(
-    request: Request,
-    env: Env,
-    ctx: ExecutionContext,
-  ): Promise<Response> {
-    // The container is reached via the Durable Object binding, not a CDN
-    // fetch(), so its responses are never auto-cached. We cache rendered images
-    // explicitly: a HIT is served at the edge and never reaches the container,
-    // so it costs nothing and doesn't count against the 5/s render limiter.
+  async fetch(request: Request, env: Env): Promise<Response> {
+    // Caching lives in Workers Caching (`cache.enabled` in wrangler.jsonc), not
+    // here: it is tiered (one render anywhere fills a network-wide upper tier,
+    // unlike the per-datacenter Cache API) and collapses concurrent requests
+    // for the same URL into a single container call - both matter during the
+    // scale-to-zero cold start. Cache HITs never invoke this Worker at all, so
+    // everything below runs only on a true miss. Lifetimes come from the
+    // Cache-Control/CDN-Cache-Control headers the Rust server sets; the cache
+    // key includes the Worker version, so every deploy busts it.
     if (request.method !== "GET") {
       return getContainer(env.MEMEGEN).fetch(request);
     }
 
     const url = new URL(request.url);
-    const cache = caches.default;
-    // Same URL == same image forever, so the URL alone is a perfect cache key.
-    const key = new Request(url.toString(), { method: "GET" });
-
-    const hit = await cache.match(key);
-    if (hit) return hit;
 
     // Only a render that actually reaches the origin counts against the limit -
-    // cache hits above are free. A single shared key caps aggregate render
+    // cache hits never get here. A single shared key caps aggregate render
     // throughput per location (a bill backstop, not a per-user limit), so a
     // distributed flood can't multiply the cost across many IPs.
     if (isRenderPath(url.pathname)) {
@@ -60,13 +54,7 @@ export default {
 
     const res = await getContainer(env.MEMEGEN).fetch(request);
 
-    // Edge-cache only the content-derived assets (rendered images, thumbnails,
-    // the font) - their URL fully determines their bytes. HTML and JSON are
-    // skipped so they stay fresh on every deploy.
     const type = res.headers.get("content-type") ?? "";
-    if (res.ok && (type.startsWith("image/") || type.startsWith("font/"))) {
-      ctx.waitUntil(cache.put(key, res.clone()));
-    }
     if (env.EXTRA_HTML_SCRIPTS && type.startsWith("text/html")) {
       return new HTMLRewriter()
         .on("head", {

@@ -360,7 +360,11 @@ const MANIFEST: &str = r##"{
 }"##;
 
 fn static_asset(bytes: &'static [u8], mime: &'static str) -> Response {
-    ([(header::CONTENT_TYPE, mime)], Bytes::from_static(bytes)).into_response()
+    (
+        [(header::CONTENT_TYPE, mime), BROWSER_CACHE, EDGE_CACHE],
+        Bytes::from_static(bytes),
+    )
+        .into_response()
 }
 
 /// `/SKILL.md`, `/llms.txt`, and any-case variants (`/skill.md`, `/LLMS.TXT`,
@@ -737,8 +741,21 @@ fn split_ext(s: &str) -> (&str, &str) {
     s.rsplit_once('.').unwrap_or((s, "png"))
 }
 
+/// Split cache lifetimes: browsers get a day (so template fixes reach users),
+/// while Cloudflare's edge keeps the render until the next deploy (Workers
+/// Caching keys on the Worker version, so every deploy busts the edge copy).
+const BROWSER_CACHE: (header::HeaderName, &str) = (header::CACHE_CONTROL, "public, max-age=86400");
+const EDGE_CACHE: (header::HeaderName, &str) = (
+    header::HeaderName::from_static("cdn-cache-control"),
+    "public, max-age=31536000, immutable",
+);
+
 fn cached_bytes(bytes: Vec<u8>, mime: &'static str) -> Response {
-    ([(header::CONTENT_TYPE, mime)], bytes).into_response()
+    (
+        [(header::CONTENT_TYPE, mime), BROWSER_CACHE, EDGE_CACHE],
+        bytes,
+    )
+        .into_response()
 }
 
 async fn fetch(url: &str) -> Result<Vec<u8>, AppError> {

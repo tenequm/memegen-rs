@@ -52,7 +52,7 @@ Release notes come from Conventional Commit messages via git-cliff (`.github/cli
 
 Worker on custom domain `memegen.rs` -> single-instance **Container** running the Rust server (binds `0.0.0.0:5005`, `getContainer` singleton, `max_instances: 1`, scales to zero after 10m idle).
 
-- `worker.ts` caches rendered images/fonts at the edge by full URL (keyed on content-type, not origin `Cache-Control`); HTML/JSON stay uncached. Cache HITs never reach the container.
+- Edge caching is Workers Caching (`cache.enabled` in `wrangler.jsonc`), tiered across PoPs with request collapsing; cache HITs never invoke the Worker or the container. TTLs come from the Rust server's headers: images/assets send `Cache-Control: max-age=86400` (browsers) + `CDN-Cache-Control: immutable` (edge); HTML/JSON send none and get the 2h heuristic. The cache key includes the Worker version, so every deploy busts it.
 - Render throttle is a **Cloudflare edge rate limiter** (`RENDER_LIMITER`, 10000/60s aggregate per location) - a runaway-bill backstop, not a per-user limit. Only cache-miss renders on `/images/` count. There is no in-app limiter.
 - Config: `ops/worker/wrangler.jsonc`. Worker bindings -> `ops/worker/worker-configuration.d.ts` via `wrangler types` (generated, do not hand-edit).
 - Analytics: a `worker.ts` HTMLRewriter injects the `EXTRA_HTML_SCRIPTS` wrangler var into each HTML `<head>`. It loads `/mesh/script.js`, served by a **separate `memegen-rybbit-proxy` Worker (not in this repo)** that proxies to a self-hosted Rybbit instance. No `/mesh` code lives here.

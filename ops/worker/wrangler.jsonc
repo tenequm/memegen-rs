@@ -7,6 +7,15 @@
   "observability": {
     "enabled": true
   },
+  // Workers Caching: tiered (cross-PoP) + request collapsing, replacing the
+  // per-datacenter Cache API the Worker used before. Keyed on the Worker
+  // version, so deploys bust it. TTLs come from response headers: the Rust
+  // server sends CDN-Cache-Control immutable on images/assets; HTML/JSON carry
+  // no Cache-Control and fall to the RFC 9111 heuristic (2h for 200s) - safe,
+  // since their content only changes on deploy anyway.
+  "cache": {
+    "enabled": true
+  },
   "vars": {
     "EXTRA_HTML_SCRIPTS": "<script defer src=\"/mesh/script.js\" data-site-id=\"84199879b537\"></script>"
   },
@@ -32,7 +41,12 @@
       // swap this for "registry.cloudflare.com/<ACCOUNT_ID>/memegen-rs:<sha>".
       "image": "../docker/Containerfile",
       "class_name": "MemegenContainer",
-      "instance_type": "basic",
+      // Custom type: 4x the CPU of "basic" (1/4 vCPU), because cold start and
+      // GIF encoding are CPU-bound and were the visible-latency complaint. 3
+      // GiB is the platform minimum per vCPU, and cheaper than standard-2's
+      // provisioned 6 GiB (memory bills on provisioned size, CPU on actual
+      // use).
+      "instance_type": { "vcpu": 1, "memory_mib": 3072, "disk_mb": 4000 },
       // The Worker routes all traffic to one instance via getContainer() (the
       // built-in cf-singleton-container id). Pin the ceiling to 1 so the
       // platform can never hold more than one instance (avoids stray instances
