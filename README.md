@@ -8,7 +8,7 @@
 
 A minimal, stateless meme generator HTTP API in pure Rust.
 
-Every meme is described entirely by its URL - there is no database, no cache server, and nothing to log in to. Backgrounds and caption geometry come from a directory of template folders, and each request renders an image on demand. It is a deliberately small reimplementation of [jacebrowning/memegen](https://github.com/jacebrowning/memegen): three endpoint groups, embedded fonts, no SaaS plumbing - around 1,000 lines across four source files.
+Every meme is described entirely by its URL - there is no database, no cache server, and nothing to log in to. Backgrounds and caption geometry come from a directory of template folders, and each request renders an image on demand. It is a deliberately small reimplementation of [jacebrowning/memegen](https://github.com/jacebrowning/memegen): three endpoint groups, embedded fonts, no SaaS plumbing - around 1,000 lines across three source files.
 
 ## Table of Contents
 
