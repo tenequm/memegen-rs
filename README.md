@@ -8,7 +8,7 @@
 
 A minimal, stateless meme generator HTTP API in pure Rust.
 
-Every meme is described entirely by its URL - there is no database, no cache server, and nothing to log in to. Backgrounds and caption geometry come from a directory of template folders, and each request renders an image on demand. It is a deliberately small reimplementation of [jacebrowning/memegen](https://github.com/jacebrowning/memegen): three endpoint groups, embedded fonts, no SaaS plumbing - around 1,000 lines across three source files.
+Every meme is described entirely by its URL - there is no database, no cache server, and nothing to log in to. Backgrounds and caption geometry come from a directory of template folders, and each request renders an image on demand. It is a deliberately small reimplementation of [jacebrowning/memegen](https://github.com/jacebrowning/memegen): three endpoint groups, embedded fonts, no SaaS plumbing - around 2,000 lines across three source files.
 
 ## Table of Contents
 
@@ -83,16 +83,24 @@ templates/<id>/
 
 `config.yml` uses the same schema as upstream memegen, so any memegen-compatible corpus works. Text-box coordinates are fractions of the image (0.0-1.0). Alternate background variants (extra image files beside `default.*`) become selectable via `?style=<name>`.
 
-This repository ships a corpus of ~780 templates under `templates/`, read once at startup into an immutable in-memory registry. Add or replace templates by dropping folders in, or point `MEMEGEN_TEMPLATES_DIR` at a different directory. See [License](#license) for the licensing posture on the bundled images.
+This repository ships a corpus of ~700 templates under `templates/`, read once at startup into an immutable in-memory registry. Add or replace templates by dropping folders in, or point `MEMEGEN_TEMPLATES_DIR` at a different directory. See [License](#license) for the licensing posture on the bundled images.
 
 ## Architecture
 
-- **[axum](https://crates.io/crates/axum)** for HTTP routing and **[utoipa](https://crates.io/crates/utoipa)** for the OpenAPI spec, rendered as interactive docs by **[Scalar](https://github.com/scalar/scalar)** at `/docs`. **[maud](https://crates.io/crates/maud)** renders the web UI (a searchable template gallery and a meme builder) at compile time, and **[tower_governor](https://crates.io/crates/tower-governor)** caps meme rendering at a global 5 requests/second.
+- **[axum](https://crates.io/crates/axum)** for HTTP routing and **[utoipa](https://crates.io/crates/utoipa)** for the OpenAPI spec, rendered as interactive docs by **[Scalar](https://github.com/scalar/scalar)** at `/docs`. **[maud](https://crates.io/crates/maud)** renders the web UI (a searchable template gallery and a meme builder) at compile time.
 - **[image](https://crates.io/crates/image)** + **[imageproc](https://crates.io/crates/imageproc)** + **[ab_glyph](https://crates.io/crates/ab_glyph)** for rendering. A caption is autosized to its box, word-wrapped, drawn with a white fill and a black outline, and composited onto the background.
 - **[serde-saphyr](https://crates.io/crates/serde-saphyr)** (pure-Rust YAML) parses each `config.yml`.
 - Fonts (**[Anton](https://fonts.google.com/specimen/Anton)** for the Impact look, **[Pangolin](https://fonts.google.com/specimen/Pangolin)** for handwriting, **[Manrope](https://fonts.google.com/specimen/Manrope)** for the watermark; all SIL OFL 1.1) are embedded in the binary via `include_bytes!` - no font directory, and it works on a fonts-less container. Anton and Pangolin cover Latin + full Cyrillic/Ukrainian; the Anton build is the Cyrillic-extended v2.300 fork from [Tural/AntonFont](https://github.com/Tural/AntonFont) (pending upstream as [google/fonts#7552](https://github.com/google/fonts/issues/7552)).
 
 Three source files: `template.rs` (model, registry, URL codec, styling), `render.rs` (the rendering pipeline), `main.rs` (router, handlers, OpenAPI, error mapping).
+
+### Deployment
+
+The server has no rate limiter and no render cache: every `/images/` request renders on demand, so cap its CPU and memory (or put your own cache or limiter in front) before exposing it publicly. Image and asset responses carry `Cache-Control: public, max-age=86400` and `CDN-Cache-Control: public, max-age=31536000, immutable`, so a CDN that honors the latter keeps a render for a year - purge it when templates or rendering change. The server also fetches any URL passed as `?background=` with no filtering of its own, so restrict its outbound network to the public internet if it can reach anything private.
+
+`.github/workflows/image.yml` builds `ops/docker/Containerfile` on every push to `main` and pushes `ghcr.io/tenequm/memegen-rs:sha-<full commit SHA>` (`linux/amd64`, template corpus baked in). CI builds images only; it deploys nothing.
+
+The maintainer's deployment runs that image as one pod on a Kubernetes cluster, pinned by digest, with CPU and memory limits, a read-only root filesystem and egress restricted to the public internet. As of 2026-09-30 [memegen.rs](https://memegen.rs) is still served by an older Cloudflare deployment, with its own edge cache and rate limiter, until its DNS is pointed at the cluster.
 
 ## Scope
 
