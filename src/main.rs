@@ -14,7 +14,7 @@ use axum::response::{Html, IntoResponse, Response};
 use axum::routing::get;
 use maud::{DOCTYPE, Markup, PreEscaped, html};
 use serde::{Deserialize, Serialize};
-use tokio::sync::{AcquireError, Semaphore};
+use tokio::sync::Semaphore;
 use utoipa::{OpenApi, ToSchema};
 use utoipa_scalar::{Scalar, Servable};
 
@@ -796,13 +796,12 @@ async fn off_worker<T: Send + 'static>(
     gif: bool,
     job: impl FnOnce() -> Result<T, RenderError> + Send + 'static,
 ) -> Result<T, AppError> {
-    let closed = |e: AcquireError| AppError::Internal(e.to_string());
     let lane = if gif {
-        Some(GIF_PERMITS.acquire().await.map_err(closed)?)
+        Some(GIF_PERMITS.acquire().await.expect("never closed"))
     } else {
         None
     };
-    let permit = RENDER_PERMITS.acquire().await.map_err(closed)?;
+    let permit = RENDER_PERMITS.acquire().await.expect("never closed");
     let out = tokio::task::spawn_blocking(move || {
         // Held by the job, not the request: a disconnected client drops this
         // future, but the render it started keeps its core until it returns.
