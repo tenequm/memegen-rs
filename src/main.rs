@@ -3,7 +3,7 @@ mod template;
 
 use std::collections::HashMap;
 use std::path::PathBuf;
-use std::sync::{Arc, Mutex, OnceLock};
+use std::sync::{Arc, LazyLock, Mutex, OnceLock};
 
 use axum::Json;
 use axum::Router;
@@ -14,6 +14,7 @@ use axum::response::{Html, IntoResponse, Response};
 use axum::routing::get;
 use maud::{DOCTYPE, Markup, PreEscaped, html};
 use serde::{Deserialize, Serialize};
+use tokio::sync::Semaphore;
 use utoipa::{OpenApi, ToSchema};
 use utoipa_scalar::Scalar;
 
@@ -198,20 +199,24 @@ async fn render_text(
     Path((id, text)): Path<(String, String)>,
     Query(q): Query<ImgQuery>,
 ) -> Result<Response, AppError> {
-    let (slug, ext) = split_ext(&text);
     let template = reg
         .get(&id)
+        .cloned()
         .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
-    let lines = decode(slug);
-    let spec = Spec {
-        lines: &lines,
-        ext,
-        size: q.size(),
-        style: q.style(),
-        layout: q.layout(),
-        color: q.color.as_deref(),
-    };
-    let (bytes, mime) = render::render(template, &spec).map_err(AppError::from)?;
+    let (bytes, mime) = off_worker(split_ext(&text).1 == "gif", move || {
+        let (slug, ext) = split_ext(&text);
+        let lines = decode(slug);
+        let spec = Spec {
+            lines: &lines,
+            ext,
+            size: q.size(),
+            style: q.style(),
+            layout: q.layout(),
+            color: q.color.as_deref(),
+        };
+        render::render(&template, &spec)
+    })
+    .await?;
     Ok(cached_bytes(bytes, mime))
 }
 
@@ -229,16 +234,20 @@ async fn render_blank(
     let (id, ext) = split_ext(&filename);
     let template = reg
         .get(id)
+        .cloned()
         .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
-    let spec = Spec {
-        lines: &[],
-        ext,
-        size: q.size(),
-        style: q.style(),
-        layout: q.layout(),
-        color: q.color.as_deref(),
-    };
-    let (bytes, mime) = render::render(template, &spec).map_err(AppError::from)?;
+    let (bytes, mime) = off_worker(ext == "gif", move || {
+        let spec = Spec {
+            lines: &[],
+            ext: split_ext(&filename).1,
+            size: q.size(),
+            style: q.style(),
+            layout: q.layout(),
+            color: q.color.as_deref(),
+        };
+        render::render(&template, &spec)
+    })
+    .await?;
     Ok(cached_bytes(bytes, mime))
 }
 
@@ -259,18 +268,21 @@ async fn render_custom(
         .background
         .clone()
         .ok_or_else(|| AppError::BadRequest("background URL is required".into()))?;
-    let (slug, ext) = split_ext(&text);
-    let lines = decode(slug);
     let bytes = fetch(&url).await?;
-    let spec = Spec {
-        lines: &lines,
-        ext,
-        size: q.size(),
-        style: "default",
-        layout: q.layout(),
-        color: q.color.as_deref(),
-    };
-    let (out, mime) = render::render_custom(&bytes, &spec).map_err(AppError::from)?;
+    let (out, mime) = off_worker(split_ext(&text).1 == "gif", move || {
+        let (slug, ext) = split_ext(&text);
+        let lines = decode(slug);
+        let spec = Spec {
+            lines: &lines,
+            ext,
+            size: q.size(),
+            style: "default",
+            layout: q.layout(),
+            color: q.color.as_deref(),
+        };
+        render::render_custom(&bytes, &spec)
+    })
+    .await?;
     Ok(cached_bytes(out, mime))
 }
 
@@ -297,13 +309,20 @@ async fn thumb(State(reg): State<AppState>, Path(id): Path<String>) -> Result<Re
         .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
     let path = template
         .default_background
-        .as_ref()
+        .clone()
         .ok_or_else(|| AppError::NotFound(format!("no background for {id}")))?;
-    let src = tokio::fs::read(path)
-        .await
-        .map_err(|e| AppError::Internal(e.to_string()))?;
-    let (bytes, mime) = render::thumbnail(&src, THUMB_PX).map_err(AppError::from)?;
-    thumb_cache().lock().unwrap().insert(id, bytes.clone());
+    // Read and cache inside the job: a request waiting for a permit holds no
+    // image bytes, and a thumbnail whose client left is still kept.
+    let (bytes, mime) = off_worker(false, move || {
+        if let Some(bytes) = thumb_cache().lock().unwrap().get(&id).cloned() {
+            return Ok((bytes, "image/jpeg"));
+        }
+        let src = std::fs::read(&path).map_err(|e| RenderError::Decode(e.to_string()))?;
+        let out = render::thumbnail(&src, THUMB_PX)?;
+        thumb_cache().lock().unwrap().insert(id, out.0.clone());
+        Ok(out)
+    })
+    .await?;
     Ok(cached_bytes(bytes, mime))
 }
 
@@ -809,6 +828,42 @@ fn cached_bytes(bytes: Vec<u8>, mime: &'static str) -> Response {
         .into_response()
 }
 
+fn cores() -> usize {
+    std::thread::available_parallelism().map_or(1, usize::from)
+}
+
+/// Renders are pure CPU (90-200 ms static, seconds for a GIF), so they run on
+/// the blocking pool to keep the async workers free for everything else. One
+/// permit per core: each in-flight render holds tens of MB, and the blocking
+/// pool alone would let hundreds run at once.
+static RENDER_PERMITS: LazyLock<Semaphore> = LazyLock::new(|| Semaphore::new(cores()));
+
+/// GIF output needs one of these as well: even a single frame takes about a
+/// second to encode. On 2+ cores there is one fewer than render permits, so
+/// GIFs alone can never hold every render permit.
+static GIF_PERMITS: LazyLock<Semaphore> = LazyLock::new(|| Semaphore::new((cores() - 1).max(1)));
+
+async fn off_worker<T: Send + 'static>(
+    gif: bool,
+    job: impl FnOnce() -> Result<T, RenderError> + Send + 'static,
+) -> Result<T, AppError> {
+    let lane = if gif {
+        Some(GIF_PERMITS.acquire().await.expect("never closed"))
+    } else {
+        None
+    };
+    let permit = RENDER_PERMITS.acquire().await.expect("never closed");
+    let out = tokio::task::spawn_blocking(move || {
+        // Held by the job, not the request: a disconnected client drops this
+        // future, but the render it started keeps its core until it returns.
+        let _permits = (lane, permit);
+        job()
+    })
+    .await
+    .map_err(|_| AppError::Internal("render failed".into()))?;
+    Ok(out?)
+}
+
 async fn fetch(url: &str) -> Result<Vec<u8>, AppError> {
     let client = reqwest::Client::builder()
         .timeout(std::time::Duration::from_secs(10))
@@ -880,3 +935,26 @@ const SKILL_MD: &str = include_str!("../assets/SKILL.md");
     components(schemas(TemplateDto, ExampleDto))
 )]
 struct ApiDoc;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // One test on purpose: it reads process-global semaphores, which a second
+    // off_worker test running in parallel would race.
+    #[tokio::test]
+    async fn job_holds_its_permits_and_a_panic_frees_them() {
+        let free = || {
+            (
+                RENDER_PERMITS.available_permits(),
+                GIF_PERMITS.available_permits(),
+            )
+        };
+        let idle = free();
+        let held = off_worker(true, move || Ok(free())).await;
+        assert!(matches!(held, Ok(held) if held == (idle.0 - 1, idle.1 - 1)));
+        let out = off_worker(true, || -> Result<(), RenderError> { panic!("boom") }).await;
+        assert!(matches!(out, Err(AppError::Internal(_))));
+        assert_eq!(free(), idle);
+    }
+}
