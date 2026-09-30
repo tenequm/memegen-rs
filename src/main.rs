@@ -1,3 +1,4 @@
+mod cache;
 mod render;
 mod template;
 
@@ -37,10 +38,30 @@ async fn main() -> anyhow::Result<()> {
     let dir = std::env::var("MEMEGEN_TEMPLATES_DIR").unwrap_or_else(|_| "templates".into());
     let registry = Arc::new(Registry::load(&PathBuf::from(&dir))?);
     println!("loaded {} templates from {dir}", registry.len());
+    let app = app(registry, cache::Cache::from_env().await?);
+
+    let port = std::env::var("PORT").unwrap_or_else(|_| "5005".into());
+    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{port}")).await?;
+    println!("listening on http://0.0.0.0:{port}");
+    axum::serve(listener, app)
+        .with_graceful_shutdown(shutdown_signal())
+        .await?;
+    Ok(())
+}
+
+fn app(registry: AppState, cache: Option<cache::Cache>) -> Router {
+    // Only these two are pure functions of the URL. `/images/custom` renders a
+    // remote background that can change under the same URL, so it stays out.
+    let mut images = Router::new()
+        .route("/images/{id}/{*text}", get(render_text))
+        .route("/images/{filename}", get(render_blank));
+    if let Some(cache) = cache {
+        images = images.route_layer(axum::middleware::from_fn_with_state(cache, cache::serve));
+    }
 
     // Rate limiting is enforced at the edge (Cloudflare Worker, see worker.ts),
     // not here - the Worker rejects render abuse before it reaches this origin.
-    let app = Router::new()
+    Router::new()
         .route("/", get(gallery))
         .route("/edit/{id}", get(builder))
         .route("/thumbs/{id}", get(thumb))
@@ -55,21 +76,12 @@ async fn main() -> anyhow::Result<()> {
         .route("/templates", get(list_templates))
         .route("/templates/{id}", get(get_template))
         .route("/images/custom/{*text}", get(render_custom))
-        .route("/images/{id}/{*text}", get(render_text))
-        .route("/images/{filename}", get(render_blank))
+        .merge(images)
         // Scalar API docs (rendered from the OpenAPI spec).
         .route("/docs", get(docs))
         // /SKILL.md, /llms.txt, and any-case variants serve the embedded doc.
         .fallback(docs_fallback)
-        .with_state(registry);
-
-    let port = std::env::var("PORT").unwrap_or_else(|_| "5005".into());
-    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{port}")).await?;
-    println!("listening on http://0.0.0.0:{port}");
-    axum::serve(listener, app)
-        .with_graceful_shutdown(shutdown_signal())
-        .await?;
-    Ok(())
+        .with_state(registry)
 }
 
 /// Exit promptly on SIGTERM (and Ctrl-C) so a Cloudflare Containers rollout

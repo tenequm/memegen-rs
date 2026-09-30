@@ -6,6 +6,7 @@ Stateless meme-generator HTTP API + web UI in **pure Rust**. Every meme is fully
 
 - `src/template.rs` - model, in-memory registry (read once at startup), URL codec, styling.
 - `src/render.rs` - rendering pipeline (autosize, wrap, outline, composite, GIF encode).
+- `src/cache.rs` - optional render cache: a middleware on the two template image routes, backed by foyer. Off unless `MEMEGEN_CACHE_DIR` is set.
 - `src/main.rs` - axum router, handlers, OpenAPI, error mapping, web UI (maud, compile-time).
 - `ops/docker/` - `Containerfile` + `Containerfile.dockerignore` for the container image build.
 - `templates/<id>/` - 700 template folders, each `config.yml` (upstream memegen schema) + `default.{png,jpg,webp,gif}`. `templates/popularity.json` ranks them. **Committed to the repo and baked into the image.**
@@ -13,7 +14,7 @@ Stateless meme-generator HTTP API + web UI in **pure Rust**. Every meme is fully
 
 ## Stack
 
-axum (HTTP) + utoipa/Scalar (`/docs`, `/openapi.json`) + maud (compile-time UI) + image/imageproc/ab_glyph (render) + serde-saphyr (pure-Rust YAML) + fast_image_resize (SIMD thumbnails) + reqwest/rustls (`?background=` fetch). Fonts embedded via `include_bytes!`. Edition 2024, Rust 1.95 (pinned in `rust-toolchain.toml`).
+axum (HTTP) + utoipa/Scalar (`/docs`, `/openapi.json`) + maud (compile-time UI) + image/imageproc/ab_glyph (render) + serde-saphyr (pure-Rust YAML) + fast_image_resize (SIMD thumbnails) + reqwest/rustls (`?background=` fetch) + foyer (render cache). Fonts embedded via `include_bytes!`. Edition 2024, Rust 1.95 (pinned in `rust-toolchain.toml`).
 
 ## Dev loop
 
@@ -73,6 +74,27 @@ One pod on a Kubernetes cluster runs the Rust server (binds `0.0.0.0:5005`) from
 ## URL scheme
 
 `/images/{id}/{line1}/{line2}.{png|jpg|webp|gif}` - lines split on `/`, space = `_`, literal underscore = `__`, blank line = `_`. Query params: `style`, `layout=top`, `width`/`height` (blurred letterbox), `color`. Custom background: `/images/custom/{lines}.png?background=<url>`.
+
+## Render cache
+
+Off by default; with `MEMEGEN_CACHE_DIR` unset the server behaves exactly as without it. Set, it caches 200s of `GET /images/{id}/{*text}` and `GET /images/{filename}`, keyed by the request path plus raw query string, and adds `x-memegen-cache: hit|miss`. `/images/custom/...` and non-GETs never reach the cache; a non-200 is answered as the handler gave it and never stored. Identical concurrent requests render once and share the answer, whatever its status (foyer's `get_or_fetch`).
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `MEMEGEN_CACHE_DIR` | _(unset)_ | Cache directory; the only path the server writes to |
+| `MEMEGEN_CACHE_MAX_BYTES` | `10737418240` (10 GiB) | Disk bound, at least 1 MiB |
+| `MEMEGEN_CACHE_MEMORY_BYTES` | `16777216` (16 MiB) | Memory tier; `0` keeps only the newest render in memory |
+
+- **The disk bound is structural.** At startup foyer creates at most `max_bytes / block` sparse files of `block = min(64 MiB, max_bytes / 8)` bytes each, holds every one open, and only ever writes inside them, so the files sum to at most `MEMEGEN_CACHE_MAX_BYTES` (160 files of 64 MiB at the default). Nothing else is written; the only overhead on top is the filesystem's own metadata. Eviction reclaims the oldest block whole, one block ahead of the writer.
+- **Startup does not check free space.** The files are sparse, so a volume smaller than the bound starts fine and fails its writes once it fills. foyer reports those through `tracing`, which nothing here subscribes to, so the only symptom is renders that stay misses. Keep `MEMEGEN_CACHE_MAX_BYTES` below the volume's size with some headroom for filesystem metadata - an `emptyDir` that outgrows its `sizeLimit` gets the pod evicted.
+- **The directory must be on a real disk and writable by the server alone.** On tmpfs (`emptyDir.medium: Memory`, many `/tmp`) every cached byte is memory charged to the container. Block files are opened by name and trusted on their checksum, so a directory someone else can write to can redirect the writes or plant responses.
+- **A render larger than one block, or than foyer's 16 MiB write buffer, is served but never reaches disk.** Disk writes are best-effort too: under a burst foyer drops what does not fit its write buffer, and that render is simply a miss next time.
+- **The cache is empty on every process start** (`RecoverMode::None`), because a render also depends on the templates and `MEMEGEN_WATERMARK`, which are not in the key. Nothing invalidates an entry while the process runs, so a template edited in place keeps serving its old render until restart. A directory with old content is fine, but lowering `MEMEGEN_CACHE_MAX_BYTES` against a reused directory leaves the old, larger set of block files behind - wipe it. A Kubernetes `emptyDir` never hits this.
+- **Memory.** The memory tier holds at most `MEMEGEN_CACHE_MEMORY_BYTES` of renders (or one render, if that is larger), counting 1 KiB of bookkeeping per entry. On top, foyer keeps two 16 MiB write buffers (touched only as far as a batch fills them), up to 16 MiB of renders queued for disk plus up to 32 MiB in the batches being written, a read buffer and a decoded copy per in-flight disk hit, and an index of roughly 50-90 bytes per render on disk. Entries are page-aligned on disk, so the index is a few MiB for ordinary renders but about 2% of `MEMEGEN_CACHE_MAX_BYTES` if every render is tiny (some 200 MiB at the 10 GiB default; measured 49 MiB for 535k one-pixel renders) - on a small pod, size the bound with that in mind. A memory hit is only 0.2-1 ms faster than a disk hit, so the tier is not worth growing.
+- **Set `MALLOC_MMAP_THRESHOLD_=131072` wherever the cache is on (Linux/glibc).** Measured in the container over 1000 mixed renders: RSS settles about 30 MiB above the uncached server with it, about 100 MiB above without it - glibc's default heap holds on to the freed render-sized buffers. It costs nothing measurable per render.
+- An unusable directory or an unparsable bound fails startup rather than silently running uncached.
+- A miss renders in a task of its own (foyer spawns the fetch), so it finishes and is stored even if the client disconnects - and a request that has been accepted always renders, client or no client.
+- The memory tier hands renders to disk when it evicts them, so a fresh render shows up in the directory only once newer ones push it out.
 
 ## Code style
 

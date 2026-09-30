@@ -33,6 +33,12 @@ fast_image_resize = "6"
 ab_glyph = "0.2.32"
 reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
 anyhow = "1.0"
+# Hybrid cache whose disk tier is a fixed set of fixed-size block files, so the
+# byte bound is structural; also gives single-flight fetch and checksums.
+foyer = "0.22.6"
+
+[dev-dependencies]
+tempfile = "3"
 
 [profile.release]
 lto = "thin"
