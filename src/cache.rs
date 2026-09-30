@@ -27,6 +27,11 @@ const MIN_MAX_BYTES: usize = 1 << 20;
 const MIN_BLOCKS: usize = 8;
 const MAX_BLOCK_BYTES: usize = 64 << 20;
 
+/// What an entry holds in memory beyond its key and encoded size: the record,
+/// the header map's tables, allocator slack. Left out, a flood of tiny renders
+/// would keep several times `MEMEGEN_CACHE_MEMORY_BYTES`.
+const ENTRY_OVERHEAD: usize = 1 << 10;
+
 const X_CACHE: HeaderName = HeaderName::from_static("x-memegen-cache");
 
 #[derive(Debug, PartialEq)]
@@ -90,7 +95,9 @@ impl Cache {
             // One shard makes the memory bound exact: a shard may keep a single
             // entry larger than its share, so eight shards could hold eight.
             .with_shards(1)
-            .with_weighter(|key: &String, value: &Rendered| key.len() + value.estimated_size())
+            .with_weighter(|key: &String, value: &Rendered| {
+                key.len() + value.estimated_size() + ENTRY_OVERHEAD
+            })
             .storage()
             .with_engine_config(BlockEngineConfig::new(device).with_block_size(block_bytes))
             .with_recover_mode(RecoverMode::None)
