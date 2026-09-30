@@ -57,6 +57,7 @@ Environment variables:
 | `PORT` | `5005` | Listen port |
 | `MEMEGEN_TEMPLATES_DIR` | `templates` | Path to the template corpus |
 | `MEMEGEN_WATERMARK` | _(unset)_ | Brand label drawn bottom-left on rendered images; unset means no watermark |
+| `MEMEGEN_HEAD_HTML` | _(unset)_ | HTML appended verbatim to the `<head>` of every page (gallery, builder, `/docs`), e.g. an analytics tag. Trusted operator config, not escaped; unset or empty leaves pages unchanged |
 
 Render a meme:
 

@@ -22,7 +22,7 @@ serde_json = "1.0.150"
 serde-saphyr = { version = "0.0.27", default-features = false, features = ["deserialize"] }
 utoipa = { version = "5.5.0", features = ["axum_extras"] }
 utoipa-axum = "0.2.0"
-utoipa-scalar = { version = "0.3.0", features = ["axum"] }
+utoipa-scalar = "0.3.0"
 maud = { version = "0.27.0", features = ["axum"] }
 image = "0.25.10"
 imageproc = { version = "0.27.0", default-features = false, features = ["text"] }

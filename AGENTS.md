@@ -24,6 +24,8 @@ cargo fmt && cargo clippy && cargo test   # validate; run before every commit
 
 Lints are strict (`unsafe_code = forbid`, clippy `all = deny`), but CI only builds the image - nothing there runs fmt, clippy or tests, so run them yourself. `cargo clippy` does **not** emit a binary; rebuild with `cargo run`/`cargo build` before smoke-testing or you'll hit a stale executable.
 
+Environment variables, each read once: `PORT` (default `5005`), `MEMEGEN_TEMPLATES_DIR` (default `templates`), `MEMEGEN_WATERMARK` (brand label on renders; unset = none), `MEMEGEN_HEAD_HTML` (HTML appended verbatim to the `<head>` of every page - gallery, builder, `/docs`; trusted operator config, never escaped; unset or empty = pages unchanged).
+
 ### Smoke test (against a running `:5005`)
 
 ```sh
@@ -59,6 +61,7 @@ One pod on a Kubernetes cluster runs the Rust server (binds `0.0.0.0:5005`) from
 - There is no edge cache and no rate limiter in front of the pod, and none in the app. The pod's CPU and memory limits are the flood backstop.
 - The server fetches any URL given as `?background=` with no filtering of its own. On the cluster a NetworkPolicy limits that fetch to the public internet.
 - Images and assets send `Cache-Control: max-age=86400` and `CDN-Cache-Control: immutable` (one year); HTML and JSON send neither. Nothing in front of the pod reads the CDN header.
+- Analytics: the tag is whatever `MEMEGEN_HEAD_HTML` holds, appended by the server to each page `<head>`. Nothing outside the pod injects it.
 
 **Until the DNS cutover** (as of 2026-09-30) `memegen.rs` itself is still served by the previously deployed Cloudflare Worker and container, last deployed from `625ea96`. Nothing in this repo updates them any more; their source is `git show 625ea96:ops/worker/worker.ts`. Until its DNS is pointed at the cluster, `memegen.rs` keeps the Worker's edge cache, render rate limiter and analytics injection, and 403s there come from Cloudflare zone-level bot protection, not app code.
 
