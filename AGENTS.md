@@ -6,6 +6,7 @@ Stateless meme-generator HTTP API + web UI in **pure Rust**. Every meme is fully
 
 - `src/template.rs` - model, in-memory registry (read once at startup), URL codec, styling.
 - `src/render.rs` - rendering pipeline (autosize, wrap, outline, composite, GIF encode).
+- `src/cache.rs` - optional render cache: a middleware on the two template image routes, backed by foyer. Off unless `MEMEGEN_CACHE_DIR` is set.
 - `src/main.rs` - axum router, handlers, OpenAPI, error mapping, web UI (maud, compile-time).
 - `ops/worker/` - Cloudflare Worker edge layer (`worker.ts`: cache + rate limit + analytics injection) and its toolchain (`wrangler.jsonc`, `package.json`, `tsconfig.json`, generated `worker-configuration.d.ts`). Not Rust.
 - `ops/docker/` - `Containerfile` + `Containerfile.dockerignore` for the container image build.
@@ -14,7 +15,7 @@ Stateless meme-generator HTTP API + web UI in **pure Rust**. Every meme is fully
 
 ## Stack
 
-axum (HTTP) + utoipa/Scalar (`/docs`, `/openapi.json`) + maud (compile-time UI) + image/imageproc/ab_glyph (render) + serde-saphyr (pure-Rust YAML) + fast_image_resize (SIMD thumbnails) + reqwest/rustls (`?background=` fetch). Fonts embedded via `include_bytes!`. Edition 2024, Rust 1.95 (pinned in `rust-toolchain.toml`).
+axum (HTTP) + utoipa/Scalar (`/docs`, `/openapi.json`) + maud (compile-time UI) + image/imageproc/ab_glyph (render) + serde-saphyr (pure-Rust YAML) + fast_image_resize (SIMD thumbnails) + reqwest/rustls (`?background=` fetch) + foyer (render cache). Fonts embedded via `include_bytes!`. Edition 2024, Rust 1.95 (pinned in `rust-toolchain.toml`).
 
 ## Dev loop
 
@@ -68,10 +69,28 @@ Worker on custom domain `memegen.rs` -> single-instance **Container** running th
 
 `/images/{id}/{line1}/{line2}.{png|jpg|webp|gif}` - lines split on `/`, space = `_`, literal underscore = `__`, blank line = `_`. Query params: `style`, `layout=top`, `width`/`height` (blurred letterbox), `color`. Custom background: `/images/custom/{lines}.png?background=<url>`.
 
+## Render cache
+
+Off by default; with `MEMEGEN_CACHE_DIR` unset the server behaves exactly as without it. Set, it caches 200s of `GET /images/{id}/{*text}` and `GET /images/{filename}`, keyed by the request path plus raw query string, and adds `x-memegen-cache: hit|miss`. `/images/custom/...`, non-200s and non-GETs pass straight through. Identical concurrent misses render once (foyer's `get_or_fetch`).
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `MEMEGEN_CACHE_DIR` | _(unset)_ | Cache directory; the only path the server writes to |
+| `MEMEGEN_CACHE_MAX_BYTES` | `10737418240` (10 GiB) | Disk bound, at least 1 MiB |
+| `MEMEGEN_CACHE_MEMORY_BYTES` | `16777216` (16 MiB) | Memory tier; `0` keeps only the newest render in memory |
+
+- **The disk bound is structural.** At startup foyer creates `max_bytes / block` sparse files of `block = min(64 MiB, max_bytes / 8)` bytes each and only ever writes inside them, so the files sum to at most `MEMEGEN_CACHE_MAX_BYTES` (160 files of 64 MiB at the default). Nothing else is written; the only overhead on top is the directory's own entries. Eviction reclaims the oldest block whole, one block ahead of the writer.
+- **A render larger than one block, or than foyer's 16 MiB write buffer, is served but never reaches disk.** Disk writes are best-effort too: under a burst foyer drops what does not fit its write buffer, and that render is simply a miss next time.
+- **The cache is empty on every process start** (`RecoverMode::None`), because a render also depends on the templates and `MEMEGEN_WATERMARK`, which are not in the key. A directory with old content is fine, but lowering `MEMEGEN_CACHE_MAX_BYTES` against a reused directory leaves the old, larger set of block files behind - wipe it. A Kubernetes `emptyDir` never hits this.
+- **Memory.** The memory tier holds at most `MEMEGEN_CACHE_MEMORY_BYTES` of renders (or one render, if that is larger). On top, foyer keeps two 16 MiB write buffers (touched only as far as a batch fills them), up to 16 MiB of renders queued for disk, and a read buffer per in-flight disk hit. A memory hit is only 0.2-1 ms faster than a disk hit, so the tier is not worth growing.
+- **Set `MALLOC_MMAP_THRESHOLD_=131072` wherever the cache is on (Linux/glibc).** Measured in the container over 1000 mixed renders: RSS settles about 30 MiB above the uncached server with it, about 100 MiB above without it - glibc's default heap holds on to the freed render-sized buffers. It costs nothing measurable per render.
+- An unusable directory or an unparsable bound fails startup rather than silently running uncached.
+- The memory tier hands renders to disk when it evicts them, so a fresh render shows up in the directory only once newer ones push it out.
+
 ## Code style
 
 - **Minimal comments.** Comment *why*, not *what*; the code is the documentation. Don't narrate obvious lines. (The existing config files - `worker.ts`, `wrangler.jsonc` - carry dense rationale comments on purpose because the deploy behavior is non-obvious; match that bar only where the reasoning is genuinely load-bearing.)
-- **Code cleanliness / minimalism.** Every new file must justify its existence - if it can be inlined, inline it. Split only for a functional reason (different lifecycle/runtime), never for "organization". No reference/template/example files. Start from the fewest files that work. This repo is deliberately ~1800 LOC across 3 Rust files; keep it that way.
+- **Code cleanliness / minimalism.** Every new file must justify its existence - if it can be inlined, inline it. Split only for a functional reason (different lifecycle/runtime), never for "organization". No reference/template/example files. Start from the fewest files that work. This repo is deliberately ~2000 LOC (tests aside) across 4 Rust files; keep it that way.
 - Read code before making claims about it; never guess a flag - check `--help`.
 - Don't edit/implement until asked; when intent is ambiguous, research and recommend rather than act.
 - ASCII-only symbols in docs; single `-` hyphens, never em/en dashes.

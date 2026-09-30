@@ -8,7 +8,7 @@
 
 A minimal, stateless meme generator HTTP API in pure Rust.
 
-Every meme is described entirely by its URL - there is no database, no cache server, and nothing to log in to. Backgrounds and caption geometry come from a directory of template folders, and each request renders an image on demand. It is a deliberately small reimplementation of [jacebrowning/memegen](https://github.com/jacebrowning/memegen): three endpoint groups, embedded fonts, no SaaS plumbing - around 1,000 lines across three source files.
+Every meme is described entirely by its URL - there is no database, no cache server, and nothing to log in to. Backgrounds and caption geometry come from a directory of template folders, and each request renders an image on demand. It is a deliberately small reimplementation of [jacebrowning/memegen](https://github.com/jacebrowning/memegen): three endpoint groups, embedded fonts, no SaaS plumbing - around 1,000 lines across four source files.
 
 ## Table of Contents
 
@@ -57,6 +57,11 @@ Environment variables:
 | `PORT` | `5005` | Listen port |
 | `MEMEGEN_TEMPLATES_DIR` | `templates` | Path to the template corpus |
 | `MEMEGEN_WATERMARK` | _(unset)_ | Brand label drawn bottom-left on rendered images; unset means no watermark |
+| `MEMEGEN_CACHE_DIR` | _(unset)_ | Directory for the render cache; unset means no cache |
+| `MEMEGEN_CACHE_MAX_BYTES` | `10737418240` | Most disk the cache directory may use (10 GiB); the oldest renders are evicted when it is full |
+| `MEMEGEN_CACHE_MEMORY_BYTES` | `16777216` | Most memory the cache keeps hot renders in (16 MiB) |
+
+With `MEMEGEN_CACHE_DIR` set, a successful template render (`/images/{id}.{ext}`, `/images/{id}/{lines}.{ext}`) is stored under its exact path and query string and served from there afterwards; identical concurrent requests render once. Those responses carry `x-memegen-cache: hit` or `miss`. `/images/custom/...` and error responses are never cached. The cache starts empty on every process start, so it belongs on disposable storage (a Kubernetes `emptyDir`, a tmp directory).
 
 Render a meme:
 
@@ -90,9 +95,10 @@ This repository ships a corpus of ~780 templates under `templates/`, read once a
 - **[axum](https://crates.io/crates/axum)** for HTTP routing and **[utoipa](https://crates.io/crates/utoipa)** for the OpenAPI spec, rendered as interactive docs by **[Scalar](https://github.com/scalar/scalar)** at `/docs`. **[maud](https://crates.io/crates/maud)** renders the web UI (a searchable template gallery and a meme builder) at compile time, and **[tower_governor](https://crates.io/crates/tower-governor)** caps meme rendering at a global 5 requests/second.
 - **[image](https://crates.io/crates/image)** + **[imageproc](https://crates.io/crates/imageproc)** + **[ab_glyph](https://crates.io/crates/ab_glyph)** for rendering. A caption is autosized to its box, word-wrapped, drawn with a white fill and a black outline, and composited onto the background.
 - **[serde-saphyr](https://crates.io/crates/serde-saphyr)** (pure-Rust YAML) parses each `config.yml`.
+- **[foyer](https://crates.io/crates/foyer)** backs the optional render cache: a small memory tier over a disk tier of preallocated block files, so the directory cannot outgrow `MEMEGEN_CACHE_MAX_BYTES`.
 - Fonts (**[Anton](https://fonts.google.com/specimen/Anton)** for the Impact look, **[Pangolin](https://fonts.google.com/specimen/Pangolin)** for handwriting, **[Manrope](https://fonts.google.com/specimen/Manrope)** for the watermark; all SIL OFL 1.1) are embedded in the binary via `include_bytes!` - no font directory, and it works on a fonts-less container. Anton and Pangolin cover Latin + full Cyrillic/Ukrainian; the Anton build is the Cyrillic-extended v2.300 fork from [Tural/AntonFont](https://github.com/Tural/AntonFont) (pending upstream as [google/fonts#7552](https://github.com/google/fonts/issues/7552)).
 
-Three source files: `template.rs` (model, registry, URL codec, styling), `render.rs` (the rendering pipeline), `main.rs` (router, handlers, OpenAPI, error mapping).
+Four source files: `template.rs` (model, registry, URL codec, styling), `render.rs` (the rendering pipeline), `main.rs` (router, handlers, OpenAPI, error mapping), `cache.rs` (the optional render cache, a middleware on the template image routes).
 
 ## Scope
 
