@@ -29,7 +29,7 @@ type AppState = Arc<Registry>;
 const SITE: &str = "https://memegen.rs";
 
 /// Homepage share card: a meme rendered by the app itself, padded to the
-/// universal 1200x630 social size as JPEG (edge-cached like any render).
+/// universal 1200x630 social size as JPEG (an ordinary render URL).
 const BRAND_OG: &str =
     "https://memegen.rs/images/buzz/memes/memes_everywhere.jpg?width=1200&height=630";
 
@@ -59,8 +59,8 @@ fn app(registry: AppState, cache: Option<cache::Cache>) -> Router {
         images = images.route_layer(axum::middleware::from_fn_with_state(cache, cache::serve));
     }
 
-    // Rate limiting is enforced at the edge (Cloudflare Worker, see worker.ts),
-    // not here - the Worker rejects render abuse before it reaches this origin.
+    // No rate limiter: `off_worker` caps how many renders run at once but
+    // turns nothing away.
     Router::new()
         .route("/", get(gallery))
         .route("/edit/{id}", get(builder))
@@ -84,9 +84,9 @@ fn app(registry: AppState, cache: Option<cache::Cache>) -> Router {
         .with_state(registry)
 }
 
-/// Exit promptly on SIGTERM (and Ctrl-C) so a Cloudflare Containers rollout
-/// replaces this instance immediately instead of waiting out the graceful
-/// shutdown window.
+/// Shut down on SIGTERM (and Ctrl-C). The server is PID 1 in its container,
+/// where a signal without a handler is ignored, so without this a Kubernetes
+/// rollout would wait out the termination grace period and then SIGKILL it.
 async fn shutdown_signal() {
     let ctrl_c = async {
         tokio::signal::ctrl_c().await.ok();
@@ -298,13 +298,13 @@ async fn render_custom(
     Ok(cached_bytes(out, mime))
 }
 
-// ---------- Static-ish handlers (unthrottled) ----------
+// ---------- Static-ish handlers ----------
 
 /// Gallery thumbnails are square JPEG cover-crops at 2x the ~170px card. We
 /// downscale the (often 1440px / ~350KB) corpus background once, then keep it:
 /// the source files never change at runtime, so a per-id in-process cache means
-/// each thumb is decoded+resized once per cold start (the edge caches the rest).
-/// This is `/thumbs/`, not `/images/`, so it skips the render rate limiter.
+/// each thumb is decoded+resized once per process start. This is `/thumbs/`,
+/// not `/images/`, so the render cache in `cache.rs` never sees it.
 const THUMB_PX: u32 = 340;
 
 fn thumb_cache() -> &'static Mutex<HashMap<String, Vec<u8>>> {
@@ -824,8 +824,8 @@ fn split_ext(s: &str) -> (&str, &str) {
 }
 
 /// Split cache lifetimes: browsers get a day (so template fixes reach users),
-/// while Cloudflare's edge keeps the render until the next deploy (Workers
-/// Caching keys on the Worker version, so every deploy busts the edge copy).
+/// a CDN a year. memegen.rs has no CDN to read `cdn-cache-control`; it stays
+/// because it is harmless and a CDN placed in front later would honor it.
 const BROWSER_CACHE: (header::HeaderName, &str) = (header::CACHE_CONTROL, "public, max-age=86400");
 const EDGE_CACHE: (header::HeaderName, &str) = (
     header::HeaderName::from_static("cdn-cache-control"),
@@ -866,8 +866,10 @@ async fn off_worker<T: Send + 'static>(
     };
     let permit = RENDER_PERMITS.acquire().await.expect("never closed");
     let out = tokio::task::spawn_blocking(move || {
-        // Held by the job, not the request: a disconnected client drops this
-        // future, but the render it started keeps its core until it returns.
+        // Held by the job, not the request: a render that has started keeps
+        // its core even if this future is dropped. A client disconnect drops
+        // it except behind the render cache, whose fetch task owns it - there
+        // a queued render keeps its place too.
         let _permits = (lane, permit);
         job()
     })

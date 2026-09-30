@@ -8,7 +8,7 @@
 
 A minimal, stateless meme generator HTTP API in pure Rust.
 
-Every meme is described entirely by its URL - there is no database, no cache server, and nothing to log in to. Backgrounds and caption geometry come from a directory of template folders, and each request renders an image on demand. It is a deliberately small reimplementation of [jacebrowning/memegen](https://github.com/jacebrowning/memegen): three endpoint groups, embedded fonts, no SaaS plumbing - around 2,000 lines across three source files.
+Every meme is described entirely by its URL - there is no database, no cache server, and nothing to log in to. Backgrounds and caption geometry come from a directory of template folders, and images are rendered on demand, with an optional local cache for repeated template renders. It is a deliberately small reimplementation of [jacebrowning/memegen](https://github.com/jacebrowning/memegen): three endpoint groups, embedded fonts, no SaaS plumbing - around 2,700 lines, tests included, across four source files.
 
 ## Table of Contents
 
@@ -103,11 +103,11 @@ Four source files: `template.rs` (model, registry, URL codec, styling), `render.
 
 ### Deployment
 
-The server has no rate limiter and no render cache: every `/images/` request renders on demand, so cap its CPU and memory (or put your own cache or limiter in front) before exposing it publicly. Image and asset responses carry `Cache-Control: public, max-age=86400` and `CDN-Cache-Control: public, max-age=31536000, immutable`, so a CDN that honors the latter keeps a render for a year - purge it when templates or rendering change. The server also fetches any URL passed as `?background=` with no filtering of its own, so restrict its outbound network to the public internet if it can reach anything private.
+The server has no rate limiter, and its render cache is off unless `MEMEGEN_CACHE_DIR` is set: without it every `/images/` request renders on demand, and with it every new URL and every `/images/custom/...` request still does. At most one render per CPU core runs at a time and the rest wait, none are refused, so cap its CPU and memory (or put your own limiter in front) before exposing it publicly. Image and asset responses carry `Cache-Control: public, max-age=86400` and `CDN-Cache-Control: public, max-age=31536000, immutable`, so a CDN that honors the latter keeps a render for a year - purge it when templates or rendering change. The server also fetches any URL passed as `?background=` with no filtering of its own, so restrict its outbound network to the public internet if it can reach anything private.
 
 `.github/workflows/image.yml` builds `ops/docker/Containerfile` on every push to `main` and pushes `ghcr.io/tenequm/memegen-rs:sha-<full commit SHA>` (`linux/amd64`, template corpus baked in). CI builds images only; it deploys nothing.
 
-The maintainer's deployment runs that image as one pod on a Kubernetes cluster, pinned by digest, with CPU and memory limits, a read-only root filesystem and egress restricted to the public internet. As of 2026-09-30 [memegen.rs](https://memegen.rs) is still served by an older Cloudflare deployment, with its own edge cache and rate limiter, until its DNS is pointed at the cluster.
+The maintainer's deployment runs that image as one pod on a Kubernetes cluster, pinned by digest, with CPU and memory limits, a read-only root filesystem and egress restricted to the public internet. Since 2026-09-30 that pod is what serves [memegen.rs](https://memegen.rs), with the render cache on an `emptyDir`; Cloudflare only hosts the DNS zone, so no CDN, edge cache or rate limiter sits in front of it.
 
 ## Scope
 

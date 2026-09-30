@@ -10,7 +10,7 @@ Stateless meme-generator HTTP API + web UI in **pure Rust**. Every meme is fully
 - `src/main.rs` - axum router, handlers, OpenAPI, error mapping, web UI (maud, compile-time).
 - `ops/docker/` - `Containerfile` + `Containerfile.dockerignore` for the container image build.
 - `templates/<id>/` - 700 template folders, each `config.yml` (upstream memegen schema) + `default.{png,jpg,webp,gif}`. `templates/popularity.json` ranks them. **Committed to the repo and baked into the image.**
-- `assets/` - embedded fonts (Anton, Pangolin; SIL OFL), favicons, OG image, `SKILL.md` (the ClawHub agent skill; `SKILL.md` at root is a symlink to it). `Anton-Regular.ttf` is the Cyrillic-extended v2.300 build from [Tural/AntonFont](https://github.com/Tural/AntonFont) (unmerged upstream as [google/fonts#7552](https://github.com/google/fonts/issues/7552)); both fonts cover Latin + full Cyrillic/Ukrainian.
+- `assets/` - embedded fonts (Anton, Pangolin, and Manrope for the watermark; SIL OFL), favicons, OG image, `SKILL.md` (the ClawHub agent skill; `SKILL.md` at root is a symlink to it). `Anton-Regular.ttf` is the Cyrillic-extended v2.300 build from [Tural/AntonFont](https://github.com/Tural/AntonFont) (unmerged upstream as [google/fonts#7552](https://github.com/google/fonts/issues/7552)); Anton and Pangolin cover Latin + full Cyrillic/Ukrainian.
 
 ## Stack
 
@@ -35,7 +35,7 @@ curl -sf 'http://localhost:5005/templates' | head                               
 curl -sf 'http://localhost:5005/' -o /dev/null && echo ok                                           # web UI / docs
 ```
 
-Prod smoke test: same paths against `https://memegen.rs`. Until the DNS cutover (see "Deploy architecture") that is still the old Cloudflare deployment - edge-cached, cold-starting after 10 minutes idle - so it does not show a cluster rollout.
+Prod smoke test: same paths against `https://memegen.rs`, which is the pod described under "Deploy architecture". Template image responses there carry `x-memegen-cache: hit|miss`.
 
 ## Releasing a new version
 
@@ -58,13 +58,14 @@ Release notes come from Conventional Commit messages via git-cliff (`.github/cli
 
 One pod on a Kubernetes cluster runs the Rust server (binds `0.0.0.0:5005`) from the pinned `ghcr.io/tenequm/memegen-rs` image. No manifests live in this repo.
 
-- Limits: 2 CPU, 512 MiB. The pod runs non-root with a read-only root filesystem.
-- There is no edge cache and no rate limiter in front of the pod, and none in the app. The pod's CPU and memory limits are the flood backstop.
+- Limits: 2 CPU, 1 GiB. The pod runs non-root with a read-only root filesystem; the cache volume is the only path it can write.
+- Render cache: on, with `MEMEGEN_CACHE_DIR=/cache` on an `emptyDir` and the default 10 GiB bound (see "Render cache"). The volume goes with the pod and the server reads nothing back from it at startup, so every rollout or restart starts empty.
+- Cloudflare hosts the DNS zone and nothing else: no Worker, no edge cache, no rate limiter and no bot protection in the request path, only the cluster's ingress. The app has no rate limiter either - it runs at most one render per core and queues the rest - so the pod's CPU and memory limits are the flood backstop.
 - The server fetches any URL given as `?background=` with no filtering of its own. On the cluster a NetworkPolicy limits that fetch to the public internet.
-- Images and assets send `Cache-Control: max-age=86400` and `CDN-Cache-Control: immutable` (one year); HTML and JSON send neither. Nothing in front of the pod reads the CDN header.
+- Images and assets send `Cache-Control: max-age=86400` and `CDN-Cache-Control: immutable` (one year). `/manifest.webmanifest` (a day) and `/SKILL.md` / `/llms.txt` (an hour) send `Cache-Control` only; HTML pages and JSON send neither. Nothing in front of the pod reads the CDN header.
 - Analytics: the tag is whatever `MEMEGEN_HEAD_HTML` holds, appended by the server to each page `<head>`. Nothing outside the pod injects it.
 
-**Until the DNS cutover** (as of 2026-09-30) `memegen.rs` itself is still served by the previously deployed Cloudflare Worker and container, last deployed from `625ea96`. Nothing in this repo updates them any more; their source is `git show 625ea96:ops/worker/worker.ts`. Until its DNS is pointed at the cluster, `memegen.rs` keeps the Worker's edge cache, render rate limiter and analytics injection, and 403s there come from Cloudflare zone-level bot protection, not app code.
+`memegen.rs` has been served by this pod since its DNS was pointed at the cluster on 2026-09-30; until then a Cloudflare Worker and container served it, and their code left this repo in #4.
 
 ## Gotchas
 
@@ -99,7 +100,7 @@ Off by default; with `MEMEGEN_CACHE_DIR` unset the server behaves exactly as wit
 ## Code style
 
 - **Minimal comments.** Comment *why*, not *what*; the code is the documentation. Don't narrate obvious lines. Write a dense rationale comment only where the reasoning is genuinely load-bearing.
-- **Code cleanliness / minimalism.** Every new file must justify its existence - if it can be inlined, inline it. Split only for a functional reason (different lifecycle/runtime), never for "organization". No reference/template/example files. Start from the fewest files that work. This repo is deliberately ~2000 LOC across 3 Rust files; keep it that way.
+- **Code cleanliness / minimalism.** Every new file must justify its existence - if it can be inlined, inline it. Split only for a functional reason (different lifecycle/runtime), never for "organization". No reference/template/example files. Start from the fewest files that work. This repo is deliberately ~2700 lines (tests included) across 4 Rust files; keep it that way.
 - Read code before making claims about it; never guess a flag - check `--help`.
 - Don't edit/implement until asked; when intent is ambiguous, research and recommend rather than act.
 - ASCII-only symbols in docs; single `-` hyphens, never em/en dashes.
