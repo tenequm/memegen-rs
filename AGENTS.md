@@ -25,7 +25,7 @@ cargo fmt && cargo clippy && cargo test   # validate; run before every commit
 
 Lints are strict (`unsafe_code = forbid`, clippy `all = deny`), but CI only builds the image - nothing there runs fmt, clippy or tests, so run them yourself. `cargo clippy` does **not** emit a binary; rebuild with `cargo run`/`cargo build` before smoke-testing or you'll hit a stale executable.
 
-Environment variables, each read once: `PORT` (default `5005`), `MEMEGEN_TEMPLATES_DIR` (default `templates`), `MEMEGEN_WATERMARK` (brand label on renders; unset = none), `MEMEGEN_HEAD_HTML` (HTML appended verbatim to the `<head>` of every page - gallery, builder, `/docs`; trusted operator config, never escaped; unset or empty = pages unchanged).
+Environment variables, each read once: `PORT` (default `5005`), `MEMEGEN_TEMPLATES_DIR` (default `templates`), `MEMEGEN_WATERMARK` (brand label on renders; unset = none), `MEMEGEN_HEAD_HTML` (HTML appended verbatim to the `<head>` of every page - gallery, builder, `/docs`; trusted operator config, never escaped; unset or empty = pages unchanged), and the three `MEMEGEN_CACHE_*` variables under "Render cache".
 
 ### Smoke test (against a running `:5005`)
 
@@ -35,41 +35,31 @@ curl -sf 'http://localhost:5005/templates' | head                               
 curl -sf 'http://localhost:5005/' -o /dev/null && echo ok                                           # web UI / docs
 ```
 
-Prod smoke test: same paths against `https://memegen.rs`, which is the pod described under "Deploy architecture". Template image responses there carry `x-memegen-cache: hit|miss`.
+The public instance is <https://memegen.rs>; the same paths work against it.
 
 ## Releasing a new version
 
-Building an image, rolling it out and cutting a versioned release are **separate** steps:
+Building an image and cutting a versioned release are **separate** steps, and neither deploys anything:
 
 ```sh
-git push origin main      # -> image.yml builds and pushes ghcr.io/tenequm/memegen-rs:sha-<commit> (+ latest). Rolls nothing out.
+git push origin main      # -> image.yml builds and pushes ghcr.io/tenequm/memegen-rs:sha-<full commit SHA> (+ latest)
 git tag v0.1.0 && git push origin v0.1.0   # -> release.yml: versioned GHCR image + git-cliff GitHub Release + ClawHub skill
-```
-
-The cluster runs whatever image is pinned by digest in a private infra repo's helmfile. To roll a commit out, wait for `image.yml` to finish, then bump the pin there to `sha-<commit>@<digest>` and apply it:
-
-```sh
-crane digest ghcr.io/tenequm/memegen-rs:sha-<commit>   # full 40-char commit SHA -> sha256:...
 ```
 
 Release notes come from Conventional Commit messages via git-cliff (`.github/cliff.toml`) - so commit hygiene *is* the changelog.
 
-## Deploy architecture (Kubernetes)
+## Running the image
 
-One pod on a Kubernetes cluster runs the Rust server (binds `0.0.0.0:5005`) from the pinned `ghcr.io/tenequm/memegen-rs` image. No manifests live in this repo.
+`ghcr.io/tenequm/memegen-rs` holds the server and the template corpus; it binds `0.0.0.0:5005`. No deployment manifests live in this repo. What the server does and does not do for whoever runs it:
 
-- Limits: 2 CPU, 1 GiB. The pod runs non-root with a read-only root filesystem; the cache volume is the only path it can write.
-- Render cache: on, with `MEMEGEN_CACHE_DIR=/cache` on an `emptyDir` and the default 10 GiB bound (see "Render cache"). The volume goes with the pod and the server reads nothing back from it at startup, so every rollout or restart starts empty.
-- Cloudflare hosts the DNS zone and nothing else: no Worker, no edge cache, no rate limiter and no bot protection in the request path, only the cluster's ingress. The app has no rate limiter either - it runs at most one render per core and queues the rest - so the pod's CPU and memory limits are the flood backstop.
-- The server fetches any URL given as `?background=` with no filtering of its own. On the cluster a NetworkPolicy limits that fetch to the public internet.
-- Images and assets send `Cache-Control: max-age=86400` and `CDN-Cache-Control: immutable` (one year). `/manifest.webmanifest` (a day) and `/SKILL.md` / `/llms.txt` (an hour) send `Cache-Control` only; HTML pages and JSON send neither. Nothing in front of the pod reads the CDN header.
-- Analytics: the tag is whatever `MEMEGEN_HEAD_HTML` holds, appended by the server to each page `<head>`. Nothing outside the pod injects it.
-
-`memegen.rs` has been served by this pod since its DNS was pointed at the cluster on 2026-09-30; until then a Cloudflare Worker and container served it, and their code left this repo in #4.
+- The cache directory is the only path it writes to, so nothing else in the container needs to be writable - and with the cache off, nothing at all.
+- No rate limiter. It runs at most one render per core and queues the rest, refusing none, so CPU and memory limits on the container are the flood backstop.
+- It fetches any URL given as `?background=` with no filtering of its own. Restrict its egress to the public internet wherever it could reach anything private.
+- Images and assets send `Cache-Control: max-age=86400` and `CDN-Cache-Control: immutable` (one year). `/manifest.webmanifest` (a day) and `/SKILL.md` / `/llms.txt` (an hour) send `Cache-Control` only; HTML pages and JSON send neither. A CDN in front that honors the CDN header keeps a render for a year - purge it when templates or rendering change.
 
 ## Gotchas
 
-- The image is built for `linux/amd64` only (the cluster's nodes).
+- The image is built for `linux/amd64` only.
 - A template whose only background is an undecodable `default.mp4` is listed but returns `422` on render.
 - Per-request limits are constants, not env vars: in `render.rs` `MAX_SIDE` (2048 px, for `width`/`height` and for the size a custom background is drawn at), `MAX_BACKGROUND_SIDE` (4096 px, the size one may arrive with) and `MAX_TOP_LINES` (32); in `main.rs` `MAX_BACKGROUND_BYTES` (10 MiB). Over a size or byte limit is a `422`; a background between the two sides is shrunk to `MAX_SIDE`, and lines past `MAX_TOP_LINES` are dropped. README "API" lists them for callers. A custom background is decoded only if it is a PNG, JPEG, GIF or WebP: the `image` crate's other decoders allocate outside the limits it is given. Template backgrounds are trusted and not limited, so the largest ones in the corpus set the memory a render can take.
 
@@ -88,11 +78,11 @@ Off by default; with `MEMEGEN_CACHE_DIR` unset the server behaves exactly as wit
 | `MEMEGEN_CACHE_MEMORY_BYTES` | `16777216` (16 MiB) | Memory tier; `0` keeps only the newest render in memory |
 
 - **The disk bound is structural.** At startup foyer creates at most `max_bytes / block` sparse files of `block = min(64 MiB, max_bytes / 8)` bytes each, holds every one open, and only ever writes inside them, so the files sum to at most `MEMEGEN_CACHE_MAX_BYTES` (160 files of 64 MiB at the default). Nothing else is written; the only overhead on top is the filesystem's own metadata. Eviction reclaims the oldest block whole, one block ahead of the writer.
-- **Startup does not check free space.** The files are sparse, so a volume smaller than the bound starts fine and fails its writes once it fills. foyer reports those through `tracing`, which nothing here subscribes to, so the only symptom is renders that stay misses. Keep `MEMEGEN_CACHE_MAX_BYTES` below the volume's size with some headroom for filesystem metadata - an `emptyDir` that outgrows its `sizeLimit` gets the pod evicted.
-- **The directory must be on a real disk and writable by the server alone.** On tmpfs (`emptyDir.medium: Memory`, many `/tmp`) every cached byte is memory charged to the container. Block files are opened by name and trusted on their checksum, so a directory someone else can write to can redirect the writes or plant responses.
+- **Startup does not check free space.** The files are sparse, so a volume smaller than the bound starts fine and fails its writes once it fills. foyer reports those through `tracing`, which nothing here subscribes to, so the only symptom is renders that stay misses. Keep `MEMEGEN_CACHE_MAX_BYTES` below the volume's size with some headroom for filesystem metadata.
+- **The directory must be on a real disk and writable by the server alone.** On tmpfs (a memory-backed volume, many `/tmp`) every cached byte is memory charged to the container. Block files are opened by name and trusted on their checksum, so a directory someone else can write to can redirect the writes or plant responses.
 - **A render larger than one block, or than foyer's 16 MiB write buffer, is served but never reaches disk.** Disk writes are best-effort too: under a burst foyer drops what does not fit its write buffer, and that render is simply a miss next time.
-- **The cache is empty on every process start** (`RecoverMode::None`), because a render also depends on the templates and `MEMEGEN_WATERMARK`, which are not in the key. Nothing invalidates an entry while the process runs, so a template edited in place keeps serving its old render until restart. A directory with old content is fine, but lowering `MEMEGEN_CACHE_MAX_BYTES` against a reused directory leaves the old, larger set of block files behind - wipe it. A Kubernetes `emptyDir` never hits this.
-- **Memory.** The memory tier holds at most `MEMEGEN_CACHE_MEMORY_BYTES` of renders (or one render, if that is larger), counting 1 KiB of bookkeeping per entry. On top, foyer keeps two 16 MiB write buffers (touched only as far as a batch fills them), up to 16 MiB of renders queued for disk plus up to 32 MiB in the batches being written, a read buffer and a decoded copy per in-flight disk hit, and an index of roughly 50-90 bytes per render on disk. Entries are page-aligned on disk, so the index is a few MiB for ordinary renders but about 2% of `MEMEGEN_CACHE_MAX_BYTES` if every render is tiny (some 200 MiB at the 10 GiB default; measured 49 MiB for 535k one-pixel renders) - on a small pod, size the bound with that in mind. A memory hit is only 0.2-1 ms faster than a disk hit, so the tier is not worth growing.
+- **The cache is empty on every process start** (`RecoverMode::None`), because a render also depends on the templates and `MEMEGEN_WATERMARK`, which are not in the key. Nothing invalidates an entry while the process runs, so a template edited in place keeps serving its old render until restart. A directory with old content is fine, but lowering `MEMEGEN_CACHE_MAX_BYTES` against a reused directory leaves the old, larger set of block files behind - wipe it. A directory created fresh for every start never hits this.
+- **Memory.** The memory tier holds at most `MEMEGEN_CACHE_MEMORY_BYTES` of renders (or one render, if that is larger), counting 1 KiB of bookkeeping per entry. On top, foyer keeps two 16 MiB write buffers (touched only as far as a batch fills them), up to 16 MiB of renders queued for disk plus up to 32 MiB in the batches being written, a read buffer and a decoded copy per in-flight disk hit, and an index of roughly 50-90 bytes per render on disk. Entries are page-aligned on disk, so the index is a few MiB for ordinary renders but about 2% of `MEMEGEN_CACHE_MAX_BYTES` if every render is tiny (some 200 MiB at the 10 GiB default; measured 49 MiB for 535k one-pixel renders) - under a small memory limit, size the bound with that in mind. A memory hit is only 0.2-1 ms faster than a disk hit, so the tier is not worth growing.
 - **Set `MALLOC_MMAP_THRESHOLD_=131072` wherever the cache is on (Linux/glibc).** Measured in the container over 1000 mixed renders: RSS settles about 30 MiB above the uncached server with it, about 100 MiB above without it - glibc's default heap holds on to the freed render-sized buffers. It costs nothing measurable per render.
 - An unusable directory or an unparsable bound fails startup rather than silently running uncached.
 - A miss renders in a task of its own (foyer spawns the fetch), so it finishes and is stored even if the client disconnects - and a request that has been accepted always renders, client or no client.

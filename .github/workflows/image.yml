@@ -1,7 +1,7 @@
 name: Build and push image
 
-# Every push to main produces ghcr.io/tenequm/memegen-rs:sha-<commit>. Nothing
-# here deploys: production pins an image by digest outside this repo.
+# Every push to main produces ghcr.io/tenequm/memegen-rs:sha-<commit> and
+# moves `latest`. Nothing here deploys.
 
 on:
   push:
@@ -47,7 +47,7 @@ jobs:
         with:
           context: .
           file: ./ops/docker/Containerfile
-          platforms: linux/amd64 # the cluster's nodes
+          platforms: linux/amd64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

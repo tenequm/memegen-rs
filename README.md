@@ -75,7 +75,7 @@ curl 'http://localhost:5005/images/custom/top/bottom.png?background=https://pics
 curl 'http://localhost:5005/images/ds/push_button/cant_decide.jpg?width=800&height=600&color=yellow' -o ds.jpg
 ```
 
-Render cache: with `MEMEGEN_CACHE_DIR` set, a successful template render (`/images/{id}.{ext}`, `/images/{id}/{lines}.{ext}`) is stored under its exact path and query string and served from there afterwards; identical concurrent requests render once. Those responses carry `x-memegen-cache: hit` or `miss`. `/images/custom/...` and error responses are never cached. The cache starts empty on every process start, so it belongs on disposable storage that only the server can write to, such as a Kubernetes `emptyDir`. Keep it on a real disk - on tmpfs every cached byte is memory - and keep `MEMEGEN_CACHE_MAX_BYTES` below what the volume holds: startup does not check free space.
+Render cache: with `MEMEGEN_CACHE_DIR` set, a successful template render (`/images/{id}.{ext}`, `/images/{id}/{lines}.{ext}`) is stored under its exact path and query string and served from there afterwards; identical concurrent requests render once. Those responses carry `x-memegen-cache: hit` or `miss`. `/images/custom/...` and error responses are never cached. The cache starts empty on every process start, so it belongs on disposable storage that only the server can write to. Keep it on a real disk - on tmpfs every cached byte is memory - and keep `MEMEGEN_CACHE_MAX_BYTES` below what the volume holds: startup does not check free space.
 
 ## Templates
 
@@ -105,9 +105,9 @@ Four source files: `template.rs` (model, registry, URL codec, styling), `render.
 
 The server has no rate limiter, and its render cache is off unless `MEMEGEN_CACHE_DIR` is set: without it every `/images/` request renders on demand, and with it every new URL and every `/images/custom/...` request still does. At most one render per CPU core runs at a time and the rest wait, none are refused, so cap its CPU and memory (or put your own limiter in front) before exposing it publicly. Image and asset responses carry `Cache-Control: public, max-age=86400` and `CDN-Cache-Control: public, max-age=31536000, immutable`, so a CDN that honors the latter keeps a render for a year - purge it when templates or rendering change. The server also fetches any URL passed as `?background=` with no filtering of its own, so restrict its outbound network to the public internet if it can reach anything private.
 
-`.github/workflows/image.yml` builds `ops/docker/Containerfile` on every push to `main` and pushes `ghcr.io/tenequm/memegen-rs:sha-<full commit SHA>` (`linux/amd64`, template corpus baked in). CI builds images only; it deploys nothing.
+The server also ships as a container image, `ghcr.io/tenequm/memegen-rs` (`linux/amd64`, template corpus baked in, listening on `5005`). `.github/workflows/image.yml` builds `ops/docker/Containerfile` on every push to `main` and pushes it as `sha-<full commit SHA>` and `latest`; a `v*` tag makes `.github/workflows/release.yml` push the versioned image. CI builds images only; it deploys nothing. The cache directory is the only path the server writes to, so nothing else in the container needs to be writable.
 
-The maintainer's deployment runs that image as one pod on a Kubernetes cluster, pinned by digest, with CPU and memory limits, a read-only root filesystem and egress restricted to the public internet. Since 2026-09-30 that pod is what serves [memegen.rs](https://memegen.rs), with the render cache on an `emptyDir`; Cloudflare only hosts the DNS zone, so no CDN, edge cache or rate limiter sits in front of it.
+A public instance runs at [memegen.rs](https://memegen.rs).
 
 ## Scope
 
