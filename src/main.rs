@@ -14,7 +14,7 @@ use axum::response::{Html, IntoResponse, Response};
 use axum::routing::get;
 use maud::{DOCTYPE, Markup, PreEscaped, html};
 use serde::{Deserialize, Serialize};
-use tokio::sync::Semaphore;
+use tokio::sync::{AcquireError, Semaphore};
 use utoipa::{OpenApi, ToSchema};
 use utoipa_scalar::{Scalar, Servable};
 
@@ -199,11 +199,13 @@ async fn render_text(
     Path((id, text)): Path<(String, String)>,
     Query(q): Query<ImgQuery>,
 ) -> Result<Response, AppError> {
-    let (bytes, mime) = off_worker(move || {
+    let template = reg
+        .get(&id)
+        .cloned()
+        .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
+    let animated = split_ext(&text).1 == "gif" && template.animated_source(q.style()).is_some();
+    let (bytes, mime) = off_worker(animated, move || {
         let (slug, ext) = split_ext(&text);
-        let template = reg
-            .get(&id)
-            .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
         let lines = decode(slug);
         let spec = Spec {
             lines: &lines,
@@ -213,7 +215,7 @@ async fn render_text(
             layout: q.layout(),
             color: q.color.as_deref(),
         };
-        Ok(render::render(template, &spec)?)
+        render::render(&template, &spec)
     })
     .await?;
     Ok(cached_bytes(bytes, mime))
@@ -230,20 +232,22 @@ async fn render_blank(
     Path(filename): Path<String>,
     Query(q): Query<ImgQuery>,
 ) -> Result<Response, AppError> {
-    let (bytes, mime) = off_worker(move || {
-        let (id, ext) = split_ext(&filename);
-        let template = reg
-            .get(id)
-            .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
+    let (id, ext) = split_ext(&filename);
+    let template = reg
+        .get(id)
+        .cloned()
+        .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
+    let animated = ext == "gif" && template.animated_source(q.style()).is_some();
+    let (bytes, mime) = off_worker(animated, move || {
         let spec = Spec {
             lines: &[],
-            ext,
+            ext: split_ext(&filename).1,
             size: q.size(),
             style: q.style(),
             layout: q.layout(),
             color: q.color.as_deref(),
         };
-        Ok(render::render(template, &spec)?)
+        render::render(&template, &spec)
     })
     .await?;
     Ok(cached_bytes(bytes, mime))
@@ -267,7 +271,7 @@ async fn render_custom(
         .clone()
         .ok_or_else(|| AppError::BadRequest("background URL is required".into()))?;
     let bytes = fetch(&url).await?;
-    let (out, mime) = off_worker(move || {
+    let (out, mime) = off_worker(false, move || {
         let (slug, ext) = split_ext(&text);
         let lines = decode(slug);
         let spec = Spec {
@@ -278,7 +282,7 @@ async fn render_custom(
             layout: q.layout(),
             color: q.color.as_deref(),
         };
-        Ok(render::render_custom(&bytes, &spec)?)
+        render::render_custom(&bytes, &spec)
     })
     .await?;
     Ok(cached_bytes(out, mime))
@@ -312,7 +316,7 @@ async fn thumb(State(reg): State<AppState>, Path(id): Path<String>) -> Result<Re
     let src = tokio::fs::read(path)
         .await
         .map_err(|e| AppError::Internal(e.to_string()))?;
-    let (bytes, mime) = off_worker(move || Ok(render::thumbnail(&src, THUMB_PX)?)).await?;
+    let (bytes, mime) = off_worker(false, move || render::thumbnail(&src, THUMB_PX)).await?;
     thumb_cache().lock().unwrap().insert(id, bytes.clone());
     Ok(cached_bytes(bytes, mime))
 }
@@ -768,28 +772,41 @@ fn cached_bytes(bytes: Vec<u8>, mime: &'static str) -> Response {
         .into_response()
 }
 
+fn cores() -> usize {
+    std::thread::available_parallelism().map_or(1, usize::from)
+}
+
 /// Renders are pure CPU (90 ms static, seconds for an animated GIF), so they
 /// run on the blocking pool to keep the async workers free for everything
 /// else. One permit per core: each in-flight render holds tens of MB, and the
 /// blocking pool alone would let hundreds run at once.
-static RENDER_PERMITS: LazyLock<Semaphore> =
-    LazyLock::new(|| Semaphore::new(std::thread::available_parallelism().map_or(1, usize::from)));
+static RENDER_PERMITS: LazyLock<Semaphore> = LazyLock::new(|| Semaphore::new(cores()));
+
+/// Animated renders need one of these as well. There is one fewer than render
+/// permits, so on 2+ cores GIFs alone can never hold every render permit.
+static ANIMATED_PERMITS: LazyLock<Semaphore> =
+    LazyLock::new(|| Semaphore::new((cores() - 1).max(1)));
 
 async fn off_worker<T: Send + 'static>(
-    job: impl FnOnce() -> Result<T, AppError> + Send + 'static,
+    animated: bool,
+    job: impl FnOnce() -> Result<T, RenderError> + Send + 'static,
 ) -> Result<T, AppError> {
-    let permit = RENDER_PERMITS
-        .acquire()
-        .await
-        .map_err(|e| AppError::Internal(e.to_string()))?;
-    tokio::task::spawn_blocking(move || {
+    let closed = |e: AcquireError| AppError::Internal(e.to_string());
+    let lane = if animated {
+        Some(ANIMATED_PERMITS.acquire().await.map_err(closed)?)
+    } else {
+        None
+    };
+    let permit = RENDER_PERMITS.acquire().await.map_err(closed)?;
+    let out = tokio::task::spawn_blocking(move || {
         // Held by the job, not the request: a disconnected client drops this
         // future, but the render it started keeps its core until it returns.
-        let _permit = permit;
+        let _permits = (lane, permit);
         job()
     })
     .await
-    .map_err(|e| AppError::Internal(format!("render failed: {e}")))?
+    .map_err(|e| AppError::Internal(format!("render failed: {e}")))?;
+    Ok(out?)
 }
 
 async fn fetch(url: &str) -> Result<Vec<u8>, AppError> {
@@ -871,7 +888,7 @@ mod tests {
     #[tokio::test]
     async fn panicking_render_is_a_500_and_frees_its_permit() {
         let before = RENDER_PERMITS.available_permits();
-        let out = off_worker(|| -> Result<(), AppError> { panic!("boom") }).await;
+        let out = off_worker(false, || -> Result<(), RenderError> { panic!("boom") }).await;
         assert!(matches!(out, Err(AppError::Internal(_))));
         assert_eq!(RENDER_PERMITS.available_permits(), before);
     }
