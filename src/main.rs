@@ -395,7 +395,7 @@ fn agent_doc(mime: &'static str) -> Response {
         .into_response()
 }
 
-// ---------- Front-end (gallery + builder) ----------
+// ---------- Front-end (gallery + builder + docs) ----------
 
 const PAGE_CSS: &str = r#"
 @font-face{font-family:"Anton";src:url("/font/anton.ttf") format("truetype");font-display:swap}
@@ -561,13 +561,7 @@ fn head_html() -> Option<&'static str> {
 // the OG block precedes the stylesheet). One 1200x630 JPEG card + the OG tags +
 // twitter:card=summary_large_image is the cross-platform lowest common
 // denominator (Telegram, Slack, Discord, LinkedIn, Reddit, X, Facebook).
-fn page_head(
-    title: &str,
-    desc: &str,
-    path: &str,
-    og_image: &str,
-    head_html: Option<&str>,
-) -> Markup {
+fn page_head(title: &str, desc: &str, path: &str, og_image: &str, extra: Option<&str>) -> Markup {
     let canonical = format!("{SITE}{path}");
     html! {
         head {
@@ -599,7 +593,7 @@ fn page_head(
 
             style { (PreEscaped(PAGE_CSS)) }
             // MEMEGEN_HEAD_HTML is trusted operator config, not user input: raw on purpose.
-            @if let Some(extra) = head_html { (PreEscaped(extra)) }
+            @if let Some(extra) = extra { (PreEscaped(extra)) }
         }
     }
 }
@@ -622,8 +616,9 @@ fn page_footer() -> Markup {
     }
 }
 
-// The gallery is a pure function of the immutable registry, so render it once
-// and serve the cached string on every hit (no per-request HTML build or stats).
+// The gallery is a pure function of the immutable registry and the head
+// snippet, so render it once and serve the cached string on every hit (no
+// per-request HTML build or stats).
 async fn gallery(State(reg): State<AppState>) -> Html<&'static str> {
     static CACHE: OnceLock<String> = OnceLock::new();
     Html(
@@ -760,13 +755,13 @@ async fn builder(State(reg): State<AppState>, Path(id): Path<String>) -> Result<
 
 // Scalar's page depends only on the spec and the head snippet, so build it once.
 async fn docs() -> Html<&'static str> {
-    static PAGE: OnceLock<String> = OnceLock::new();
-    Html(PAGE.get_or_init(|| docs_html(head_html())).as_str())
+    static CACHE: OnceLock<String> = OnceLock::new();
+    Html(CACHE.get_or_init(|| docs_html(head_html())).as_str())
 }
 
-fn docs_html(head_html: Option<&str>) -> String {
+fn docs_html(extra: Option<&str>) -> String {
     let page = Scalar::new(ApiDoc::openapi()).to_html();
-    match head_html {
+    match extra {
         // utoipa-scalar can only swap its whole template, so splice into the
         // rendered page: its first `</head>` is the template's, ahead of the spec.
         Some(extra) => page.replacen("</head>", &format!("{extra}</head>"), 1),
