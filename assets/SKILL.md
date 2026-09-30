@@ -44,6 +44,8 @@ Encode the caption text into each path segment:
 - `width`, `height` - pad to a fixed size with a blurred letterbox
 - `color` - text fill color (name or hex)
 
+Limits. These return `422` with a JSON `{"error": "..."}` body: `width` or `height` above 2048, or a custom `background` that is not a PNG, JPEG, GIF or WebP, or is above 10 MiB or 4096x4096 pixels. A custom `background` over 2048 pixels on a side is scaled down to fit 2048x2048, and `layout=top` draws only the first 32 lines.
+
 ## Find templates
 
 - Every template with its id, name, line count, and an example URL: `GET https://memegen.rs/templates`

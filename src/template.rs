@@ -122,14 +122,17 @@ impl Template {
     /// to the default background. Returns `None` when only an undecodable source
     /// (e.g. a bare `default.mp4`) exists - the template is metadata-only in v1.
     pub(crate) fn background(&self, style: &str) -> Option<PathBuf> {
-        let style = if style.is_empty() { "default" } else { style };
-        if let Some(p) = self.find_background(style) {
-            return Some(p);
+        self.find_background(self.known_style(style))
+    }
+
+    /// `style` comes straight from the query string and is joined into a path,
+    /// so only a name `list_styles` found in this folder is ever used.
+    fn known_style<'a>(&self, style: &'a str) -> &'a str {
+        if self.styles.iter().any(|s| s == style) {
+            style
+        } else {
+            "default"
         }
-        if style != "default" {
-            return self.find_background("default");
-        }
-        None
     }
 
     fn find_background(&self, stem: &str) -> Option<PathBuf> {
@@ -142,7 +145,7 @@ impl Template {
     /// The animated `.gif` source for a style, if one exists (used for animated
     /// output; `background` would otherwise prefer a static still).
     pub(crate) fn animated_source(&self, style: &str) -> Option<PathBuf> {
-        let style = if style.is_empty() { "default" } else { style };
+        let style = self.known_style(style);
         [
             self.dir.join(format!("{style}.gif")),
             self.dir.join("default.gif"),
@@ -447,6 +450,19 @@ mod tests {
         );
         // Canonical lookups still work.
         assert!(reg.get("drake-hotline-bling").is_some());
+    }
+
+    #[test]
+    fn style_cannot_leave_the_template_folder() {
+        let reg = registry();
+        let doge = reg.get("doge").expect("doge");
+        let outside = reg.get("bongo").expect("bongo").dir.join("default");
+        assert!(outside.with_extension("gif").is_file());
+        for style in ["nope", "../bongo/default", outside.to_str().unwrap()] {
+            assert_eq!(doge.background(style), doge.background("default"));
+            assert_eq!(doge.animated_source(style), None);
+        }
+        assert_eq!(doge.background("bark"), Some(doge.dir.join("bark.jpg")));
     }
 
     #[test]

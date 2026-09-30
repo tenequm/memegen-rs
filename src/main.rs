@@ -186,8 +186,15 @@ struct ImgQuery {
 }
 
 impl ImgQuery {
-    fn size(&self) -> (u32, u32) {
-        (self.width.unwrap_or(0), self.height.unwrap_or(0))
+    fn size(&self) -> Result<(u32, u32), AppError> {
+        let (w, h) = (self.width.unwrap_or(0), self.height.unwrap_or(0));
+        if w.max(h) > render::MAX_SIDE {
+            return Err(AppError::Unprocessable(format!(
+                "width and height must be at most {}",
+                render::MAX_SIDE
+            )));
+        }
+        Ok((w, h))
     }
     fn style(&self) -> &str {
         self.style.as_deref().unwrap_or("default")
@@ -202,15 +209,24 @@ impl ImgQuery {
     path = "/images/{id}/{text}",
     params(
         ("id" = String, Path, description = "Template ID"),
-        ("text" = String, Path, description = "Caption lines and extension, e.g. top/bottom.png")
+        ("text" = String, Path, description = "Caption lines and extension, e.g. top/bottom.png"),
+        ("style" = Option<String>, Query, description = "Alternate background, one of the template's `styles`; anything else uses the default"),
+        ("layout" = Option<String>, Query, description = "`top` puts every line at the top and draws the first 32"),
+        ("color" = Option<String>, Query, description = "Text color, a name or hex"),
+        ("width" = Option<u32>, Query, maximum = 2048, description = "Pad to this width; needs `height` too"),
+        ("height" = Option<u32>, Query, maximum = 2048, description = "Pad to this height; needs `width` too")
     ),
-    responses((status = 200, description = "Rendered meme", content_type = "image/*"))
+    responses(
+        (status = 200, description = "Rendered meme", content_type = "image/*"),
+        (status = 422, description = "`width` or `height` over 2048, or an unsupported extension; JSON `{\"error\": ...}`")
+    )
 )]
 async fn render_text(
     State(reg): State<AppState>,
     Path((id, text)): Path<(String, String)>,
     Query(q): Query<ImgQuery>,
 ) -> Result<Response, AppError> {
+    let size = q.size()?;
     let template = reg
         .get(&id)
         .cloned()
@@ -221,7 +237,7 @@ async fn render_text(
         let spec = Spec {
             lines: &lines,
             ext,
-            size: q.size(),
+            size,
             style: q.style(),
             layout: q.layout(),
             color: q.color.as_deref(),
@@ -235,14 +251,23 @@ async fn render_text(
 #[utoipa::path(
     get,
     path = "/images/{filename}",
-    params(("filename" = String, Path, description = "Template ID and extension, e.g. fry.png")),
-    responses((status = 200, description = "Blank template", content_type = "image/*"))
+    params(
+        ("filename" = String, Path, description = "Template ID and extension, e.g. fry.png"),
+        ("style" = Option<String>, Query, description = "Alternate background, one of the template's `styles`; anything else uses the default"),
+        ("width" = Option<u32>, Query, maximum = 2048, description = "Pad to this width; needs `height` too"),
+        ("height" = Option<u32>, Query, maximum = 2048, description = "Pad to this height; needs `width` too")
+    ),
+    responses(
+        (status = 200, description = "Blank template", content_type = "image/*"),
+        (status = 422, description = "`width` or `height` over 2048, or an unsupported extension; JSON `{\"error\": ...}`")
+    )
 )]
 async fn render_blank(
     State(reg): State<AppState>,
     Path(filename): Path<String>,
     Query(q): Query<ImgQuery>,
 ) -> Result<Response, AppError> {
+    let size = q.size()?;
     let (id, ext) = split_ext(&filename);
     let template = reg
         .get(id)
@@ -252,7 +277,7 @@ async fn render_blank(
         let spec = Spec {
             lines: &[],
             ext: split_ext(&filename).1,
-            size: q.size(),
+            size,
             style: q.style(),
             layout: q.layout(),
             color: q.color.as_deref(),
@@ -268,14 +293,22 @@ async fn render_blank(
     path = "/images/custom/{text}",
     params(
         ("text" = String, Path, description = "Caption lines and extension"),
-        ("background" = String, Query, description = "Source image URL")
+        ("background" = String, Query, description = "URL of a PNG, JPEG, GIF or WebP image, at most 10 MiB and 4096x4096 pixels; one over 2048 on a side is scaled down to fit 2048x2048"),
+        ("layout" = Option<String>, Query, description = "`top` puts every line at the top and draws the first 32"),
+        ("color" = Option<String>, Query, description = "Text color, a name or hex"),
+        ("width" = Option<u32>, Query, maximum = 2048, description = "Pad to this width; needs `height` too"),
+        ("height" = Option<u32>, Query, maximum = 2048, description = "Pad to this height; needs `width` too")
     ),
-    responses((status = 200, description = "Rendered meme on a custom background", content_type = "image/*"))
+    responses(
+        (status = 200, description = "Rendered meme on a custom background", content_type = "image/*"),
+        (status = 422, description = "`width` or `height` over 2048, or a background that is over a limit, not one of the four formats or not fetchable; JSON `{\"error\": ...}`")
+    )
 )]
 async fn render_custom(
     Path(text): Path<String>,
     Query(q): Query<ImgQuery>,
 ) -> Result<Response, AppError> {
+    let size = q.size()?;
     let url = q
         .background
         .clone()
@@ -287,7 +320,7 @@ async fn render_custom(
         let spec = Spec {
             lines: &lines,
             ext,
-            size: q.size(),
+            size,
             style: "default",
             layout: q.layout(),
             color: q.color.as_deref(),
@@ -878,12 +911,16 @@ async fn off_worker<T: Send + 'static>(
     Ok(out?)
 }
 
+/// Most bytes read from a `?background=` URL: room for a 12 MP phone JPEG,
+/// which is a few MiB. Every request waiting for a render permit holds one.
+const MAX_BACKGROUND_BYTES: usize = 10 * 1024 * 1024;
+
 async fn fetch(url: &str) -> Result<Vec<u8>, AppError> {
     let client = reqwest::Client::builder()
         .timeout(std::time::Duration::from_secs(10))
         .build()
         .map_err(|e| AppError::Internal(e.to_string()))?;
-    let resp = client
+    let mut resp = client
         .get(url)
         .send()
         .await
@@ -894,10 +931,30 @@ async fn fetch(url: &str) -> Result<Vec<u8>, AppError> {
             resp.status()
         )));
     }
-    resp.bytes()
+    let too_large = || {
+        AppError::Unprocessable(format!(
+            "background is larger than {} MiB",
+            MAX_BACKGROUND_BYTES >> 20
+        ))
+    };
+    // Content-Length only fails fast: a server can omit it, so the count of
+    // bytes actually received is what enforces the cap.
+    let declared = resp.content_length().unwrap_or(0);
+    if declared > MAX_BACKGROUND_BYTES as u64 {
+        return Err(too_large());
+    }
+    let mut body = Vec::with_capacity(declared as usize);
+    while let Some(chunk) = resp
+        .chunk()
         .await
-        .map(|b| b.to_vec())
-        .map_err(|e| AppError::Unprocessable(e.to_string()))
+        .map_err(|e| AppError::Unprocessable(e.to_string()))?
+    {
+        if body.len() + chunk.len() > MAX_BACKGROUND_BYTES {
+            return Err(too_large());
+        }
+        body.extend_from_slice(&chunk);
+    }
+    Ok(body)
 }
 
 // ---------- Errors ----------
@@ -918,6 +975,10 @@ impl From<RenderError> for AppError {
             RenderError::Unsupported(ext) => {
                 AppError::Unprocessable(format!("unsupported extension: {ext}"))
             }
+            RenderError::TooLarge => AppError::Unprocessable(format!(
+                "background is larger than {0}x{0} pixels",
+                render::MAX_BACKGROUND_SIDE
+            )),
             RenderError::Decode(m) => AppError::Unprocessable(format!("cannot decode image: {m}")),
             RenderError::Encode(m) => AppError::Internal(format!("cannot encode image: {m}")),
         }
@@ -970,5 +1031,86 @@ mod tests {
         let out = off_worker(true, || -> Result<(), RenderError> { panic!("boom") }).await;
         assert!(matches!(out, Err(AppError::Internal(_))));
         assert_eq!(free(), idle);
+    }
+
+    fn query(q: &str) -> Query<ImgQuery> {
+        Query::try_from_uri(&format!("/?{q}").parse().unwrap()).unwrap()
+    }
+
+    async fn refusal(out: Result<Response, AppError>) -> (StatusCode, String) {
+        let resp = out.expect_err("refused").into_response();
+        let status = resp.status();
+        let body = axum::body::to_bytes(resp.into_body(), 1024).await.unwrap();
+        (status, String::from_utf8(body.to_vec()).unwrap())
+    }
+
+    #[tokio::test]
+    async fn oversized_canvas_is_refused_before_any_work() {
+        let dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("templates");
+        let reg = Arc::new(Registry::load(&dir).unwrap());
+        let refused = (
+            StatusCode::UNPROCESSABLE_ENTITY,
+            r#"{"error":"width and height must be at most 2048"}"#.to_string(),
+        );
+        // No such template: looking it up first would be a 404 instead.
+        let text = render_text(
+            State(reg.clone()),
+            Path(("nope".into(), "a/b.png".into())),
+            query("width=2049&height=630"),
+        );
+        assert_eq!(refusal(text.await).await, refused);
+        // One dimension alone pads nothing, but the rule is per parameter.
+        let blank = render_blank(State(reg), Path("nope.png".into()), query("height=20000"));
+        assert_eq!(refusal(blank.await).await, refused);
+        // Nothing listens on port 9: fetching first would fail differently.
+        let custom = render_custom(
+            Path("a.png".into()),
+            query("background=http://127.0.0.1:9/x.png&width=20000&height=20000"),
+        );
+        assert_eq!(refusal(custom.await).await, refused);
+        let largest = query("width=2048&height=2048");
+        assert!(matches!(largest.size(), Ok((2048, 2048))));
+        // The size the app's own share cards ask for.
+        let card = query(BRAND_OG.split_once('?').unwrap().1);
+        assert!(matches!(card.size(), Ok((1200, 630))));
+    }
+
+    #[tokio::test]
+    async fn oversized_background_is_a_422() {
+        let (status, body) = refusal(Err(RenderError::TooLarge.into())).await;
+        assert_eq!(status, StatusCode::UNPROCESSABLE_ENTITY);
+        assert_eq!(
+            body,
+            r#"{"error":"background is larger than 4096x4096 pixels"}"#
+        );
+    }
+
+    /// One-shot HTTP server: answers the first connection with `head` and
+    /// `body` zero bytes, then closes.
+    fn serve(head: String, body: usize) -> String {
+        use std::io::{Read, Write};
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        let url = format!("http://{}/bg.png", listener.local_addr().unwrap());
+        std::thread::spawn(move || {
+            let (mut sock, _) = listener.accept().unwrap();
+            let _ = sock.read(&mut [0; 1024]);
+            let _ = sock.write_all(head.as_bytes());
+            let _ = sock.write_all(&vec![0; body]);
+        });
+        url
+    }
+
+    #[tokio::test]
+    async fn background_over_the_byte_cap_is_refused() {
+        let refused = |out| matches!(out, Err(AppError::Unprocessable(m)) if m == "background is larger than 10 MiB");
+        let over = MAX_BACKGROUND_BYTES + 1;
+        // Declared: refused on the header, the body is never sent.
+        let declared = format!("HTTP/1.1 200 OK\r\nContent-Length: {over}\r\n\r\n");
+        assert!(refused(fetch(&serve(declared, 0)).await));
+        // Undeclared: only counting what arrives can catch it.
+        let undeclared = "HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n";
+        assert!(refused(fetch(&serve(undeclared.into(), over)).await));
+        let at_cap = fetch(&serve(undeclared.into(), MAX_BACKGROUND_BYTES)).await;
+        assert!(matches!(at_cap, Ok(body) if body.len() == MAX_BACKGROUND_BYTES));
     }
 }

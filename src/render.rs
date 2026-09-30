@@ -6,7 +6,10 @@ use std::sync::LazyLock;
 use ab_glyph::{Font, FontArc, PxScale, ScaleFont};
 use image::codecs::gif::{GifDecoder, GifEncoder, Repeat};
 use image::imageops::FilterType;
-use image::{AnimationDecoder, DynamicImage, Frame, ImageFormat, Rgba, RgbaImage, imageops};
+use image::{
+    AnimationDecoder, DynamicImage, Frame, ImageError, ImageFormat, ImageReader, Limits, Rgba,
+    RgbaImage, imageops,
+};
 use imageproc::geometric_transformations::{Border, Interpolation, rotate_about_center};
 
 use crate::template::{Template, stylize};
@@ -38,6 +41,28 @@ static WATERMARK: LazyLock<Option<String>> = LazyLock::new(|| {
 const SAFE_MARGIN: f32 = 0.05; // each side, fraction of the box width
 const MAX_FONT_FRAC: f32 = 0.14; // fraction of image height
 
+/// Longest side, in pixels, of a `?width=`/`?height=` canvas and of a custom
+/// background once it is drawn on. Padding costs about 16 bytes per
+/// source-column x canvas-row on top of the canvas itself, so both ends of it
+/// have to be bounded.
+pub(crate) const MAX_SIDE: u32 = 2048;
+
+/// Longest side a custom background may arrive with; one over `MAX_SIDE` is
+/// shrunk to it before anything else. 4096 takes a 12 MP phone photo
+/// (4032x3024) and a 4K screenshot.
+pub(crate) const MAX_BACKGROUND_SIDE: u32 = 4096;
+
+/// Decoder allowance for a custom background: 16-bit RGBA, the deepest pixel
+/// the accepted formats decode to, at `MAX_BACKGROUND_SIDE` square. Only the
+/// side limit can then refuse an image.
+const MAX_DECODE_BYTES: u64 = 8 * (MAX_BACKGROUND_SIDE as u64).pow(2);
+
+/// `layout=top` makes one box, and one full-width layer, per caption line, so
+/// the count needs a ceiling. The band is a fifth of the image: under 1280 px
+/// of height, 32 lines are already at the 8 px font floor. Lines past the cap
+/// are dropped like lines without a box.
+const MAX_TOP_LINES: usize = 32;
+
 fn font(name: &str) -> &'static FontArc {
     match name {
         "comic" | "kalam" => &PANGOLIN,
@@ -49,6 +74,7 @@ fn font(name: &str) -> &'static FontArc {
 pub(crate) enum RenderError {
     NoBackground,
     Unsupported(String),
+    TooLarge,
     Decode(String),
     Encode(String),
 }
@@ -81,7 +107,7 @@ pub(crate) fn render(
     let bytes = std::fs::read(&bg).map_err(|e| RenderError::Decode(e.to_string()))?;
     let img = image::load_from_memory(&bytes)
         .map_err(|e| RenderError::Decode(e.to_string()))?
-        .to_rgba8();
+        .into_rgba8();
     let boxes = effective_boxes(template, spec.layout, spec.lines.len());
     finish(img, &boxes, spec)
 }
@@ -90,9 +116,36 @@ pub(crate) fn render_custom(
     bytes: &[u8],
     spec: &Spec,
 ) -> Result<(Vec<u8>, &'static str), RenderError> {
-    let img = image::load_from_memory(bytes)
-        .map_err(|e| RenderError::Decode(e.to_string()))?
-        .to_rgba8();
+    let mut reader = ImageReader::new(Cursor::new(bytes))
+        .with_guessed_format()
+        .map_err(|e| RenderError::Decode(e.to_string()))?;
+    // The bytes are untrusted, and the limits below only hold for the formats
+    // worth supporting: the other decoders size buffers the limits never see.
+    if !matches!(
+        reader.format(),
+        Some(ImageFormat::Png | ImageFormat::Jpeg | ImageFormat::Gif | ImageFormat::WebP)
+    ) {
+        return Err(RenderError::Decode(
+            "not a PNG, JPEG, GIF or WebP image".into(),
+        ));
+    }
+    // A small file can declare a huge bitmap, so the decoder checks the header
+    // against these before it allocates.
+    let mut limits = Limits::default();
+    limits.max_image_width = Some(MAX_BACKGROUND_SIDE);
+    limits.max_image_height = Some(MAX_BACKGROUND_SIDE);
+    limits.max_alloc = Some(MAX_DECODE_BYTES);
+    reader.limits(limits);
+    let mut img = reader.decode().map_err(|e| match e {
+        ImageError::Limits(_) => RenderError::TooLarge,
+        e => RenderError::Decode(e.to_string()),
+    })?;
+    // Shrunk as decoded, before the RGBA copy: a photo is RGB, and every later
+    // step costs memory by the side.
+    if img.width().max(img.height()) > MAX_SIDE {
+        img = img.thumbnail(MAX_SIDE, MAX_SIDE);
+    }
+    let img = img.into_rgba8();
     let boxes = if spec.layout == "top" {
         top_boxes(spec.lines.len())
     } else {
@@ -115,6 +168,7 @@ fn finish(
 ) -> Result<(Vec<u8>, &'static str), RenderError> {
     let captions = caption_layers(img.dimensions(), boxes, spec);
     overlay_captions(&mut img, &captions);
+    drop(captions); // not held through the padding, the peak of a render
     if spec.size.0 > 0 && spec.size.1 > 0 {
         img = pad_to(&img, spec.size.0, spec.size.1);
     }
@@ -223,7 +277,7 @@ fn animated_gif(
     template: &Template,
     spec: &Spec,
 ) -> Result<Option<Vec<u8>>, RenderError> {
-    let decode = |e: image::ImageError| RenderError::Decode(e.to_string());
+    let decode = |e: ImageError| RenderError::Decode(e.to_string());
     let file = File::open(gif).map_err(|e| RenderError::Decode(e.to_string()))?;
     let frames = GifDecoder::new(BufReader::new(file))
         .map_err(decode)?
@@ -237,7 +291,7 @@ fn animated_gif(
     let captions = caption_layers(frames[0].buffer().dimensions(), &boxes, spec);
     let mut out = Cursor::new(Vec::new());
     {
-        let encode = |e: image::ImageError| RenderError::Encode(e.to_string());
+        let encode = |e: ImageError| RenderError::Encode(e.to_string());
         let mut enc = GifEncoder::new(&mut out);
         enc.set_repeat(Repeat::Infinite).map_err(encode)?;
         for fr in frames {
@@ -286,8 +340,9 @@ fn effective_boxes(template: &Template, layout: &str, lines: usize) -> Vec<Box> 
 }
 
 fn top_boxes(lines: usize) -> Vec<Box> {
-    let n = lines.max(1) as f32;
-    (0..lines.max(1))
+    let lines = lines.clamp(1, MAX_TOP_LINES);
+    let n = lines as f32;
+    (0..lines)
         .map(|i| Box {
             style: "none".into(),
             color: "white".into(),
@@ -467,10 +522,9 @@ fn pad_to(img: &RgbaImage, w: u32, h: u32) -> RgbaImage {
     let ratio = (w as f32 / img.width() as f32).min(h as f32 / img.height() as f32);
     let nw = ((img.width() as f32 * ratio).round() as u32).max(1);
     let nh = ((img.height() as f32 * ratio).round() as u32).max(1);
+    // The cover resize is the peak, so it runs before `fitted` exists.
+    let mut canvas = imageops::fast_blur(&imageops::resize(img, w, h, FilterType::Triangle), 16.0);
     let fitted = imageops::resize(img, nw, nh, FilterType::Lanczos3);
-
-    let cover = imageops::resize(img, w, h, FilterType::Triangle);
-    let mut canvas = imageops::fast_blur(&cover, 16.0);
     imageops::overlay(
         &mut canvas,
         &fitted,
@@ -499,7 +553,7 @@ pub(crate) fn thumbnail(bytes: &[u8], size: u32) -> Result<(Vec<u8>, &'static st
     // Decode by content, not extension (same corpus quirk as `render`).
     let img = image::load_from_memory(bytes)
         .map_err(|e| RenderError::Decode(e.to_string()))?
-        .to_rgba8();
+        .into_rgba8();
     let (w, h) = img.dimensions();
     let to_err = |e: fast_image_resize::ResizeError| RenderError::Decode(e.to_string());
 
@@ -636,5 +690,51 @@ mod tests {
                 assert_ne!(f.glyph_id(c).0, 0, "missing glyph for {c:?}");
             }
         }
+    }
+
+    fn blank(w: u32, h: u32, format: ImageFormat) -> Vec<u8> {
+        let mut buf = Cursor::new(Vec::new());
+        let img = DynamicImage::ImageRgb8(image::RgbImage::new(w, h));
+        write(&img, &mut buf, format).unwrap();
+        buf.into_inner()
+    }
+
+    #[test]
+    fn custom_background_is_fitted_or_refused() {
+        let spec = Spec {
+            lines: &[],
+            ext: "png",
+            size: (0, 0),
+            style: "default",
+            layout: "default",
+            color: None,
+        };
+        let size = |w, h| -> Result<(u32, u32), RenderError> {
+            let (out, _) = render_custom(&blank(w, h, ImageFormat::Png), &spec)?;
+            let out = image::load_from_memory(&out).unwrap();
+            Ok((out.width(), out.height()))
+        };
+        assert!(matches!(size(MAX_SIDE, 8), Ok((MAX_SIDE, 8))));
+        // Over the drawing side but within the arrival side: shrunk to fit.
+        assert!(matches!(size(MAX_SIDE + 1, 8), Ok((MAX_SIDE, 8))));
+        assert!(matches!(size(8, MAX_BACKGROUND_SIDE), Ok((4, MAX_SIDE))));
+        assert!(matches!(
+            size(MAX_BACKGROUND_SIDE + 1, 1),
+            Err(RenderError::TooLarge)
+        ));
+        assert!(matches!(
+            size(1, MAX_BACKGROUND_SIDE + 1),
+            Err(RenderError::TooLarge)
+        ));
+        // A format outside the four never reaches its decoder.
+        let bmp = render_custom(&blank(8, 8, ImageFormat::Bmp), &spec);
+        assert!(matches!(bmp, Err(RenderError::Decode(_))));
+    }
+
+    #[test]
+    fn top_layout_boxes_are_capped() {
+        assert_eq!(top_boxes(0).len(), 1);
+        assert_eq!(top_boxes(3).len(), 3);
+        assert_eq!(top_boxes(60_000).len(), MAX_TOP_LINES);
     }
 }
