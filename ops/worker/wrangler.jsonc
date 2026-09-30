@@ -74,5 +74,28 @@
       "tag": "v1",
       "new_sqlite_classes": ["MemegenContainer"]
     }
-  ]
+  ],
+  // Staging for the edge layer: the same Worker code on dev.memegen.rs, against
+  // the same origin. Deployed by hand (`wrangler deploy --env dev`), never by
+  // CI. No container and no analytics; the injected tag keeps it out of search
+  // indexes and still exercises the HTMLRewriter path.
+  "env": {
+    "dev": {
+      "name": "memegen-rs-dev",
+      "routes": [
+        { "pattern": "dev.memegen.rs", "custom_domain": true }
+      ],
+      "vars": {
+        "ORIGIN": "https://memegen.cascade.fyi",
+        "EXTRA_HTML_SCRIPTS": "<meta name=\"robots\" content=\"noindex\">"
+      },
+      "ratelimits": [
+        {
+          "name": "RENDER_LIMITER",
+          "namespace_id": "1002",
+          "simple": { "limit": 10000, "period": 60 }
+        }
+      ]
+    }
+  }
 }
