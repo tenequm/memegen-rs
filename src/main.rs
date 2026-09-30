@@ -85,8 +85,8 @@ fn app(registry: AppState, cache: Option<cache::Cache>) -> Router {
 }
 
 /// Shut down on SIGTERM (and Ctrl-C). The server is PID 1 in its container,
-/// where a signal without a handler is ignored, so without this a Kubernetes
-/// rollout would wait out the termination grace period and then SIGKILL it.
+/// where a signal without a handler is ignored, so without this a stop would
+/// wait out the runtime's grace period and end in SIGKILL.
 async fn shutdown_signal() {
     let ctrl_c = async {
         tokio::signal::ctrl_c().await.ok();
@@ -857,8 +857,8 @@ fn split_ext(s: &str) -> (&str, &str) {
 }
 
 /// Split cache lifetimes: browsers get a day (so template fixes reach users),
-/// a CDN a year. memegen.rs has no CDN to read `cdn-cache-control`; it stays
-/// because it is harmless and a CDN placed in front later would honor it.
+/// a CDN a year. Only a CDN in front of the server reads `cdn-cache-control`;
+/// without one the header is harmless.
 const BROWSER_CACHE: (header::HeaderName, &str) = (header::CACHE_CONTROL, "public, max-age=86400");
 const EDGE_CACHE: (header::HeaderName, &str) = (
     header::HeaderName::from_static("cdn-cache-control"),
