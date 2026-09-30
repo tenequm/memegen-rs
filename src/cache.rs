@@ -273,7 +273,7 @@ mod tests {
                     .await
                     .unwrap();
             }
-            if key.starts_with("missing") {
+            if key.contains("missing") {
                 return (StatusCode::NOT_FOUND, "no such template").into_response();
             }
             let body: Vec<u8> = key.bytes().cycle().take(BODY_BYTES).collect();
@@ -425,6 +425,31 @@ mod tests {
             let (status, _, _, body) = request.await.unwrap();
             assert_eq!(status, StatusCode::OK);
             assert_eq!(body.len(), BODY_BYTES);
+        }
+        assert_eq!(renders.load(Ordering::SeqCst), 1);
+    }
+
+    #[tokio::test]
+    async fn concurrent_identical_errors_share_one_answer() {
+        let dir = tempfile::tempdir().unwrap();
+        let renders = Arc::new(AtomicUsize::new(0));
+        let app = counting_app(open(dir.path(), 1 << 20).await, renders.clone());
+        let url = format!(
+            "{}/images/slow-missing.png",
+            serve_on_a_spare_port(app).await
+        );
+
+        let requests: Vec<_> = (0..10)
+            .map(|_| {
+                let url = url.clone();
+                tokio::spawn(async move { fetch(&url).await })
+            })
+            .collect();
+        for request in requests {
+            let (status, _, verdict, body) = request.await.unwrap();
+            assert_eq!(status, StatusCode::NOT_FOUND);
+            assert_eq!(verdict, None);
+            assert_eq!(body, "no such template");
         }
         assert_eq!(renders.load(Ordering::SeqCst), 1);
     }
