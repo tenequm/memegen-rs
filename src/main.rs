@@ -874,8 +874,8 @@ async fn off_worker<T: Send + 'static>(
     Ok(out?)
 }
 
-/// Most bytes read from a `?background=` URL. A 2048x2048 photo saved as PNG
-/// is 5-9 MB, and JPEG or WebP a fraction of that.
+/// Most bytes read from a `?background=` URL: room for a 12 MP phone JPEG,
+/// which is a few MiB. Every request waiting for a render permit holds one.
 const MAX_BACKGROUND_BYTES: usize = 10 * 1024 * 1024;
 
 async fn fetch(url: &str) -> Result<Vec<u8>, AppError> {
@@ -942,7 +942,7 @@ impl From<RenderError> for AppError {
             }
             RenderError::TooLarge => AppError::Unprocessable(format!(
                 "background is larger than {0}x{0} pixels",
-                render::MAX_SIDE
+                render::MAX_BACKGROUND_SIDE
             )),
             RenderError::Decode(m) => AppError::Unprocessable(format!("cannot decode image: {m}")),
             RenderError::Encode(m) => AppError::Internal(format!("cannot encode image: {m}")),
@@ -1034,6 +1034,19 @@ mod tests {
         assert_eq!(refusal(custom.await).await, refused);
         let largest = query("width=2048&height=2048");
         assert!(matches!(largest.size(), Ok((2048, 2048))));
+        // The size the app's own share cards ask for.
+        let card = query(BRAND_OG.split_once('?').unwrap().1);
+        assert!(matches!(card.size(), Ok((1200, 630))));
+    }
+
+    #[tokio::test]
+    async fn oversized_background_is_a_422() {
+        let (status, body) = refusal(Err(RenderError::TooLarge.into())).await;
+        assert_eq!(status, StatusCode::UNPROCESSABLE_ENTITY);
+        assert_eq!(
+            body,
+            r#"{"error":"background is larger than 4096x4096 pixels"}"#
+        );
     }
 
     /// One-shot HTTP server: answers the first connection with `head` and

@@ -69,7 +69,7 @@ One pod on a Kubernetes cluster runs the Rust server (binds `0.0.0.0:5005`) from
 
 - The image is built for `linux/amd64` only (the cluster's nodes).
 - A template whose only background is an undecodable `default.mp4` is listed but returns `422` on render.
-- Per-request limits are constants, not env vars: `MAX_SIDE` (2048 px, for `width`/`height` and for a custom background's decoded size) and `MAX_TOP_LINES` (32) in `render.rs`, `MAX_BACKGROUND_BYTES` (10 MiB) in `main.rs`. Over a limit is a `422`; README "API" lists them for callers. Template backgrounds are trusted and not limited, so the largest ones in the corpus set the memory a render can take.
+- Per-request limits are constants, not env vars: in `render.rs` `MAX_SIDE` (2048 px, for `width`/`height` and for the size a custom background is drawn at), `MAX_BACKGROUND_SIDE` (4096 px, the size one may arrive with) and `MAX_TOP_LINES` (32); in `main.rs` `MAX_BACKGROUND_BYTES` (10 MiB). Over a size or byte limit is a `422`; a background between the two sides is shrunk to `MAX_SIDE`, and lines past `MAX_TOP_LINES` are dropped. README "API" lists them for callers. A custom background is decoded only if it is a PNG, JPEG, GIF or WebP: the `image` crate's other decoders allocate outside the limits it is given. Template backgrounds are trusted and not limited, so the largest ones in the corpus set the memory a render can take.
 
 ## URL scheme
 

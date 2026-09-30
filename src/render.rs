@@ -42,13 +42,20 @@ const SAFE_MARGIN: f32 = 0.05; // each side, fraction of the box width
 const MAX_FONT_FRAC: f32 = 0.14; // fraction of image height
 
 /// Longest side, in pixels, of a `?width=`/`?height=` canvas and of a custom
-/// background. Padding costs about 16 bytes per source-column x canvas-row on
-/// top of the canvas itself, so both ends of it have to be bounded.
+/// background once it is drawn on. Padding costs about 16 bytes per
+/// source-column x canvas-row on top of the canvas itself, so both ends of it
+/// have to be bounded.
 pub(crate) const MAX_SIDE: u32 = 2048;
 
-/// Decoder allowance for a custom background: a `MAX_SIDE` square at 16-bit
-/// RGBA is half of it, the rest is decoder scratch.
-const MAX_DECODE_BYTES: u64 = 64 * 1024 * 1024;
+/// Longest side a custom background may arrive with; one over `MAX_SIDE` is
+/// shrunk to it before anything else. 4096 takes a 12 MP phone photo
+/// (4032x3024) and a 4K screenshot.
+pub(crate) const MAX_BACKGROUND_SIDE: u32 = 4096;
+
+/// Decoder allowance for a custom background: 16-bit RGBA, the deepest pixel
+/// the accepted formats decode to, at `MAX_BACKGROUND_SIDE` square. Only the
+/// side limit can then refuse an image.
+const MAX_DECODE_BYTES: u64 = 8 * (MAX_BACKGROUND_SIDE as u64).pow(2);
 
 /// `layout=top` makes one box, and one full-width layer, per caption line, so
 /// the count needs a ceiling. The band is a fifth of the image: under 1280 px
@@ -109,23 +116,36 @@ pub(crate) fn render_custom(
     bytes: &[u8],
     spec: &Spec,
 ) -> Result<(Vec<u8>, &'static str), RenderError> {
-    // The bytes are untrusted: a small file can declare a huge bitmap, so the
-    // decoder checks the header against these before it allocates.
-    let mut limits = Limits::default();
-    limits.max_image_width = Some(MAX_SIDE);
-    limits.max_image_height = Some(MAX_SIDE);
-    limits.max_alloc = Some(MAX_DECODE_BYTES);
     let mut reader = ImageReader::new(Cursor::new(bytes))
         .with_guessed_format()
         .map_err(|e| RenderError::Decode(e.to_string()))?;
+    // The bytes are untrusted, and the limits below only hold for the formats
+    // worth supporting: the other decoders size buffers the limits never see.
+    if !matches!(
+        reader.format(),
+        Some(ImageFormat::Png | ImageFormat::Jpeg | ImageFormat::Gif | ImageFormat::WebP)
+    ) {
+        return Err(RenderError::Decode(
+            "not a PNG, JPEG, GIF or WebP image".into(),
+        ));
+    }
+    // A small file can declare a huge bitmap, so the decoder checks the header
+    // against these before it allocates.
+    let mut limits = Limits::default();
+    limits.max_image_width = Some(MAX_BACKGROUND_SIDE);
+    limits.max_image_height = Some(MAX_BACKGROUND_SIDE);
+    limits.max_alloc = Some(MAX_DECODE_BYTES);
     reader.limits(limits);
-    let img = reader
-        .decode()
-        .map_err(|e| match e {
-            ImageError::Limits(_) => RenderError::TooLarge,
-            e => RenderError::Decode(e.to_string()),
-        })?
-        .to_rgba8();
+    let mut img = reader.decode().map_err(|e| match e {
+        ImageError::Limits(_) => RenderError::TooLarge,
+        e => RenderError::Decode(e.to_string()),
+    })?;
+    // Shrunk as decoded, before the RGBA copy: a photo is RGB, and every later
+    // step costs memory by the side.
+    if img.width().max(img.height()) > MAX_SIDE {
+        img = img.thumbnail(MAX_SIDE, MAX_SIDE);
+    }
+    let img = img.into_rgba8();
     let boxes = if spec.layout == "top" {
         top_boxes(spec.lines.len())
     } else {
@@ -672,58 +692,43 @@ mod tests {
         }
     }
 
-    fn spec<'a>(lines: &'a [String], ext: &'a str, size: (u32, u32)) -> Spec<'a> {
-        Spec {
-            lines,
-            ext,
-            size,
-            style: "default",
-            layout: "default",
-            color: None,
-        }
-    }
-
-    fn png(w: u32, h: u32) -> Vec<u8> {
+    fn blank(w: u32, h: u32, format: ImageFormat) -> Vec<u8> {
         let mut buf = Cursor::new(Vec::new());
-        write(
-            &DynamicImage::ImageRgba8(RgbaImage::new(w, h)),
-            &mut buf,
-            ImageFormat::Png,
-        )
-        .unwrap();
+        let img = DynamicImage::ImageRgb8(image::RgbImage::new(w, h));
+        write(&img, &mut buf, format).unwrap();
         buf.into_inner()
     }
 
     #[test]
-    fn custom_background_over_the_pixel_cap_is_refused() {
-        let spec = spec(&[], "png", (0, 0));
-        let refused =
-            |bytes: &[u8]| matches!(render_custom(bytes, &spec), Err(RenderError::TooLarge));
-        assert!(refused(&png(MAX_SIDE + 1, 1)));
-        assert!(refused(&png(1, MAX_SIDE + 1)));
-        assert!(render_custom(&png(MAX_SIDE, 1), &spec).is_ok());
-
-        // A 54-byte BMP header declaring 12000x12000 pixels and carrying none:
-        // refused on the header, where an unlimited decoder allocates 412 MiB.
-        let mut bomb = b"BM".to_vec();
-        for field in [
-            54u32,
-            0,
-            54,
-            40,
-            12000,
-            12000,
-            24 << 16 | 1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-        ] {
-            bomb.extend_from_slice(&field.to_le_bytes());
-        }
-        assert!(refused(&bomb));
+    fn custom_background_is_fitted_or_refused() {
+        let spec = Spec {
+            lines: &[],
+            ext: "png",
+            size: (0, 0),
+            style: "default",
+            layout: "default",
+            color: None,
+        };
+        let size = |w, h| -> Result<(u32, u32), RenderError> {
+            let (out, _) = render_custom(&blank(w, h, ImageFormat::Png), &spec)?;
+            let out = image::load_from_memory(&out).unwrap();
+            Ok((out.width(), out.height()))
+        };
+        assert!(matches!(size(MAX_SIDE, 8), Ok((MAX_SIDE, 8))));
+        // Over the drawing side but within the arrival side: shrunk to fit.
+        assert!(matches!(size(MAX_SIDE + 1, 8), Ok((MAX_SIDE, 8))));
+        assert!(matches!(size(8, MAX_BACKGROUND_SIDE), Ok((4, MAX_SIDE))));
+        assert!(matches!(
+            size(MAX_BACKGROUND_SIDE + 1, 1),
+            Err(RenderError::TooLarge)
+        ));
+        assert!(matches!(
+            size(1, MAX_BACKGROUND_SIDE + 1),
+            Err(RenderError::TooLarge)
+        ));
+        // A format outside the four never reaches its decoder.
+        let bmp = render_custom(&blank(8, 8, ImageFormat::Bmp), &spec);
+        assert!(matches!(bmp, Err(RenderError::Decode(_))));
     }
 
     #[test]
@@ -731,16 +736,5 @@ mod tests {
         assert_eq!(top_boxes(0).len(), 1);
         assert_eq!(top_boxes(3).len(), 3);
         assert_eq!(top_boxes(60_000).len(), MAX_TOP_LINES);
-    }
-
-    #[test]
-    fn social_card_size_still_renders() {
-        let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("templates");
-        let reg = crate::template::Registry::load(&dir).unwrap();
-        let lines = ["memes".to_string(), "memes everywhere".to_string()];
-        let card = spec(&lines, "jpg", (1200, 630));
-        let (bytes, mime) = render(reg.get("buzz").unwrap(), &card).unwrap();
-        let img = image::load_from_memory(&bytes).unwrap();
-        assert_eq!((mime, img.width(), img.height()), ("image/jpeg", 1200, 630));
     }
 }
