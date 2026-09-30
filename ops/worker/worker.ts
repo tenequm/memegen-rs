@@ -62,10 +62,10 @@ export default {
     // Caching lives in Workers Caching (`cache.enabled` in wrangler.jsonc), not
     // here: it is tiered (one render anywhere fills a network-wide upper tier,
     // unlike the per-datacenter Cache API) and collapses concurrent requests
-    // for the same URL into a single origin call. Cache HITs never invoke this Worker at all, so
-    // everything below runs only on a true miss. Lifetimes come from the
-    // Cache-Control/CDN-Cache-Control headers the Rust server sets; the cache
-    // key includes the Worker version, so every deploy busts it.
+    // for the same URL into a single origin call. Cache HITs never invoke this
+    // Worker at all, so everything below runs only on a true miss. Lifetimes
+    // come from the Cache-Control/CDN-Cache-Control headers the Rust server
+    // sets; the cache key includes the Worker version, so every deploy busts it.
     if (request.method !== "GET") {
       return origin(request, env);
     }
