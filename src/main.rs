@@ -889,11 +889,21 @@ struct ApiDoc;
 mod tests {
     use super::*;
 
+    // One test on purpose: it reads process-global semaphores, which a second
+    // off_worker test running in parallel would race.
     #[tokio::test]
-    async fn panicking_render_is_a_500_and_frees_its_permit() {
-        let before = RENDER_PERMITS.available_permits();
-        let out = off_worker(false, || -> Result<(), RenderError> { panic!("boom") }).await;
+    async fn job_holds_its_permits_and_a_panic_frees_them() {
+        let free = || {
+            (
+                RENDER_PERMITS.available_permits(),
+                GIF_PERMITS.available_permits(),
+            )
+        };
+        let idle = free();
+        let held = off_worker(true, move || Ok(free())).await;
+        assert!(matches!(held, Ok(held) if held == (idle.0 - 1, idle.1 - 1)));
+        let out = off_worker(true, || -> Result<(), RenderError> { panic!("boom") }).await;
         assert!(matches!(out, Err(AppError::Internal(_))));
-        assert_eq!(RENDER_PERMITS.available_permits(), before);
+        assert_eq!(free(), idle);
     }
 }
