@@ -122,19 +122,12 @@ impl Template {
     /// to the default background. Returns `None` when only an undecodable source
     /// (e.g. a bare `default.mp4`) exists - the template is metadata-only in v1.
     pub(crate) fn background(&self, style: &str) -> Option<PathBuf> {
-        let style = self.known_style(style);
-        if let Some(p) = self.find_background(style) {
-            return Some(p);
-        }
-        if style != "default" {
-            return self.find_background("default");
-        }
-        None
+        self.find_background(self.known_style(style))
     }
 
     /// `style` comes straight from the query string and is joined into a path,
     /// so only a name `list_styles` found in this folder is ever used.
-    fn known_style<'a>(&'a self, style: &'a str) -> &'a str {
+    fn known_style<'a>(&self, style: &'a str) -> &'a str {
         if self.styles.iter().any(|s| s == style) {
             style
         } else {

@@ -277,7 +277,7 @@ fn animated_gif(
     template: &Template,
     spec: &Spec,
 ) -> Result<Option<Vec<u8>>, RenderError> {
-    let decode = |e: image::ImageError| RenderError::Decode(e.to_string());
+    let decode = |e: ImageError| RenderError::Decode(e.to_string());
     let file = File::open(gif).map_err(|e| RenderError::Decode(e.to_string()))?;
     let frames = GifDecoder::new(BufReader::new(file))
         .map_err(decode)?
@@ -291,7 +291,7 @@ fn animated_gif(
     let captions = caption_layers(frames[0].buffer().dimensions(), &boxes, spec);
     let mut out = Cursor::new(Vec::new());
     {
-        let encode = |e: image::ImageError| RenderError::Encode(e.to_string());
+        let encode = |e: ImageError| RenderError::Encode(e.to_string());
         let mut enc = GifEncoder::new(&mut out);
         enc.set_repeat(Repeat::Infinite).map_err(encode)?;
         for fr in frames {
