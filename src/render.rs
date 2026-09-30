@@ -107,7 +107,7 @@ pub(crate) fn render(
     let bytes = std::fs::read(&bg).map_err(|e| RenderError::Decode(e.to_string()))?;
     let img = image::load_from_memory(&bytes)
         .map_err(|e| RenderError::Decode(e.to_string()))?
-        .to_rgba8();
+        .into_rgba8();
     let boxes = effective_boxes(template, spec.layout, spec.lines.len());
     finish(img, &boxes, spec)
 }
@@ -168,6 +168,7 @@ fn finish(
 ) -> Result<(Vec<u8>, &'static str), RenderError> {
     let captions = caption_layers(img.dimensions(), boxes, spec);
     overlay_captions(&mut img, &captions);
+    drop(captions); // not held through the padding, the peak of a render
     if spec.size.0 > 0 && spec.size.1 > 0 {
         img = pad_to(&img, spec.size.0, spec.size.1);
     }
@@ -521,10 +522,9 @@ fn pad_to(img: &RgbaImage, w: u32, h: u32) -> RgbaImage {
     let ratio = (w as f32 / img.width() as f32).min(h as f32 / img.height() as f32);
     let nw = ((img.width() as f32 * ratio).round() as u32).max(1);
     let nh = ((img.height() as f32 * ratio).round() as u32).max(1);
+    // The cover resize is the peak, so it runs before `fitted` exists.
+    let mut canvas = imageops::fast_blur(&imageops::resize(img, w, h, FilterType::Triangle), 16.0);
     let fitted = imageops::resize(img, nw, nh, FilterType::Lanczos3);
-
-    let cover = imageops::resize(img, w, h, FilterType::Triangle);
-    let mut canvas = imageops::fast_blur(&cover, 16.0);
     imageops::overlay(
         &mut canvas,
         &fitted,
@@ -553,7 +553,7 @@ pub(crate) fn thumbnail(bytes: &[u8], size: u32) -> Result<(Vec<u8>, &'static st
     // Decode by content, not extension (same corpus quirk as `render`).
     let img = image::load_from_memory(bytes)
         .map_err(|e| RenderError::Decode(e.to_string()))?
-        .to_rgba8();
+        .into_rgba8();
     let (w, h) = img.dimensions();
     let to_err = |e: fast_image_resize::ResizeError| RenderError::Decode(e.to_string());
 

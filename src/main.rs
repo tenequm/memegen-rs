@@ -902,13 +902,11 @@ async fn fetch(url: &str) -> Result<Vec<u8>, AppError> {
     };
     // Content-Length only fails fast: a server can omit it, so the count of
     // bytes actually received is what enforces the cap.
-    if resp
-        .content_length()
-        .is_some_and(|n| n > MAX_BACKGROUND_BYTES as u64)
-    {
+    let declared = resp.content_length().unwrap_or(0);
+    if declared > MAX_BACKGROUND_BYTES as u64 {
         return Err(too_large());
     }
-    let mut body = Vec::new();
+    let mut body = Vec::with_capacity(declared as usize);
     while let Some(chunk) = resp
         .chunk()
         .await
