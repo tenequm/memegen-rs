@@ -87,12 +87,20 @@ This repository ships a corpus of ~780 templates under `templates/`, read once a
 
 ## Architecture
 
-- **[axum](https://crates.io/crates/axum)** for HTTP routing and **[utoipa](https://crates.io/crates/utoipa)** for the OpenAPI spec, rendered as interactive docs by **[Scalar](https://github.com/scalar/scalar)** at `/docs`. **[maud](https://crates.io/crates/maud)** renders the web UI (a searchable template gallery and a meme builder) at compile time, and **[tower_governor](https://crates.io/crates/tower-governor)** caps meme rendering at a global 5 requests/second.
+- **[axum](https://crates.io/crates/axum)** for HTTP routing and **[utoipa](https://crates.io/crates/utoipa)** for the OpenAPI spec, rendered as interactive docs by **[Scalar](https://github.com/scalar/scalar)** at `/docs`. **[maud](https://crates.io/crates/maud)** renders the web UI (a searchable template gallery and a meme builder) at compile time.
 - **[image](https://crates.io/crates/image)** + **[imageproc](https://crates.io/crates/imageproc)** + **[ab_glyph](https://crates.io/crates/ab_glyph)** for rendering. A caption is autosized to its box, word-wrapped, drawn with a white fill and a black outline, and composited onto the background.
 - **[serde-saphyr](https://crates.io/crates/serde-saphyr)** (pure-Rust YAML) parses each `config.yml`.
 - Fonts (**[Anton](https://fonts.google.com/specimen/Anton)** for the Impact look, **[Pangolin](https://fonts.google.com/specimen/Pangolin)** for handwriting, **[Manrope](https://fonts.google.com/specimen/Manrope)** for the watermark; all SIL OFL 1.1) are embedded in the binary via `include_bytes!` - no font directory, and it works on a fonts-less container. Anton and Pangolin cover Latin + full Cyrillic/Ukrainian; the Anton build is the Cyrillic-extended v2.300 fork from [Tural/AntonFont](https://github.com/Tural/AntonFont) (pending upstream as [google/fonts#7552](https://github.com/google/fonts/issues/7552)).
 
 Three source files: `template.rs` (model, registry, URL codec, styling), `render.rs` (the rendering pipeline), `main.rs` (router, handlers, OpenAPI, error mapping).
+
+### Deployment
+
+The server has no rate limiter and no render cache: every `/images/` request renders on demand, so cap its CPU (or put your own cache or limiter in front) before exposing it publicly. It also fetches any URL passed as `?background=` with no filtering of its own, so restrict its outbound network to the public internet if it can reach anything private.
+
+`.github/workflows/image.yml` builds `ops/docker/Containerfile` on every push to `main` and pushes `ghcr.io/tenequm/memegen-rs:sha-<commit>` (`linux/amd64`, template corpus baked in). CI builds images only; it deploys nothing.
+
+The public instance ([memegen.rs](https://memegen.rs)) runs that image as one pod on a Kubernetes cluster: pinned by digest in a private infra repo's helmfile, limited to 2 CPUs and 512 MiB, non-root with a read-only root filesystem, behind a NetworkPolicy that limits the `?background=` fetch to the public internet. A release is a push to `main`, then bumping the pin (`crane digest ghcr.io/tenequm/memegen-rs:sha-<commit>`) in the infra repo and applying it - a push alone does not change production. There is no edge cache and no edge rate limiter; the pod's CPU limit is the flood backstop. As of 2026-09-30 the `memegen.rs` domain is still served by the previously deployed Cloudflare Worker and container, until its DNS is pointed at the cluster.
 
 ## Scope
 

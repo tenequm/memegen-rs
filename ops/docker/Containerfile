@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # memegen-rs container image. Builds the Rust server and bakes the template
 # corpus in, so the image is fully self-contained and durable.
-# Must run on linux/amd64 (Cloudflare Containers requirement).
+# Built for linux/amd64 (the production cluster's nodes).
 
 # ---- build stage ----
 FROM rust:1.95-slim-bookworm AS build
