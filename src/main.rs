@@ -825,7 +825,7 @@ fn split_ext(s: &str) -> (&str, &str) {
 
 /// Split cache lifetimes: browsers get a day (so template fixes reach users),
 /// a CDN a year. memegen.rs has no CDN to read `cdn-cache-control`; it stays
-/// because it is harmless and a CDN placed in front later would honour it.
+/// because it is harmless and a CDN placed in front later would honor it.
 const BROWSER_CACHE: (header::HeaderName, &str) = (header::CACHE_CONTROL, "public, max-age=86400");
 const EDGE_CACHE: (header::HeaderName, &str) = (
     header::HeaderName::from_static("cdn-cache-control"),
