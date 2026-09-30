@@ -7,9 +7,8 @@ Stateless meme-generator HTTP API + web UI in **pure Rust**. Every meme is fully
 - `src/template.rs` - model, in-memory registry (read once at startup), URL codec, styling.
 - `src/render.rs` - rendering pipeline (autosize, wrap, outline, composite, GIF encode).
 - `src/main.rs` - axum router, handlers, OpenAPI, error mapping, web UI (maud, compile-time).
-- `ops/worker/` - Cloudflare Worker edge layer (`worker.ts`: cache + rate limit + analytics injection) and its toolchain (`wrangler.jsonc`, `package.json`, `tsconfig.json`, generated `worker-configuration.d.ts`). Not Rust.
 - `ops/docker/` - `Containerfile` + `Containerfile.dockerignore` for the container image build.
-- `templates/<id>/` - 701 template folders, each `config.yml` (upstream memegen schema) + `default.{png,jpg,webp,gif}`. `templates/popularity.json` ranks them. **Committed to the repo and baked into the image.**
+- `templates/<id>/` - 700 template folders, each `config.yml` (upstream memegen schema) + `default.{png,jpg,webp,gif}`. `templates/popularity.json` ranks them. **Committed to the repo and baked into the image.**
 - `assets/` - embedded fonts (Anton, Pangolin; SIL OFL), favicons, OG image, `SKILL.md` (the ClawHub agent skill; `SKILL.md` at root is a symlink to it). `Anton-Regular.ttf` is the Cyrillic-extended v2.300 build from [Tural/AntonFont](https://github.com/Tural/AntonFont) (unmerged upstream as [google/fonts#7552](https://github.com/google/fonts/issues/7552)); both fonts cover Latin + full Cyrillic/Ukrainian.
 
 ## Stack
@@ -23,9 +22,9 @@ cargo run                 # local server on :5005, reads ./templates (override: 
 cargo fmt && cargo clippy && cargo test   # validate; run before every commit
 ```
 
-Lints are strict (`unsafe_code = forbid`, clippy `all = deny`) - CI fails on warnings. `cargo clippy` does **not** emit a binary; rebuild with `cargo run`/`cargo build` before smoke-testing or you'll hit a stale executable.
+Lints are strict (`unsafe_code = forbid`, clippy `all = deny`), but CI only builds the image - nothing there runs fmt, clippy or tests, so run them yourself. `cargo clippy` does **not** emit a binary; rebuild with `cargo run`/`cargo build` before smoke-testing or you'll hit a stale executable.
 
-Optional: `cd ops/worker && npm run dev` (`wrangler dev`) runs the Worker edge layer locally; not needed for pure Rust/render work.
+Environment variables, each read once: `PORT` (default `5005`), `MEMEGEN_TEMPLATES_DIR` (default `templates`), `MEMEGEN_WATERMARK` (brand label on renders; unset = none), `MEMEGEN_HEAD_HTML` (HTML appended verbatim to the `<head>` of every page - gallery, builder, `/docs`; trusted operator config, never escaped; unset or empty = pages unchanged).
 
 ### Smoke test (against a running `:5005`)
 
@@ -35,34 +34,41 @@ curl -sf 'http://localhost:5005/templates' | head                               
 curl -sf 'http://localhost:5005/' -o /dev/null && echo ok                                           # web UI / docs
 ```
 
-Prod smoke test: same paths against `https://memegen.rs` (expect cold-start latency on first render).
+Prod smoke test: same paths against `https://memegen.rs`. Until the DNS cutover (see "Deploy architecture") that is still the old Cloudflare deployment - edge-cached, cold-starting after 10 minutes idle - so it does not show a cluster rollout.
 
 ## Releasing a new version
 
-Deploy and release are **separate** pipelines:
+Building an image, rolling it out and cutting a versioned release are **separate** steps:
 
 ```sh
-git push origin main      # -> deploy.yml auto-deploys to prod (memegen.rs). NOT triggered by tags.
+git push origin main      # -> image.yml builds and pushes ghcr.io/tenequm/memegen-rs:sha-<commit> (+ latest). Rolls nothing out.
 git tag v0.1.0 && git push origin v0.1.0   # -> release.yml: versioned GHCR image + git-cliff GitHub Release + ClawHub skill
 ```
 
-Release notes come from Conventional Commit messages via git-cliff (`.github/cliff.toml`) - so commit hygiene *is* the changelog. The GHCR package is private on first push; flip it public once for the Release's `docker pull` link to work anonymously.
+The cluster runs whatever image is pinned by digest in a private infra repo's helmfile. To roll a commit out, wait for `image.yml` to finish, then bump the pin there to `sha-<commit>@<digest>` and apply it:
 
-## Deploy architecture (Cloudflare)
+```sh
+crane digest ghcr.io/tenequm/memegen-rs:sha-<commit>   # full 40-char commit SHA -> sha256:...
+```
 
-Worker on custom domain `memegen.rs` -> single-instance **Container** running the Rust server (binds `0.0.0.0:5005`, `getContainer` singleton, `max_instances: 1`, scales to zero after 10m idle).
+Release notes come from Conventional Commit messages via git-cliff (`.github/cliff.toml`) - so commit hygiene *is* the changelog.
 
-- Edge caching is Workers Caching (`cache.enabled` in `wrangler.jsonc`), tiered across PoPs with request collapsing; cache HITs never invoke the Worker or the container. TTLs come from the Rust server's headers: images/assets send `Cache-Control: max-age=86400` (browsers) + `CDN-Cache-Control: immutable` (edge); HTML/JSON send none and get the 2h heuristic. The cache key includes the Worker version, so every deploy busts it.
-- Render throttle is a **Cloudflare edge rate limiter** (`RENDER_LIMITER`, 10000/60s aggregate per location) - a runaway-bill backstop, not a per-user limit. Only cache-miss renders on `/images/` count. There is no in-app limiter.
-- Config: `ops/worker/wrangler.jsonc`. Worker bindings -> `ops/worker/worker-configuration.d.ts` via `wrangler types` (generated, do not hand-edit).
-- Analytics: a `worker.ts` HTMLRewriter injects the `EXTRA_HTML_SCRIPTS` wrangler var into each HTML `<head>`. It loads `/mesh/script.js`, served by a **separate `memegen-rybbit-proxy` Worker (not in this repo)** that proxies to a self-hosted Rybbit instance. No `/mesh` code lives here.
+## Deploy architecture (Kubernetes)
+
+One pod on a Kubernetes cluster runs the Rust server (binds `0.0.0.0:5005`) from the pinned `ghcr.io/tenequm/memegen-rs` image. No manifests live in this repo.
+
+- Limits: 2 CPU, 512 MiB. The pod runs non-root with a read-only root filesystem.
+- There is no edge cache and no rate limiter in front of the pod, and none in the app. The pod's CPU and memory limits are the flood backstop.
+- The server fetches any URL given as `?background=` with no filtering of its own. On the cluster a NetworkPolicy limits that fetch to the public internet.
+- Images and assets send `Cache-Control: max-age=86400` and `CDN-Cache-Control: immutable` (one year); HTML and JSON send neither. Nothing in front of the pod reads the CDN header.
+- Analytics: the tag is whatever `MEMEGEN_HEAD_HTML` holds, appended by the server to each page `<head>`. Nothing outside the pod injects it.
+
+**Until the DNS cutover** (as of 2026-09-30) `memegen.rs` itself is still served by the previously deployed Cloudflare Worker and container, last deployed from `625ea96`. Nothing in this repo updates them any more; their source is `git show 625ea96:ops/worker/worker.ts`. Until its DNS is pointed at the cluster, `memegen.rs` keeps the Worker's edge cache, render rate limiter and analytics injection, and 403s there come from Cloudflare zone-level bot protection, not app code.
 
 ## Gotchas
 
-- Cloudflare Containers **cannot pull from GHCR** - CI copies the image into `registry.cloudflare.com` (which also forbids the `latest` tag; a commit-derived tag is used).
-- Containers require `linux/amd64`.
+- The image is built for `linux/amd64` only (the cluster's nodes).
 - A template whose only background is an undecodable `default.mp4` is listed but returns `422` on render.
-- 403s in prod come from Cloudflare zone-level bot protection, not app code (`worker.ts` has zero UA logic).
 
 ## URL scheme
 
@@ -70,8 +76,8 @@ Worker on custom domain `memegen.rs` -> single-instance **Container** running th
 
 ## Code style
 
-- **Minimal comments.** Comment *why*, not *what*; the code is the documentation. Don't narrate obvious lines. (The existing config files - `worker.ts`, `wrangler.jsonc` - carry dense rationale comments on purpose because the deploy behavior is non-obvious; match that bar only where the reasoning is genuinely load-bearing.)
-- **Code cleanliness / minimalism.** Every new file must justify its existence - if it can be inlined, inline it. Split only for a functional reason (different lifecycle/runtime), never for "organization". No reference/template/example files. Start from the fewest files that work. This repo is deliberately ~1800 LOC across 3 Rust files; keep it that way.
+- **Minimal comments.** Comment *why*, not *what*; the code is the documentation. Don't narrate obvious lines. Write a dense rationale comment only where the reasoning is genuinely load-bearing.
+- **Code cleanliness / minimalism.** Every new file must justify its existence - if it can be inlined, inline it. Split only for a functional reason (different lifecycle/runtime), never for "organization". No reference/template/example files. Start from the fewest files that work. This repo is deliberately ~2000 LOC across 3 Rust files; keep it that way.
 - Read code before making claims about it; never guess a flag - check `--help`.
 - Don't edit/implement until asked; when intent is ambiguous, research and recommend rather than act.
 - ASCII-only symbols in docs; single `-` hyphens, never em/en dashes.

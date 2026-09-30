@@ -16,7 +16,7 @@ use maud::{DOCTYPE, Markup, PreEscaped, html};
 use serde::{Deserialize, Serialize};
 use tokio::sync::Semaphore;
 use utoipa::{OpenApi, ToSchema};
-use utoipa_scalar::{Scalar, Servable};
+use utoipa_scalar::Scalar;
 
 use render::{RenderError, Spec};
 use template::{Registry, Template, decode};
@@ -58,7 +58,7 @@ async fn main() -> anyhow::Result<()> {
         .route("/images/{id}/{*text}", get(render_text))
         .route("/images/{filename}", get(render_blank))
         // Scalar API docs (rendered from the OpenAPI spec).
-        .merge(Scalar::with_url("/docs", ApiDoc::openapi()))
+        .route("/docs", get(docs))
         // /SKILL.md, /llms.txt, and any-case variants serve the embedded doc.
         .fallback(docs_fallback)
         .with_state(registry);
@@ -414,7 +414,7 @@ fn agent_doc(mime: &'static str) -> Response {
         .into_response()
 }
 
-// ---------- Front-end (gallery + builder) ----------
+// ---------- Front-end (gallery + builder + docs) ----------
 
 const PAGE_CSS: &str = r#"
 @font-face{font-family:"Anton";src:url("/font/anton.ttf") format("truetype");font-display:swap}
@@ -563,11 +563,24 @@ fn topbar() -> Markup {
     }
 }
 
+/// `MEMEGEN_HEAD_HTML`, read once: markup appended verbatim to the `<head>` of
+/// every HTML page (e.g. an analytics tag). Unset or empty means none.
+fn head_html() -> Option<&'static str> {
+    static HEAD_HTML: OnceLock<Option<String>> = OnceLock::new();
+    HEAD_HTML
+        .get_or_init(|| {
+            std::env::var("MEMEGEN_HEAD_HTML")
+                .ok()
+                .filter(|s| !s.is_empty())
+        })
+        .as_deref()
+}
+
 // Social-share metadata first (Slack reads only the first 32 KB of <head>, so
 // the OG block precedes the stylesheet). One 1200x630 JPEG card + the OG tags +
 // twitter:card=summary_large_image is the cross-platform lowest common
 // denominator (Telegram, Slack, Discord, LinkedIn, Reddit, X, Facebook).
-fn page_head(title: &str, desc: &str, path: &str, og_image: &str) -> Markup {
+fn page_head(title: &str, desc: &str, path: &str, og_image: &str, extra: Option<&str>) -> Markup {
     let canonical = format!("{SITE}{path}");
     html! {
         head {
@@ -598,6 +611,8 @@ fn page_head(title: &str, desc: &str, path: &str, og_image: &str) -> Markup {
             meta name="theme-color" content="#0b0c0e";
 
             style { (PreEscaped(PAGE_CSS)) }
+            // MEMEGEN_HEAD_HTML is trusted operator config, not user input: raw on purpose.
+            @if let Some(extra) = extra { (PreEscaped(extra)) }
         }
     }
 }
@@ -620,8 +635,9 @@ fn page_footer() -> Markup {
     }
 }
 
-// The gallery is a pure function of the immutable registry, so render it once
-// and serve the cached string on every hit (no per-request HTML build or stats).
+// The gallery is a pure function of the immutable registry and the head
+// snippet, so render it once and serve the cached string on every hit (no
+// per-request HTML build or stats).
 async fn gallery(State(reg): State<AppState>) -> Html<&'static str> {
     static CACHE: OnceLock<String> = OnceLock::new();
     Html(
@@ -641,6 +657,7 @@ fn gallery_markup(reg: &Registry) -> Markup {
                 "A tiny, stateless meme generator in pure Rust. Pick a template, type your caption, copy the link.",
                 "/",
                 BRAND_OG,
+                head_html(),
             ))
             body {
                 (topbar())
@@ -707,6 +724,7 @@ async fn builder(State(reg): State<AppState>, Path(id): Path<String>) -> Result<
                 &format!("Caption the {name} meme template and copy the link or the image."),
                 &format!("/edit/{}", t.id),
                 &og_image_for(t),
+                head_html(),
             ))
             body data-template=(t.id) {
                 (topbar())
@@ -752,6 +770,39 @@ async fn builder(State(reg): State<AppState>, Path(id): Path<String>) -> Result<
         }
     };
     Ok(markup)
+}
+
+// Scalar's page depends only on the spec and the head snippet, so build it once.
+async fn docs() -> Html<&'static str> {
+    static CACHE: OnceLock<String> = OnceLock::new();
+    Html(CACHE.get_or_init(|| docs_html(head_html())).as_str())
+}
+
+fn docs_html(extra: Option<&str>) -> String {
+    let page = Scalar::new(ApiDoc::openapi()).to_html();
+    match extra {
+        // utoipa-scalar can only swap its whole template, so splice into the
+        // rendered page: its first `</head>` is the template's, ahead of the spec.
+        Some(extra) => page.replacen("</head>", &format!("{extra}</head>"), 1),
+        None => page,
+    }
+}
+
+#[test]
+fn head_html_lands_once_at_the_end_of_head() {
+    let tag = r#"<script defer src="/mesh/script.js" data-site-id="t"></script>"#;
+    let head = |extra| page_head("t", "d", "/", BRAND_OG, extra).into_string();
+    for (with, without) in [
+        (head(Some(tag)), head(None)),
+        (docs_html(Some(tag)), docs_html(None)),
+    ] {
+        assert_eq!(with.matches(tag).count(), 1);
+        assert_eq!(
+            with.find(tag).unwrap() + tag.len(),
+            with.find("</head>").unwrap()
+        );
+        assert_eq!(with.replacen(tag, "", 1), without);
+    }
 }
 
 // ---------- Helpers ----------
