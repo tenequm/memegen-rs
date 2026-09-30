@@ -309,13 +309,20 @@ async fn thumb(State(reg): State<AppState>, Path(id): Path<String>) -> Result<Re
         .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
     let path = template
         .default_background
-        .as_ref()
+        .clone()
         .ok_or_else(|| AppError::NotFound(format!("no background for {id}")))?;
-    let src = tokio::fs::read(path)
-        .await
-        .map_err(|e| AppError::Internal(e.to_string()))?;
-    let (bytes, mime) = off_worker(false, move || render::thumbnail(&src, THUMB_PX)).await?;
-    thumb_cache().lock().unwrap().insert(id, bytes.clone());
+    // Read and cache inside the job: a request waiting for a permit holds no
+    // image bytes, and a thumbnail whose client left is still kept.
+    let (bytes, mime) = off_worker(false, move || {
+        if let Some(bytes) = thumb_cache().lock().unwrap().get(&id).cloned() {
+            return Ok((bytes, "image/jpeg"));
+        }
+        let src = std::fs::read(&path).map_err(|e| RenderError::Decode(e.to_string()))?;
+        let out = render::thumbnail(&src, THUMB_PX)?;
+        thumb_cache().lock().unwrap().insert(id, out.0.clone());
+        Ok(out)
+    })
+    .await?;
     Ok(cached_bytes(bytes, mime))
 }
 
