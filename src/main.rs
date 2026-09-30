@@ -197,9 +197,17 @@ impl ImgQuery {
     path = "/images/{id}/{text}",
     params(
         ("id" = String, Path, description = "Template ID"),
-        ("text" = String, Path, description = "Caption lines and extension, e.g. top/bottom.png")
+        ("text" = String, Path, description = "Caption lines and extension, e.g. top/bottom.png"),
+        ("style" = Option<String>, Query, description = "Alternate background, one of the template's `styles`; anything else uses the default"),
+        ("layout" = Option<String>, Query, description = "`top` puts every line at the top and draws the first 32"),
+        ("color" = Option<String>, Query, description = "Text color, a name or hex"),
+        ("width" = Option<u32>, Query, maximum = 2048, description = "Pad to this width; needs `height` too"),
+        ("height" = Option<u32>, Query, maximum = 2048, description = "Pad to this height; needs `width` too")
     ),
-    responses((status = 200, description = "Rendered meme", content_type = "image/*"))
+    responses(
+        (status = 200, description = "Rendered meme", content_type = "image/*"),
+        (status = 422, description = "`width` or `height` over 2048, or an unsupported extension; JSON `{\"error\": ...}`")
+    )
 )]
 async fn render_text(
     State(reg): State<AppState>,
@@ -231,8 +239,16 @@ async fn render_text(
 #[utoipa::path(
     get,
     path = "/images/{filename}",
-    params(("filename" = String, Path, description = "Template ID and extension, e.g. fry.png")),
-    responses((status = 200, description = "Blank template", content_type = "image/*"))
+    params(
+        ("filename" = String, Path, description = "Template ID and extension, e.g. fry.png"),
+        ("style" = Option<String>, Query, description = "Alternate background, one of the template's `styles`; anything else uses the default"),
+        ("width" = Option<u32>, Query, maximum = 2048, description = "Pad to this width; needs `height` too"),
+        ("height" = Option<u32>, Query, maximum = 2048, description = "Pad to this height; needs `width` too")
+    ),
+    responses(
+        (status = 200, description = "Blank template", content_type = "image/*"),
+        (status = 422, description = "`width` or `height` over 2048, or an unsupported extension; JSON `{\"error\": ...}`")
+    )
 )]
 async fn render_blank(
     State(reg): State<AppState>,
@@ -265,9 +281,16 @@ async fn render_blank(
     path = "/images/custom/{text}",
     params(
         ("text" = String, Path, description = "Caption lines and extension"),
-        ("background" = String, Query, description = "Source image URL (at most 10 MiB and 2048x2048 pixels)")
+        ("background" = String, Query, description = "URL of a PNG, JPEG, GIF or WebP image, at most 10 MiB and 4096x4096 pixels; one over 2048 on a side is scaled down to fit 2048x2048"),
+        ("layout" = Option<String>, Query, description = "`top` puts every line at the top and draws the first 32"),
+        ("color" = Option<String>, Query, description = "Text color, a name or hex"),
+        ("width" = Option<u32>, Query, maximum = 2048, description = "Pad to this width; needs `height` too"),
+        ("height" = Option<u32>, Query, maximum = 2048, description = "Pad to this height; needs `width` too")
     ),
-    responses((status = 200, description = "Rendered meme on a custom background", content_type = "image/*"))
+    responses(
+        (status = 200, description = "Rendered meme on a custom background", content_type = "image/*"),
+        (status = 422, description = "`width` or `height` over 2048, or a background that is over a limit, not one of the four formats or not fetchable; JSON `{\"error\": ...}`")
+    )
 )]
 async fn render_custom(
     Path(text): Path<String>,
