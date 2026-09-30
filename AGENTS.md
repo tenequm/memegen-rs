@@ -8,7 +8,7 @@ Stateless meme-generator HTTP API + web UI in **pure Rust**. Every meme is fully
 - `src/render.rs` - rendering pipeline (autosize, wrap, outline, composite, GIF encode).
 - `src/main.rs` - axum router, handlers, OpenAPI, error mapping, web UI (maud, compile-time).
 - `ops/docker/` - `Containerfile` + `Containerfile.dockerignore` for the container image build.
-- `templates/<id>/` - 701 template folders, each `config.yml` (upstream memegen schema) + `default.{png,jpg,webp,gif}`. `templates/popularity.json` ranks them. **Committed to the repo and baked into the image.**
+- `templates/<id>/` - 700 template folders, each `config.yml` (upstream memegen schema) + `default.{png,jpg,webp,gif}`. `templates/popularity.json` ranks them. **Committed to the repo and baked into the image.**
 - `assets/` - embedded fonts (Anton, Pangolin; SIL OFL), favicons, OG image, `SKILL.md` (the ClawHub agent skill; `SKILL.md` at root is a symlink to it). `Anton-Regular.ttf` is the Cyrillic-extended v2.300 build from [Tural/AntonFont](https://github.com/Tural/AntonFont) (unmerged upstream as [google/fonts#7552](https://github.com/google/fonts/issues/7552)); both fonts cover Latin + full Cyrillic/Ukrainian.
 
 ## Stack
@@ -22,7 +22,7 @@ cargo run                 # local server on :5005, reads ./templates (override: 
 cargo fmt && cargo clippy && cargo test   # validate; run before every commit
 ```
 
-Lints are strict (`unsafe_code = forbid`, clippy `all = deny`) - CI fails on warnings. `cargo clippy` does **not** emit a binary; rebuild with `cargo run`/`cargo build` before smoke-testing or you'll hit a stale executable.
+Lints are strict (`unsafe_code = forbid`, clippy `all = deny`), but CI only builds the image - nothing there runs fmt, clippy or tests, so run them yourself. `cargo clippy` does **not** emit a binary; rebuild with `cargo run`/`cargo build` before smoke-testing or you'll hit a stale executable.
 
 ### Smoke test (against a running `:5005`)
 
@@ -49,7 +49,7 @@ The cluster runs whatever image is pinned by digest in a private infra repo's he
 crane digest ghcr.io/tenequm/memegen-rs:sha-<commit>   # full 40-char commit SHA -> sha256:...
 ```
 
-Release notes come from Conventional Commit messages via git-cliff (`.github/cliff.toml`) - so commit hygiene *is* the changelog. The GHCR package is private on first push; flip it public once for the Release's `docker pull` link to work anonymously.
+Release notes come from Conventional Commit messages via git-cliff (`.github/cliff.toml`) - so commit hygiene *is* the changelog.
 
 ## Deploy architecture (Kubernetes)
 
@@ -74,7 +74,7 @@ One pod on a Kubernetes cluster runs the Rust server (binds `0.0.0.0:5005`) from
 ## Code style
 
 - **Minimal comments.** Comment *why*, not *what*; the code is the documentation. Don't narrate obvious lines. Write a dense rationale comment only where the reasoning is genuinely load-bearing.
-- **Code cleanliness / minimalism.** Every new file must justify its existence - if it can be inlined, inline it. Split only for a functional reason (different lifecycle/runtime), never for "organization". No reference/template/example files. Start from the fewest files that work. This repo is deliberately ~1800 LOC across 3 Rust files; keep it that way.
+- **Code cleanliness / minimalism.** Every new file must justify its existence - if it can be inlined, inline it. Split only for a functional reason (different lifecycle/runtime), never for "organization". No reference/template/example files. Start from the fewest files that work. This repo is deliberately ~2000 LOC across 3 Rust files; keep it that way.
 - Read code before making claims about it; never guess a flag - check `--help`.
 - Don't edit/implement until asked; when intent is ambiguous, research and recommend rather than act.
 - ASCII-only symbols in docs; single `-` hyphens, never em/en dashes.

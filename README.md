@@ -8,7 +8,7 @@
 
 A minimal, stateless meme generator HTTP API in pure Rust.
 
-Every meme is described entirely by its URL - there is no database, no cache server, and nothing to log in to. Backgrounds and caption geometry come from a directory of template folders, and each request renders an image on demand. It is a deliberately small reimplementation of [jacebrowning/memegen](https://github.com/jacebrowning/memegen): three endpoint groups, embedded fonts, no SaaS plumbing - around 1,000 lines across three source files.
+Every meme is described entirely by its URL - there is no database, no cache server, and nothing to log in to. Backgrounds and caption geometry come from a directory of template folders, and each request renders an image on demand. It is a deliberately small reimplementation of [jacebrowning/memegen](https://github.com/jacebrowning/memegen): three endpoint groups, embedded fonts, no SaaS plumbing - around 2,000 lines across three source files.
 
 ## Table of Contents
 
@@ -83,7 +83,7 @@ templates/<id>/
 
 `config.yml` uses the same schema as upstream memegen, so any memegen-compatible corpus works. Text-box coordinates are fractions of the image (0.0-1.0). Alternate background variants (extra image files beside `default.*`) become selectable via `?style=<name>`.
 
-This repository ships a corpus of ~780 templates under `templates/`, read once at startup into an immutable in-memory registry. Add or replace templates by dropping folders in, or point `MEMEGEN_TEMPLATES_DIR` at a different directory. See [License](#license) for the licensing posture on the bundled images.
+This repository ships a corpus of ~700 templates under `templates/`, read once at startup into an immutable in-memory registry. Add or replace templates by dropping folders in, or point `MEMEGEN_TEMPLATES_DIR` at a different directory. See [License](#license) for the licensing posture on the bundled images.
 
 ## Architecture
 
