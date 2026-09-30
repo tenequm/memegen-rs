@@ -157,7 +157,7 @@ pub(crate) async fn serve(State(cache): State<Cache>, req: Request, next: Next) 
         }
         Err(e) => match e.downcast_ref::<Uncached>() {
             Some(Uncached(status, rendered)) => (*status, rendered.clone()).into_response(),
-            None => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
+            None => crate::AppError::Internal("render failed".into()).into_response(),
         },
     }
 }
