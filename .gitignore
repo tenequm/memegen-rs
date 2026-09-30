@@ -1,7 +1,5 @@
 /target
 /cache
-node_modules/
-.wrangler/
 
 # Local launch/demo video assets - not part of the app
 /demo-assets/
