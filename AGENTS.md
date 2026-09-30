@@ -59,10 +59,10 @@ Release notes come from Conventional Commit messages via git-cliff (`.github/cli
 One pod on a Kubernetes cluster runs the Rust server (binds `0.0.0.0:5005`) from the pinned `ghcr.io/tenequm/memegen-rs` image. No manifests live in this repo.
 
 - Limits: 2 CPU, 1 GiB. The pod runs non-root with a read-only root filesystem; the cache volume is the only path it can write.
-- Render cache: on, with `MEMEGEN_CACHE_DIR=/cache` on an `emptyDir` and the default 10 GiB bound (see "Render cache"). It goes with the pod, so every restart or rollout starts empty.
+- Render cache: on, with `MEMEGEN_CACHE_DIR=/cache` on an `emptyDir` and the default 10 GiB bound (see "Render cache"). The volume goes with the pod and the server reads nothing back from it at startup, so every rollout or restart starts empty.
 - Cloudflare hosts the DNS zone and nothing else: no Worker, no edge cache, no rate limiter and no bot protection in the request path, only the cluster's ingress. The app has no rate limiter either - it runs at most one render per core and queues the rest - so the pod's CPU and memory limits are the flood backstop.
 - The server fetches any URL given as `?background=` with no filtering of its own. On the cluster a NetworkPolicy limits that fetch to the public internet.
-- Images and assets send `Cache-Control: max-age=86400` and `CDN-Cache-Control: immutable` (one year); HTML and JSON send neither. Nothing in front of the pod reads the CDN header.
+- Images and assets send `Cache-Control: max-age=86400` and `CDN-Cache-Control: immutable` (one year). `/manifest.webmanifest` (a day) and `/SKILL.md` / `/llms.txt` (an hour) send `Cache-Control` only; HTML pages and JSON send neither. Nothing in front of the pod reads the CDN header.
 - Analytics: the tag is whatever `MEMEGEN_HEAD_HTML` holds, appended by the server to each page `<head>`. Nothing outside the pod injects it.
 
 `memegen.rs` has been served by this pod since its DNS was pointed at the cluster on 2026-09-30; until then a Cloudflare Worker and container served it, and their code left this repo in #4.
