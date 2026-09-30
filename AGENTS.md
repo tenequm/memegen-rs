@@ -90,7 +90,7 @@ Off by default; with `MEMEGEN_CACHE_DIR` unset the server behaves exactly as wit
 ## Code style
 
 - **Minimal comments.** Comment *why*, not *what*; the code is the documentation. Don't narrate obvious lines. (The existing config files - `worker.ts`, `wrangler.jsonc` - carry dense rationale comments on purpose because the deploy behavior is non-obvious; match that bar only where the reasoning is genuinely load-bearing.)
-- **Code cleanliness / minimalism.** Every new file must justify its existence - if it can be inlined, inline it. Split only for a functional reason (different lifecycle/runtime), never for "organization". No reference/template/example files. Start from the fewest files that work. This repo is deliberately ~2000 LOC (tests aside) across 4 Rust files; keep it that way.
+- **Code cleanliness / minimalism.** Every new file must justify its existence - if it can be inlined, inline it. Split only for a functional reason (different lifecycle/runtime), never for "organization". No reference/template/example files. Start from the fewest files that work. This repo is deliberately ~1800 LOC across 3 Rust files; keep it that way.
 - Read code before making claims about it; never guess a flag - check `--help`.
 - Don't edit/implement until asked; when intent is ambiguous, research and recommend rather than act.
 - ASCII-only symbols in docs; single `-` hyphens, never em/en dashes.

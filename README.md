@@ -56,12 +56,10 @@ Environment variables:
 |---|---|---|
 | `PORT` | `5005` | Listen port |
 | `MEMEGEN_TEMPLATES_DIR` | `templates` | Path to the template corpus |
-| `MEMEGEN_WATERMARK` | _(unset)_ | Brand label drawn bottom-left on rendered images; unset means no watermark |
 | `MEMEGEN_CACHE_DIR` | _(unset)_ | Directory for the render cache; unset means no cache |
 | `MEMEGEN_CACHE_MAX_BYTES` | `10737418240` | Most disk the cache directory may use (10 GiB); the oldest renders are evicted when it is full |
 | `MEMEGEN_CACHE_MEMORY_BYTES` | `16777216` | Most memory the cache keeps hot renders in (16 MiB) |
-
-With `MEMEGEN_CACHE_DIR` set, a successful template render (`/images/{id}.{ext}`, `/images/{id}/{lines}.{ext}`) is stored under its exact path and query string and served from there afterwards; identical concurrent requests render once. Those responses carry `x-memegen-cache: hit` or `miss`. `/images/custom/...` and error responses are never cached. The cache starts empty on every process start, so it belongs on disposable storage (a Kubernetes `emptyDir`, a tmp directory).
+| `MEMEGEN_WATERMARK` | _(unset)_ | Brand label drawn bottom-left on rendered images; unset means no watermark |
 
 Render a meme:
 
@@ -75,6 +73,8 @@ curl 'http://localhost:5005/images/custom/top/bottom.png?background=https://pics
 # sized (padded with a blurred letterbox) and recolored
 curl 'http://localhost:5005/images/ds/push_button/cant_decide.jpg?width=800&height=600&color=yellow' -o ds.jpg
 ```
+
+Render cache: with `MEMEGEN_CACHE_DIR` set, a successful template render (`/images/{id}.{ext}`, `/images/{id}/{lines}.{ext}`) is stored under its exact path and query string and served from there afterwards; identical concurrent requests render once. Those responses carry `x-memegen-cache: hit` or `miss`. `/images/custom/...` and error responses are never cached. The cache starts empty on every process start, so it belongs on disposable storage (a Kubernetes `emptyDir`, a tmp directory).
 
 ## Templates
 
