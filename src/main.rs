@@ -3,7 +3,7 @@ mod template;
 
 use std::collections::HashMap;
 use std::path::PathBuf;
-use std::sync::{Arc, Mutex, OnceLock};
+use std::sync::{Arc, LazyLock, Mutex, OnceLock};
 
 use axum::Json;
 use axum::Router;
@@ -14,6 +14,7 @@ use axum::response::{Html, IntoResponse, Response};
 use axum::routing::get;
 use maud::{DOCTYPE, Markup, PreEscaped, html};
 use serde::{Deserialize, Serialize};
+use tokio::sync::Semaphore;
 use utoipa::{OpenApi, ToSchema};
 use utoipa_scalar::{Scalar, Servable};
 
@@ -198,20 +199,23 @@ async fn render_text(
     Path((id, text)): Path<(String, String)>,
     Query(q): Query<ImgQuery>,
 ) -> Result<Response, AppError> {
-    let (slug, ext) = split_ext(&text);
-    let template = reg
-        .get(&id)
-        .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
-    let lines = decode(slug);
-    let spec = Spec {
-        lines: &lines,
-        ext,
-        size: q.size(),
-        style: q.style(),
-        layout: q.layout(),
-        color: q.color.as_deref(),
-    };
-    let (bytes, mime) = render::render(template, &spec).map_err(AppError::from)?;
+    let (bytes, mime) = off_worker(move || {
+        let (slug, ext) = split_ext(&text);
+        let template = reg
+            .get(&id)
+            .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
+        let lines = decode(slug);
+        let spec = Spec {
+            lines: &lines,
+            ext,
+            size: q.size(),
+            style: q.style(),
+            layout: q.layout(),
+            color: q.color.as_deref(),
+        };
+        Ok(render::render(template, &spec)?)
+    })
+    .await?;
     Ok(cached_bytes(bytes, mime))
 }
 
@@ -226,19 +230,22 @@ async fn render_blank(
     Path(filename): Path<String>,
     Query(q): Query<ImgQuery>,
 ) -> Result<Response, AppError> {
-    let (id, ext) = split_ext(&filename);
-    let template = reg
-        .get(id)
-        .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
-    let spec = Spec {
-        lines: &[],
-        ext,
-        size: q.size(),
-        style: q.style(),
-        layout: q.layout(),
-        color: q.color.as_deref(),
-    };
-    let (bytes, mime) = render::render(template, &spec).map_err(AppError::from)?;
+    let (bytes, mime) = off_worker(move || {
+        let (id, ext) = split_ext(&filename);
+        let template = reg
+            .get(id)
+            .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
+        let spec = Spec {
+            lines: &[],
+            ext,
+            size: q.size(),
+            style: q.style(),
+            layout: q.layout(),
+            color: q.color.as_deref(),
+        };
+        Ok(render::render(template, &spec)?)
+    })
+    .await?;
     Ok(cached_bytes(bytes, mime))
 }
 
@@ -259,18 +266,21 @@ async fn render_custom(
         .background
         .clone()
         .ok_or_else(|| AppError::BadRequest("background URL is required".into()))?;
-    let (slug, ext) = split_ext(&text);
-    let lines = decode(slug);
     let bytes = fetch(&url).await?;
-    let spec = Spec {
-        lines: &lines,
-        ext,
-        size: q.size(),
-        style: "default",
-        layout: q.layout(),
-        color: q.color.as_deref(),
-    };
-    let (out, mime) = render::render_custom(&bytes, &spec).map_err(AppError::from)?;
+    let (out, mime) = off_worker(move || {
+        let (slug, ext) = split_ext(&text);
+        let lines = decode(slug);
+        let spec = Spec {
+            lines: &lines,
+            ext,
+            size: q.size(),
+            style: "default",
+            layout: q.layout(),
+            color: q.color.as_deref(),
+        };
+        Ok(render::render_custom(&bytes, &spec)?)
+    })
+    .await?;
     Ok(cached_bytes(out, mime))
 }
 
@@ -302,7 +312,7 @@ async fn thumb(State(reg): State<AppState>, Path(id): Path<String>) -> Result<Re
     let src = tokio::fs::read(path)
         .await
         .map_err(|e| AppError::Internal(e.to_string()))?;
-    let (bytes, mime) = render::thumbnail(&src, THUMB_PX).map_err(AppError::from)?;
+    let (bytes, mime) = off_worker(move || Ok(render::thumbnail(&src, THUMB_PX)?)).await?;
     thumb_cache().lock().unwrap().insert(id, bytes.clone());
     Ok(cached_bytes(bytes, mime))
 }
@@ -758,6 +768,30 @@ fn cached_bytes(bytes: Vec<u8>, mime: &'static str) -> Response {
         .into_response()
 }
 
+/// Renders are pure CPU (90 ms static, seconds for an animated GIF), so they
+/// run on the blocking pool to keep the async workers free for everything
+/// else. One permit per core: each in-flight render holds tens of MB, and the
+/// blocking pool alone would let hundreds run at once.
+static RENDER_PERMITS: LazyLock<Semaphore> =
+    LazyLock::new(|| Semaphore::new(std::thread::available_parallelism().map_or(1, usize::from)));
+
+async fn off_worker<T: Send + 'static>(
+    job: impl FnOnce() -> Result<T, AppError> + Send + 'static,
+) -> Result<T, AppError> {
+    let permit = RENDER_PERMITS
+        .acquire()
+        .await
+        .map_err(|e| AppError::Internal(e.to_string()))?;
+    tokio::task::spawn_blocking(move || {
+        // Held by the job, not the request: a disconnected client drops this
+        // future, but the render it started keeps its core until it returns.
+        let _permit = permit;
+        job()
+    })
+    .await
+    .map_err(|e| AppError::Internal(format!("render failed: {e}")))?
+}
+
 async fn fetch(url: &str) -> Result<Vec<u8>, AppError> {
     let client = reqwest::Client::builder()
         .timeout(std::time::Duration::from_secs(10))
@@ -829,3 +863,16 @@ const SKILL_MD: &str = include_str!("../assets/SKILL.md");
     components(schemas(TemplateDto, ExampleDto))
 )]
 struct ApiDoc;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn panicking_render_is_a_500_and_frees_its_permit() {
+        let before = RENDER_PERMITS.available_permits();
+        let out = off_worker(|| -> Result<(), AppError> { panic!("boom") }).await;
+        assert!(matches!(out, Err(AppError::Internal(_))));
+        assert_eq!(RENDER_PERMITS.available_permits(), before);
+    }
+}
