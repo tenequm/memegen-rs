@@ -810,7 +810,7 @@ async fn off_worker<T: Send + 'static>(
         job()
     })
     .await
-    .map_err(|e| AppError::Internal(format!("render failed: {e}")))?;
+    .map_err(|_| AppError::Internal("render failed".into()))?;
     Ok(out?)
 }
 
