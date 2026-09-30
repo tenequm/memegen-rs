@@ -138,8 +138,14 @@ Query parameters for image endpoints:
 |---|---|
 | `style` | Alternate background variant |
 | `layout=top` | Place all captions at the top |
-| `width`, `height` | Pad to size with a blurred letterbox |
+| `width`, `height` | Pad to size with a blurred letterbox; at most 2048 each |
 | `color` | Text fill color (name or hex) |
+
+Limits, so that one request cannot ask for an unbounded amount of memory. Going over one is a `422` with a JSON `{"error": "..."}` body, never a silently smaller image:
+
+- `width` and `height` are at most 2048 each.
+- A custom `background` is at most 10 MiB to download and 2048x2048 pixels once decoded. Only the first frame of an animated one is used.
+- `layout=top` draws the first 32 caption lines and drops the rest, the same way lines beyond a template's text boxes are dropped.
 
 The full machine-readable contract is served at `/openapi.json`.
 

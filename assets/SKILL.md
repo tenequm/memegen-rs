@@ -41,8 +41,10 @@ Encode the caption text into each path segment:
 
 - `style` - alternate background variant for the template
 - `layout=top` - place all captions at the top
-- `width`, `height` - pad to a fixed size with a blurred letterbox
+- `width`, `height` - pad to a fixed size with a blurred letterbox (at most 2048 each)
 - `color` - text fill color (name or hex)
+
+Going over a limit returns `422` with a JSON `{"error": "..."}` body: `width`/`height` above 2048, or a custom `background` above 10 MiB or 2048x2048 pixels.
 
 ## Find templates
 
