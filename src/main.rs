@@ -1038,14 +1038,15 @@ mod tests {
             StatusCode::UNPROCESSABLE_ENTITY,
             r#"{"error":"width and height must be at most 2048"}"#.to_string(),
         );
+        // No such template: looking it up first would be a 404 instead.
         let text = render_text(
             State(reg.clone()),
-            Path(("drake".into(), "a/b.png".into())),
+            Path(("nope".into(), "a/b.png".into())),
             query("width=2049&height=630"),
         );
         assert_eq!(refusal(text.await).await, refused);
         // One dimension alone pads nothing, but the rule is per parameter.
-        let blank = render_blank(State(reg), Path("drake.png".into()), query("height=20000"));
+        let blank = render_blank(State(reg), Path("nope.png".into()), query("height=20000"));
         assert_eq!(refusal(blank.await).await, refused);
         // Nothing listens on port 9: fetching first would fail differently.
         let custom = render_custom(
@@ -1093,9 +1094,9 @@ mod tests {
         let declared = format!("HTTP/1.1 200 OK\r\nContent-Length: {over}\r\n\r\n");
         assert!(refused(fetch(&serve(declared, 0)).await));
         // Undeclared: only counting what arrives can catch it.
-        let undeclared = || "HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n".to_string();
-        assert!(refused(fetch(&serve(undeclared(), over)).await));
-        let at_cap = fetch(&serve(undeclared(), MAX_BACKGROUND_BYTES)).await;
+        let undeclared = "HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n";
+        assert!(refused(fetch(&serve(undeclared.into(), over)).await));
+        let at_cap = fetch(&serve(undeclared.into(), MAX_BACKGROUND_BYTES)).await;
         assert!(matches!(at_cap, Ok(body) if body.len() == MAX_BACKGROUND_BYTES));
     }
 }
