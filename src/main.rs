@@ -203,8 +203,7 @@ async fn render_text(
         .get(&id)
         .cloned()
         .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
-    let animated = split_ext(&text).1 == "gif" && template.animated_source(q.style()).is_some();
-    let (bytes, mime) = off_worker(animated, move || {
+    let (bytes, mime) = off_worker(split_ext(&text).1 == "gif", move || {
         let (slug, ext) = split_ext(&text);
         let lines = decode(slug);
         let spec = Spec {
@@ -237,8 +236,7 @@ async fn render_blank(
         .get(id)
         .cloned()
         .ok_or_else(|| AppError::NotFound(format!("template not found: {id}")))?;
-    let animated = ext == "gif" && template.animated_source(q.style()).is_some();
-    let (bytes, mime) = off_worker(animated, move || {
+    let (bytes, mime) = off_worker(ext == "gif", move || {
         let spec = Spec {
             lines: &[],
             ext: split_ext(&filename).1,
@@ -271,7 +269,7 @@ async fn render_custom(
         .clone()
         .ok_or_else(|| AppError::BadRequest("background URL is required".into()))?;
     let bytes = fetch(&url).await?;
-    let (out, mime) = off_worker(false, move || {
+    let (out, mime) = off_worker(split_ext(&text).1 == "gif", move || {
         let (slug, ext) = split_ext(&text);
         let lines = decode(slug);
         let spec = Spec {
@@ -776,24 +774,24 @@ fn cores() -> usize {
     std::thread::available_parallelism().map_or(1, usize::from)
 }
 
-/// Renders are pure CPU (90 ms static, seconds for an animated GIF), so they
-/// run on the blocking pool to keep the async workers free for everything
-/// else. One permit per core: each in-flight render holds tens of MB, and the
-/// blocking pool alone would let hundreds run at once.
+/// Renders are pure CPU (90-200 ms static, seconds for a GIF), so they run on
+/// the blocking pool to keep the async workers free for everything else. One
+/// permit per core: each in-flight render holds tens of MB, and the blocking
+/// pool alone would let hundreds run at once.
 static RENDER_PERMITS: LazyLock<Semaphore> = LazyLock::new(|| Semaphore::new(cores()));
 
-/// Animated renders need one of these as well. There is one fewer than render
-/// permits, so on 2+ cores GIFs alone can never hold every render permit.
-static ANIMATED_PERMITS: LazyLock<Semaphore> =
-    LazyLock::new(|| Semaphore::new((cores() - 1).max(1)));
+/// GIF output needs one of these as well: even a single frame takes about a
+/// second to encode. On 2+ cores there is one fewer than render permits, so
+/// GIFs alone can never hold every render permit.
+static GIF_PERMITS: LazyLock<Semaphore> = LazyLock::new(|| Semaphore::new((cores() - 1).max(1)));
 
 async fn off_worker<T: Send + 'static>(
-    animated: bool,
+    gif: bool,
     job: impl FnOnce() -> Result<T, RenderError> + Send + 'static,
 ) -> Result<T, AppError> {
     let closed = |e: AcquireError| AppError::Internal(e.to_string());
-    let lane = if animated {
-        Some(ANIMATED_PERMITS.acquire().await.map_err(closed)?)
+    let lane = if gif {
+        Some(GIF_PERMITS.acquire().await.map_err(closed)?)
     } else {
         None
     };
