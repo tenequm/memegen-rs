@@ -32,18 +32,18 @@ curl -sf 'http://localhost:5005/templates' | head                               
 curl -sf 'http://localhost:5005/' -o /dev/null && echo ok                                           # web UI / docs
 ```
 
-Prod smoke test: same paths against `https://memegen.rs`.
+Prod smoke test: same paths against `https://memegen.rs`. Until the DNS cutover (see "Deploy architecture") that is still the old Cloudflare deployment - edge-cached, cold-starting after 10 minutes idle - so it does not show a cluster rollout.
 
 ## Releasing a new version
 
-Building an image, rolling it out and cutting a versioned release are **separate** steps. CI never deploys:
+Building an image, rolling it out and cutting a versioned release are **separate** steps:
 
 ```sh
-git push origin main      # -> image.yml builds and pushes ghcr.io/tenequm/memegen-rs:sha-<commit> (+ latest). Does NOT change production.
+git push origin main      # -> image.yml builds and pushes ghcr.io/tenequm/memegen-rs:sha-<commit> (+ latest). Rolls nothing out.
 git tag v0.1.0 && git push origin v0.1.0   # -> release.yml: versioned GHCR image + git-cliff GitHub Release + ClawHub skill
 ```
 
-Production runs whatever image is pinned by digest in a private infra repo's helmfile. To roll a commit out, wait for `image.yml` to finish, then bump the pin there to `sha-<commit>@<digest>` and apply it:
+The cluster runs whatever image is pinned by digest in a private infra repo's helmfile. To roll a commit out, wait for `image.yml` to finish, then bump the pin there to `sha-<commit>@<digest>` and apply it:
 
 ```sh
 crane digest ghcr.io/tenequm/memegen-rs:sha-<commit>   # full 40-char commit SHA -> sha256:...
@@ -53,11 +53,14 @@ Release notes come from Conventional Commit messages via git-cliff (`.github/cli
 
 ## Deploy architecture (Kubernetes)
 
-One pod on a Kubernetes cluster runs the Rust server (binds `0.0.0.0:5005`) from `ghcr.io/tenequm/memegen-rs`, pinned by digest in a private infra repo's helmfile. No manifests live in this repo. As of 2026-09-30 `memegen.rs` is still served by the previously deployed Cloudflare Worker and container, which nothing in this repo updates any more, until its DNS is pointed at the cluster.
+One pod on a Kubernetes cluster runs the Rust server (binds `0.0.0.0:5005`) from the pinned `ghcr.io/tenequm/memegen-rs` image. No manifests live in this repo.
 
 - Limits: 2 CPU, 512 MiB. The pod runs non-root with a read-only root filesystem.
-- There is no edge cache and no rate limiter, at the edge or in the app. The pod's CPU limit is the flood backstop.
+- There is no edge cache and no rate limiter in front of the pod, and none in the app. The pod's CPU and memory limits are the flood backstop.
 - The server fetches any URL given as `?background=` with no filtering of its own. On the cluster a NetworkPolicy limits that fetch to the public internet.
+- Images and assets send `Cache-Control: max-age=86400` and `CDN-Cache-Control: immutable` (one year); HTML and JSON send neither. Nothing in front of the pod reads the CDN header.
+
+**Until the DNS cutover** (as of 2026-09-30) `memegen.rs` itself is still served by the previously deployed Cloudflare Worker and container, last deployed from `625ea96`. Nothing in this repo updates them any more; their source is `git show 625ea96:ops/worker/worker.ts`. Until its DNS is pointed at the cluster, `memegen.rs` keeps the Worker's edge cache, render rate limiter and analytics injection, and 403s there come from Cloudflare zone-level bot protection, not app code.
 
 ## Gotchas
 

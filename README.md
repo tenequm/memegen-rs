@@ -96,11 +96,11 @@ Three source files: `template.rs` (model, registry, URL codec, styling), `render
 
 ### Deployment
 
-The server has no rate limiter and no render cache: every `/images/` request renders on demand, so cap its CPU (or put your own cache or limiter in front) before exposing it publicly. It also fetches any URL passed as `?background=` with no filtering of its own, so restrict its outbound network to the public internet if it can reach anything private.
+The server has no rate limiter and no render cache: every `/images/` request renders on demand, so cap its CPU and memory (or put your own cache or limiter in front) before exposing it publicly. Image and asset responses carry `Cache-Control: public, max-age=86400` and `CDN-Cache-Control: public, max-age=31536000, immutable`, so a CDN that honors the latter keeps a render for a year - purge it when templates or rendering change. The server also fetches any URL passed as `?background=` with no filtering of its own, so restrict its outbound network to the public internet if it can reach anything private.
 
-`.github/workflows/image.yml` builds `ops/docker/Containerfile` on every push to `main` and pushes `ghcr.io/tenequm/memegen-rs:sha-<commit>` (`linux/amd64`, template corpus baked in). CI builds images only; it deploys nothing.
+`.github/workflows/image.yml` builds `ops/docker/Containerfile` on every push to `main` and pushes `ghcr.io/tenequm/memegen-rs:sha-<full commit SHA>` (`linux/amd64`, template corpus baked in). CI builds images only; it deploys nothing.
 
-The public instance ([memegen.rs](https://memegen.rs)) runs that image as one pod on a Kubernetes cluster: pinned by digest in a private infra repo's helmfile, limited to 2 CPUs and 512 MiB, non-root with a read-only root filesystem, behind a NetworkPolicy that limits the `?background=` fetch to the public internet. A release is a push to `main`, then bumping the pin (`crane digest ghcr.io/tenequm/memegen-rs:sha-<commit>`) in the infra repo and applying it - a push alone does not change production. There is no edge cache and no edge rate limiter; the pod's CPU limit is the flood backstop. As of 2026-09-30 the `memegen.rs` domain is still served by the previously deployed Cloudflare Worker and container, until its DNS is pointed at the cluster.
+The maintainer's deployment runs that image as one pod on a Kubernetes cluster, pinned by digest, with CPU and memory limits, a read-only root filesystem and egress restricted to the public internet. As of 2026-09-30 [memegen.rs](https://memegen.rs) is still served by an older Cloudflare deployment, with its own edge cache and rate limiter, until its DNS is pointed at the cluster.
 
 ## Scope
 
