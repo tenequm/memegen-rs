@@ -1,8 +1,10 @@
-import { Container, getContainer } from "@cloudflare/containers";
+import { Container } from "@cloudflare/containers";
 
 /**
- * Wraps the memegen-rs Rust server (binds 0.0.0.0:5005 inside the container).
- * Pinned to a single instance (getContainer's built-in singleton id).
+ * The pre-Kubernetes origin: the Rust server in a Cloudflare Container. No
+ * request reaches it any more (see `origin` below); the class stays exported
+ * because the Durable Object binding still names it, and so that reverting the
+ * origin swap is a one-commit rollback onto a container that is still deployed.
  */
 export class MemegenContainer extends Container {
   defaultPort = 5005; // matches the Rust server's bind port
@@ -20,6 +22,14 @@ export class MemegenContainer extends Container {
 // on-disk thumbnails are cheap and stay unthrottled.
 function isRenderPath(pathname: string): boolean {
   return pathname.startsWith("/images/");
+}
+
+// Renders happen on the Rust server in the Kubernetes cluster (ORIGIN in
+// wrangler.jsonc). Path and query pass through unchanged; the server builds
+// every URL relative, so nothing in a response names the origin host.
+function origin(request: Request, env: Env): Promise<Response> {
+  const url = new URL(request.url);
+  return fetch(new Request(new URL(url.pathname + url.search, env.ORIGIN), request));
 }
 
 export default {
@@ -52,13 +62,12 @@ export default {
     // Caching lives in Workers Caching (`cache.enabled` in wrangler.jsonc), not
     // here: it is tiered (one render anywhere fills a network-wide upper tier,
     // unlike the per-datacenter Cache API) and collapses concurrent requests
-    // for the same URL into a single container call - both matter during the
-    // scale-to-zero cold start. Cache HITs never invoke this Worker at all, so
+    // for the same URL into a single origin call. Cache HITs never invoke this Worker at all, so
     // everything below runs only on a true miss. Lifetimes come from the
     // Cache-Control/CDN-Cache-Control headers the Rust server sets; the cache
     // key includes the Worker version, so every deploy busts it.
     if (request.method !== "GET") {
-      return getContainer(env.MEMEGEN).fetch(request);
+      return origin(request, env);
     }
 
     // Only a render that actually reaches the origin counts against the limit -
@@ -75,7 +84,7 @@ export default {
       }
     }
 
-    const res = await getContainer(env.MEMEGEN).fetch(request);
+    const res = await origin(request, env);
 
     const type = res.headers.get("content-type") ?? "";
     if (env.EXTRA_HTML_SCRIPTS && type.startsWith("text/html")) {

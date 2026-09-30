@@ -17,6 +17,9 @@
     "enabled": true
   },
   "vars": {
+    // Where cache misses are rendered: the memegen release on the Hetzner
+    // cluster (tenequm/infra, cluster/helmfile).
+    "ORIGIN": "https://memegen.cascade.fyi",
     "EXTRA_HTML_SCRIPTS": "<script defer src=\"/mesh/script.js\" data-site-id=\"84199879b537\"></script>"
   },
   "routes": [

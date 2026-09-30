@@ -7,7 +7,7 @@ Stateless meme-generator HTTP API + web UI in **pure Rust**. Every meme is fully
 - `src/template.rs` - model, in-memory registry (read once at startup), URL codec, styling.
 - `src/render.rs` - rendering pipeline (autosize, wrap, outline, composite, GIF encode).
 - `src/main.rs` - axum router, handlers, OpenAPI, error mapping, web UI (maud, compile-time).
-- `ops/worker/` - Cloudflare Worker edge layer (`worker.ts`: cache + rate limit + analytics injection) and its toolchain (`wrangler.jsonc`, `package.json`, `tsconfig.json`, generated `worker-configuration.d.ts`). Not Rust.
+- `ops/worker/` - Cloudflare Worker edge layer (`worker.ts`: cache + rate limit + analytics injection, forwarding misses to the Kubernetes origin) and its toolchain (`wrangler.jsonc`, `package.json`, `tsconfig.json`, generated `worker-configuration.d.ts`). Not Rust.
 - `ops/docker/` - `Containerfile` + `Containerfile.dockerignore` for the container image build.
 - `templates/<id>/` - 701 template folders, each `config.yml` (upstream memegen schema) + `default.{png,jpg,webp,gif}`. `templates/popularity.json` ranks them. **Committed to the repo and baked into the image.**
 - `assets/` - embedded fonts (Anton, Pangolin; SIL OFL), favicons, OG image, `SKILL.md` (the ClawHub agent skill; `SKILL.md` at root is a symlink to it). `Anton-Regular.ttf` is the Cyrillic-extended v2.300 build from [Tural/AntonFont](https://github.com/Tural/AntonFont) (unmerged upstream as [google/fonts#7552](https://github.com/google/fonts/issues/7552)); both fonts cover Latin + full Cyrillic/Ukrainian.
@@ -35,30 +35,34 @@ curl -sf 'http://localhost:5005/templates' | head                               
 curl -sf 'http://localhost:5005/' -o /dev/null && echo ok                                           # web UI / docs
 ```
 
-Prod smoke test: same paths against `https://memegen.rs` (expect cold-start latency on first render).
+Prod smoke test: same paths against `https://memegen.rs` (the edge) and `https://memegen.cascade.fyi` (the origin directly).
 
 ## Releasing a new version
 
 Deploy and release are **separate** pipelines:
 
 ```sh
-git push origin main      # -> deploy.yml auto-deploys to prod (memegen.rs). NOT triggered by tags.
+git push origin main      # -> deploy.yml builds the image and deploys the Worker. NOT triggered by tags.
 git tag v0.1.0 && git push origin v0.1.0   # -> release.yml: versioned GHCR image + git-cliff GitHub Release + ClawHub skill
 ```
 
+A push deploys the **Worker**; it no longer deploys the **server**. The server runs on a Kubernetes cluster that pins the image by digest, so a server change goes live when that pin is bumped to the new `sha-<commit>` image (`crane digest ghcr.io/tenequm/memegen-rs:sha-<commit>`) in the cluster's helmfile, which lives in the private infra repo.
+
 Release notes come from Conventional Commit messages via git-cliff (`.github/cliff.toml`) - so commit hygiene *is* the changelog. The GHCR package is private on first push; flip it public once for the Release's `docker pull` link to work anonymously.
 
-## Deploy architecture (Cloudflare)
+## Deploy architecture (Cloudflare edge, Kubernetes origin)
 
-Worker on custom domain `memegen.rs` -> single-instance **Container** running the Rust server (binds `0.0.0.0:5005`, `getContainer` singleton, `max_instances: 1`, scales to zero after 10m idle).
+Worker on custom domain `memegen.rs` -> the Rust server on a Hetzner Kubernetes cluster, reached at the `ORIGIN` var in `wrangler.jsonc` (`https://memegen.cascade.fyi`; 2 replicas, binds `0.0.0.0:5005`). Moved off a single Cloudflare Container on 2026-09-30: a cache-miss static render is about 2x faster from the cluster at equal network distance, and one slow render no longer blocks the only instance.
 
+- The Cloudflare Container (`MemegenContainer`, `containers` and `durable_objects` in `wrangler.jsonc`, the registry copy in `deploy.yml`) is still deployed but receives no traffic. It is kept so that reverting the origin swap is a one-commit rollback; remove all of it once the cluster origin has held for a week.
 - Edge caching is Workers Caching (`cache.enabled` in `wrangler.jsonc`), tiered across PoPs with request collapsing; cache HITs never invoke the Worker or the container. TTLs come from the Rust server's headers: images/assets send `Cache-Control: max-age=86400` (browsers) + `CDN-Cache-Control: immutable` (edge); HTML/JSON send none and get the 2h heuristic. The cache key includes the Worker version, so every deploy busts it.
-- Render throttle is a **Cloudflare edge rate limiter** (`RENDER_LIMITER`, 10000/60s aggregate per location) - a runaway-bill backstop, not a per-user limit. Only cache-miss renders on `/images/` count. There is no in-app limiter.
+- Render throttle is a **Cloudflare edge rate limiter** (`RENDER_LIMITER`, 10000/60s aggregate per location) - a flood backstop, not a per-user limit. Only cache-miss renders on `/images/` count. There is no in-app limiter.
 - Config: `ops/worker/wrangler.jsonc`. Worker bindings -> `ops/worker/worker-configuration.d.ts` via `wrangler types` (generated, do not hand-edit).
 - Analytics: a `worker.ts` HTMLRewriter injects the `EXTRA_HTML_SCRIPTS` wrangler var into each HTML `<head>`. It loads `/mesh/script.js`, served by a **separate `memegen-rybbit-proxy` Worker (not in this repo)** that proxies to a self-hosted Rybbit instance. No `/mesh` code lives here.
 
 ## Gotchas
 
+- The server fetches any URL given as `?background=`; on the cluster a NetworkPolicy limits that fetch to the public internet. Keep that in mind before adding any other outbound call.
 - Cloudflare Containers **cannot pull from GHCR** - CI copies the image into `registry.cloudflare.com` (which also forbids the `latest` tag; a commit-derived tag is used).
 - Containers require `linux/amd64`.
 - A template whose only background is an undecodable `default.mp4` is listed but returns `422` on render.
